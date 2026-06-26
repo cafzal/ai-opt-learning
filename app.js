@@ -139,10 +139,10 @@
       "<b>About.</b> A free, non-commercial study tool. The questions, explanations, and diagrams are original and " +
       "<b>reproduce no text</b> from any source work — they cover standard concepts only (facts and methods, which " +
       "copyright doesn't cover). Those concepts follow widely-taught texts, credited under their stated terms — most " +
-      "are Creative Commons <b>BY-NC-ND</b>: Murphy, <i>Probabilistic Machine Learning</i> (MIT Press, 2022); " +
-      "Sutton &amp; Barto, <i>Reinforcement Learning: An Introduction</i> (MIT Press, 2018); Kochenderfer &amp; Wheeler, " +
-      "<i>Algorithms for Optimization</i> (MIT Press, 2025); Kochenderfer, Wheeler &amp; Wray, <i>Algorithms for " +
-      "Decision Making</i> (MIT Press, 2022); and Fleuret, <i>The Little Book of Deep Learning</i>. " +
+      "are Creative Commons <b>BY-NC-ND</b>: Murphy, <a href=\"https://probml.github.io/pml-book/\" target=\"_blank\" rel=\"noopener\"><i>Probabilistic Machine Learning</i></a> (MIT Press, 2022); " +
+      "Sutton &amp; Barto, <a href=\"http://incompleteideas.net/book/the-book-2nd.html\" target=\"_blank\" rel=\"noopener\"><i>Reinforcement Learning: An Introduction</i></a> (MIT Press, 2018); Kochenderfer &amp; Wheeler, " +
+      "<a href=\"https://algorithmsbook.com/optimization/\" target=\"_blank\" rel=\"noopener\"><i>Algorithms for Optimization</i></a> (MIT Press, 2025); Kochenderfer, Wheeler &amp; Wray, <a href=\"https://algorithmsbook.com/\" target=\"_blank\" rel=\"noopener\"><i>Algorithms for " +
+      "Decision Making</i></a> (MIT Press, 2022); and Fleuret, <a href=\"https://fleuret.org/francois/lbdl.html\" target=\"_blank\" rel=\"noopener\"><i>The Little Book of Deep Learning</i></a>. " +
       "Not affiliated with, sponsored by, or endorsed by these authors or publishers. " +
       "This app is released under <a href=\"https://creativecommons.org/licenses/by-nc/4.0/\" target=\"_blank\" rel=\"noopener\">CC BY-NC 4.0</a>; " +
       "full sources &amp; links are in the <a href=\"https://github.com/cafzal/ai-opt-learning#attribution\" target=\"_blank\" rel=\"noopener\">project README</a>.");

@@ -1,6 +1,6 @@
 /* Review: Unsupervised & Latent-Variable Models */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["unsupervised"] = {
-  intro: "No labels — just $\\boldsymbol{x}$. The task is to discover structure: cluster the data, model its density, or compress it to a few latent dimensions. The recurring idea is a <b>latent variable</b> $z$ behind each observation, fit by EM or by an eigen/SVD decomposition. We move from mixtures (GMM) and clustering (K-means) through PCA and its probabilistic cousins (FA, ICA) up to the VAE. Skim the toggles, then test yourself.",
+  intro: "No labels — just $\\boldsymbol{x}$. The task is to discover structure: cluster the data, model its density, or compress it to a few latent dimensions. The recurring idea is a <b>latent variable</b> $z$ behind each observation, fit by EM or by an eigen/SVD decomposition. We move from mixtures (GMM) and clustering (K-means, hierarchical) through PCA and its probabilistic cousins (FA, ICA) up to the VAE. Skim the toggles, then test yourself.",
   concepts: [
     {
       title: "Latent-variable models & finite mixtures",
@@ -280,7 +280,7 @@
     },
     {
       title: "Hierarchical agglomerative clustering (HAC)",
-      tag: "clustering",
+      tag: "core",
       body: "<p><b>HAC</b> is a <b>bottom-up</b> clustering scheme: start with every point as its own singleton cluster, then repeatedly <b>merge the two closest clusters</b> until one cluster remains. The full sequence of merges is recorded as a <b>dendrogram</b> — a binary tree whose join heights are the inter-cluster distances at each merge. Crucially it needs <b>no preset $K$</b>: you read off any number of clusters afterward by <b>cutting the tree at a chosen height</b> (a lower cut yields more, tighter clusters).</p><p>The behavior is set by the <b>linkage</b> — how cluster-to-cluster distance is defined from pairwise point distances:</p><ul><li><b>Single</b> (nearest pair, $\\min$): can follow thin bridges between groups → <i>chaining</i> into long straggly clusters.</li><li><b>Complete</b> (farthest pair, $\\max$): demands all members be close → tight, <b>compact</b> clusters.</li><li><b>Average</b> (mean pairwise distance, <b>UPGMA</b>): a middle ground that is <b>generally the best default</b>.</li></ul><p>Unlike <b>K-means</b> and <b>GMM</b>, which fix $K$ up front and return a single flat partition, HAC produces a whole <b>hierarchy</b> and defers the choice of $K$ to the cut. The price is cost: a naive implementation is $O(N^3)$ (or $O(N^2\\log N)$ with a heap) and $O(N^2)$ memory, so it suits modest $N$.</p>",
       visual: `<svg viewBox="0 0 520 230" xmlns="http://www.w3.org/2000/svg" role="img">
         <text x="10" y="20" style="fill:var(--text)" font-size="13" font-weight="700">Dendrogram: merge closest clusters, bottom-up</text>

@@ -105,7 +105,7 @@
       </svg>`,
       caption: "RLHF routes preferences through a reward model and a PPO loop; DPO crosses the reward model out and trains the policy directly.",
       example: "Without the KL penalty, a policy chasing a reward model that slightly over-rewards the word \"certainly\" learns to spam \"Certainly! Certainly!\" — high modeled reward, useless text. The $\\beta\\,D_{\\text{KL}}$ leash to $\\pi_{\\text{ref}}$ keeps it close to the sensible SFT model and prevents that drift.",
-      takeaway: "RLHF can push past imitation toward genuine preference, but the three-model PPO loop is the costly, unstable part — tune $\\\\beta$ carefully or you get reward hacking or no movement."
+      takeaway: "RLHF can push past imitation toward genuine preference, but the three-model PPO loop is the costly, unstable part — tune $\\beta$ carefully or you get reward hacking or no movement."
     },
     {
       title: "DPO: the reward model cancels out",

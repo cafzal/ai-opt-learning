@@ -1,6 +1,6 @@
 /* Review: Advanced Optimization — Multiobjective, Surrogates & Uncertainty */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["opt-advanced"] = {
-  intro: "When a problem has competing objectives, expensive evaluations, or uncontrollable inputs, the deterministic toolkit isn't enough. This batch covers four threads: <b>multiobjective</b> optimization (Pareto frontiers, scalarization, population methods), <b>surrogate</b> modeling (sampling plans, model selection, Gaussian processes, acquisition functions), <b>optimization under uncertainty</b> (robustness, VaR/CVaR, Markowitz, uncertainty propagation), and the structural cases — <b>discrete</b> and <b>multidisciplinary</b> optimization. Skim the toggles, then test yourself below.",
+  intro: "When a problem has competing objectives, expensive evaluations, or uncontrollable inputs, the deterministic toolkit isn't enough. This batch covers four threads: <b>multiobjective</b> optimization (Pareto frontiers, scalarization, population methods), <b>surrogate</b> modeling (sampling plans, model selection, Gaussian processes, acquisition functions), <b>optimization under uncertainty</b> (robustness, VaR/CVaR, Markowitz, uncertainty propagation), and the structural cases — <b>discrete</b>, <b>multidisciplinary</b>, and <b>expression</b> (genetic-programming) optimization. Skim the toggles, then test yourself below.",
   concepts: [
     {
       title: "Pareto optimality & dominance",
@@ -213,7 +213,7 @@
     },
     {
       title: "Expression optimization (genetic programming)",
-      tag: "discrete",
+      tag: "algorithm",
       body: "<p>Sometimes the design <i>is</i> a formula: optimize over <b>expressions</b> represented as <b>symbol trees</b> drawn from a grammar (leaves = variables/constants, internal nodes = operators/functions). <b>Genetic programming</b> applies population search (§S12's GA) to these trees: it is <b>strongly typed</b> (children must match a node's expected types), recombines via <b>tree crossover</b> (swap subtrees) and <b>tree mutation</b> (regrow a subtree), and must <b>encourage parsimony</b> — penalize size — to fight code <b>bloat</b>, the runaway growth of useless subtrees.</p><p>To stay inside the space of <i>valid</i> expressions, three grammar-based tools:</p><ul><li><b>Grammars</b> — context-free <b>production rules</b> that generate only syntactically valid expressions (invalid or equivalent forms handled via penalties).</li><li><b>Grammatical evolution</b> — the genotype is an <b>integer array</b> decoded into a tree: at each step pick the production by $\\text{rule} = v \\bmod n$ (value mod number of applicable rules), <b>wrapping around</b> the array if it runs out.</li><li><b>Probabilistic grammars / prototype trees</b> — learn <b>rule weights</b> (a categorical distribution per node, Dirichlet-initialized) from the counts in <b>elite</b> individuals, biasing future samples toward what worked.</li></ul>",
       visual: `<svg viewBox="0 0 520 210" xmlns="http://www.w3.org/2000/svg" role="img">
         <text x="260" y="20" text-anchor="middle" font-size="12" font-weight="700">expression tree for  x × x + 2</text>

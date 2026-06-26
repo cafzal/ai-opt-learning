@@ -139,6 +139,13 @@
       caption: "Each fold takes a turn as validation; the error is averaged over all five.",
       example: "With 1,000 points and limited data, 5-fold CV trains on 800 and validates on 200, five times, averaging the validation error to choose, say, the ridge penalty $\\lambda$.",
       takeaway: "Touch the test set more than once and your reported accuracy is fiction; this discipline is what keeps the final number honest."
+    },
+    {
+      title: "The exponential family",
+      tag: "toolkit",
+      body: "<p>A huge swath of standard distributions (Gaussian, Bernoulli, categorical, Poisson, gamma) share one canonical form $p(\\boldsymbol{x}\\mid\\boldsymbol\\theta)=h(\\boldsymbol{x})\\exp[\\boldsymbol\\theta^\\top\\boldsymbol\\phi(\\boldsymbol{x})-A(\\boldsymbol\\theta)]$, with natural parameters $\\boldsymbol\\theta$ and sufficient statistics $\\boldsymbol\\phi$. It is the <b>maximum-entropy</b> distribution consistent with given moment constraints. The log-partition $A(\\boldsymbol\\theta)$ is convex and generates the moments: $\\nabla A=\\mathbb{E}[\\boldsymbol\\phi]$.</p><p>Two payoffs: <b>MLE reduces to moment matching</b> (set empirical statistics equal to $\\mathbb{E}[\\boldsymbol\\phi]$), and a likelihood has a <b>conjugate prior iff</b> it is exponential-family.</p>",
+      example: "The Gaussian is exponential-family with $\\boldsymbol\\phi(x)=(x,x^2)$; fitting it by MLE just matches the first two empirical moments — the sample mean and variance.",
+      takeaway: "Recognizing a model as exponential-family hands you convex, well-behaved fitting (moment matching) and a ready conjugate prior for closed-form Bayesian updates."
     }
   ]
 };

@@ -1,6 +1,6 @@
 /* Review: Statistics, Estimation & Decision Theory */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["statistics"] = {
-  intro: "How we turn data into parameters and parameters into decisions: maximum likelihood and its MAP/Bayesian generalizations, the Bayesian-vs-frequentist split, decision theory that turns a posterior into an action, and the metrics that score classifiers. Expand each toggle, then test yourself below.",
+  intro: "How we turn data into parameters and parameters into decisions: maximum likelihood and its MAP/Bayesian generalizations, the Bayesian-vs-frequentist split, model selection and the p-value pitfalls, decision theory that turns a posterior into an action, the metrics that score classifiers, plus method-of-moments and online estimators and the shrinkage of hierarchical/empirical Bayes. Expand each toggle, then test yourself below.",
   concepts: [
     {
       title: "Maximum likelihood estimation (MLE)",

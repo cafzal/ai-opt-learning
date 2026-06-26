@@ -1,6 +1,6 @@
 /* Review: Deep Learning & Generative AI */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["deep-learning"] = {
-  intro: "From a single neuron to transformers and generative models. The throughline: stacking <i>nonlinear</i> layers builds compositional feature hierarchies, depth and scale follow smooth power laws, and a handful of tricks — residuals, normalization, attention — keep gradients flowing and let path length collapse to $O(1)$. Skim the toggles, then test yourself below.",
+  intro: "From a single neuron to transformers, generative models, and the systems that make them run. The throughline: stacking <i>nonlinear</i> layers builds compositional feature hierarchies, depth and scale follow smooth power laws, and a handful of tricks — residuals, normalization, attention — keep gradients flowing and let path length collapse to $O(1)$. Skim the toggles, then test yourself below.",
   concepts: [
     {
       title: "The MLP & why nonlinearity matters",
@@ -194,7 +194,7 @@
       tag: "systems",
       body: "<p><b>Why DL is feasible.</b> <b>GPUs</b> pack thousands of parallel cores; <b>TPUs</b> use systolic matrix-multiply arrays purpose-built for the dense linear algebra of neural nets. The practical bottleneck is usually <b>memory bandwidth</b> — moving weights and activations to and from the compute units — rather than raw FLOPs.</p><p><b>Tensors.</b> Inputs are batched into multi-dimensional <b>tensors</b> — images as $(N,C,H,W)$, sequences as $(N,T,D)$ — so a whole batch passes through a layer as <b>one big matrix multiply</b>, exactly the operation the hardware accelerates.</p><p><b>Mixed precision.</b> Compute in <b>FP16/BF16</b> while accumulating in <b>FP32</b> for numerical stability: roughly <b>halves memory and doubles throughput</b> with negligible accuracy loss (BF16's wider exponent range avoids FP16 overflow).</p>",
       example: "A batch of 64 RGB images at 224×224 is the tensor $(64,3,224,224)$; flattened per layer, the forward pass is a single large matmul a GPU/TPU chews through in parallel. Switching that training run from FP32 to BF16 mixed precision typically about halves memory use and nearly doubles step throughput — often the cheapest speedup available.",
-      takeaway: "Because inference is usually bandwidth-bound, mixed precision and quantization buy more real speedup than chasing FLOPs — switch to BF16 before you reach for a bigger GPU."
+      takeaway: "Because training and inference are usually bandwidth-bound, mixed precision buys more real speedup than chasing peak FLOPs — switch to BF16 before you reach for a bigger GPU."
     }
   ]
 };

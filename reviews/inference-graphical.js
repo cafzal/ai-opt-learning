@@ -223,7 +223,7 @@
       tag: "sequential",
       body: "<p>A <b>conditional random field</b> is the <i>discriminative</i> undirected model of a structured output — an MRF whose normalizer depends on the input $\\boldsymbol{x}$:</p><p style=\"text-align:center\">$p(\\boldsymbol{y}\\mid\\boldsymbol{x},\\boldsymbol{w})=\\dfrac{1}{Z(\\boldsymbol{x},\\boldsymbol{w})}\\prod_c\\exp\\!\\big(\\boldsymbol{w}_c^\\top\\boldsymbol\\phi(\\boldsymbol{x},\\boldsymbol{y}_c)\\big)$</p><p>Unlike a generative <b>HMM</b> (which models $p(\\boldsymbol{x},\\boldsymbol{y})$ with local features), a CRF models $p(\\boldsymbol{y}\\mid\\boldsymbol{x})$ directly, allows <b>arbitrary overlapping global features</b>, and is <b>globally normalized</b>. Global normalization <i>avoids the label-bias problem</i> of locally-normalized MEMMs (so future evidence can revise earlier labels). Trained by gradient ascent (gradient = empirical − model-expected feature counts). The max-margin analog is the <b>structural SVM</b>.</p>",
       example: "Named-entity recognition: a chain CRF can use features spanning the whole sentence (capitalization, neighboring words, gazetteers) and, being globally normalized, won't get trapped by an early wrong label the way a locally-normalized MEMM can.",
-      takeaway: "Reach for a CRF over an HMM when you only need $p(\\\\boldsymbol{y}\\\\mid\\\\boldsymbol{x})$ and want rich overlapping features, and global normalization is what spares you the label-bias trap."
+      takeaway: "Reach for a CRF over an HMM when you only need $p(\\boldsymbol{y}\\mid\\boldsymbol{x})$ and want rich overlapping features, and global normalization is what spares you the label-bias trap."
     }
   ]
 };

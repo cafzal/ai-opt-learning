@@ -105,10 +105,10 @@
     },
     {
       title: "Stochastic-method specifics: noisy descent, MADS, MeZO",
-      tag: "stochastic",
+      tag: "algorithm",
       body: "<p><b>Noisy descent</b> adds decaying Gaussian noise to each gradient step so the iterate can jiggle out of a local optimum — SGD-style, with a schedule satisfying $\\sum\\alpha=\\infty,\\ \\sum\\alpha^2<\\infty$ (large enough to keep moving, shrinking fast enough to settle). <b>Mesh adaptive direct search (MADS)</b> generalizes generalized pattern search: instead of a fixed positive-spanning set it polls along <i>random</i> positive-spanning directions on a mesh whose mesh/step sizes are a power of $4$ (the mesh refines faster than the poll step, giving dense direction coverage). <b>Memory-efficient zeroth-order (MeZO)</b> applies an SPSA-style two-point estimate $\\frac{f(\\mathbf{x}+\\epsilon\\mathbf{z})-f(\\mathbf{x}-\\epsilon\\mathbf{z})}{2\\epsilon}\\mathbf{z}$ <i>in place</i>: it never stores the perturbation vector $\\mathbf{z}$, instead reusing the saved RNG seed to regenerate $\\mathbf{z}$ on the fly during the update (≈$12\\times$ memory reduction — used to fine-tune LLMs without ever materializing a gradient).</p>",
       example: "Fine-tuning a large language model with MeZO: a normal backprop step must hold a full gradient the size of the model in memory. MeZO instead does two forward passes with $\\pm\\epsilon\\mathbf{z}$, then walks the weights in-place by regenerating $\\mathbf{z}$ from the stored seed — so peak memory is roughly just the model itself, about $12\\times$ less than gradient-based fine-tuning.",
-      takeaway: "MeZO is what lets you fine-tune a model that wouldn't otherwise fit in GPU memory, trading many more iterations for roughly a $12\\\\times$ smaller memory footprint."
+      takeaway: "MeZO is what lets you fine-tune a model that wouldn't otherwise fit in GPU memory, trading many more iterations for roughly a $12\\times$ smaller memory footprint."
     }
   ]
 };
