@@ -2,31 +2,31 @@
    ML & Optimization Quiz — styles
    ============================================================ */
 :root {
-  /* Light theme (default) */
-  --bg: #f6f8fa;
+  /* Light theme (default) — warm paper / ivory neutrals, blue accent */
+  --bg: #f5f2ea;
   --bg-elev: #ffffff;
-  --bg-elev2: #eef1f4;
-  --border: #d6dde4;
-  --border-strong: #c2cbd4;
-  --text: #1f2328;
-  --text-dim: #57606a;
-  --text-faint: #818b98;
+  --bg-elev2: #ece8dd;
+  --border: #e3ded1;
+  --border-strong: #d2ccba;
+  --text: #21201c;
+  --text-dim: #6a655c;
+  --text-faint: #8e897e;
   --accent: #0969da;
-  --accent-soft: #ddf4ff;
+  --accent-soft: #dbe7f7;
   --on-accent: #ffffff;
   --good: #1a7f37;
-  --good-soft: #dafbe1;
-  --bad: #cf222e;
-  --bad-soft: #ffebe9;
-  --warn: #9a6700;
-  --warn-soft: #fff8c5;
+  --good-soft: #d8f0de;
+  --bad: #c4392f;
+  --bad-soft: #fae5e0;
+  --warn: #946800;
+  --warn-soft: #f6ecc6;
   --purple: #8250df;
-  --purple-soft: #f3e8ff;
-  --m-gold: #9a6700; --m-gold-soft: #fdf4d2; --m-gold-bd: #eac54f;
-  --m-bronze: #8a5a2b; --m-bronze-soft: #f5e6d3; --m-bronze-bd: #d9b48a;
+  --purple-soft: #eee5fa;
+  --m-gold: #946800; --m-gold-soft: #f6ecca; --m-gold-bd: #e3c566;
+  --m-bronze: #8a5a2b; --m-bronze-soft: #eee1cf; --m-bronze-bd: #d6ba95;
   --radius: 12px;
   --radius-sm: 8px;
-  --shadow: 0 1px 2px rgba(31, 35, 40, 0.06), 0 6px 24px rgba(31, 35, 40, 0.06);
+  --shadow: 0 1px 2px rgba(40, 37, 30, 0.06), 0 6px 24px rgba(40, 37, 30, 0.05);
   --maxw: 880px;
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
