@@ -8,6 +8,8 @@
   const DATA = window.QUIZ_DATA;
   const app = document.getElementById("app");
   const LS_KEY = "mlq_scores_v1";
+  const PREFS_KEY = "mlq_prefs_v1";
+  const STATUS_LABEL = { core: "Core", skim: "Skim", review: "Review if rusty", off: "Optional" };
 
   const QC_OPTIONS = [
     "Quantity A is greater",
@@ -86,56 +88,41 @@
   /* ---------- state ---------- */
   let S = null; // { batchId, questions[], prepped[], i, selections[], graded[], correctCount }
 
-  /* ============================================================
-     HOME
-     ============================================================ */
-  function renderHome() {
-    S = null;
-    const scores = loadScores();
-    app.innerHTML = "";
+  /* ---------- preferences (onboarding / view) ---------- */
+  function getPrefs() {
+    try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || null; }
+    catch (e) { return null; }
+  }
+  function savePrefs(p) { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); }
 
-    const intro = el("div", "intro",
-      "Each <b>batch</b> is 10 related questions that ramp from recall to synthesis. " +
-      "Formats mix like the GRE — <b>multiple choice</b>, <b>select-all</b>, <b>numeric entry</b>, and " +
-      "<b>quantitative comparison</b> — across <b>conceptual</b> and <b>applied</b> framings. " +
-      "Every answer gets a worked explanation and the topic it tests. Scores save in your browser.");
-    app.appendChild(intro);
+  function masteryTier(sc) {
+    if (!sc || !sc.total) return null;
+    const pct = sc.best / sc.total;
+    if (pct >= 1) return { key: "gold", label: "Gold" };
+    if (pct >= 0.8) return { key: "silver", label: "Silver" };
+    if (pct >= 0.6) return { key: "bronze", label: "Bronze" };
+    return { key: "started", label: "In progress" };
+  }
+  function scorePill(id, scores) {
+    const sc = scores[id];
+    if (!sc) return `<span class="bc-score">not started</span>`;
+    const t = masteryTier(sc);
+    return `<span class="bc-score has m-${t.key}" title="best ${sc.best} of ${sc.total}">${t.label} · ${sc.best}/${sc.total}</span>`;
+  }
 
-    DATA.tracks.forEach(track => {
-      const t = el("div", "track");
-      const head = el("div", "track-head");
-      head.appendChild(el("h2", null, track.title));
-      head.appendChild(el("span", "src", track.source));
-      t.appendChild(head);
-      if (track.sub) t.appendChild(el("p", "track-sub", track.sub));
+  // For a goal + level, tag every stage: core / skim (on-path) or review / off.
+  function stageStatus(goalKey, levelKey) {
+    const goal = (DATA.goals || []).find(g => g.key === goalKey) || (DATA.goals || [])[0];
+    const level = (DATA.levels || []).find(l => l.key === levelKey) || (DATA.levels || [])[0];
+    const start = level ? level.start : 1;
+    return DATA.stages.map(s => ({
+      stage: s,
+      status: (s.n < start) ? "review" : ((goal && goal.role[s.id]) || "off")
+    }));
+  }
 
-      const grid = el("div", "batch-grid");
-      track.batches.forEach((batchId, idx) => {
-        const b = DATA.batches[batchId];
-        if (!b) return;
-        const card = el("button", "batch-card");
-        const total = b.questions.length;
-        const sc = scores[batchId];
-        const scoreHtml = sc
-          ? `<span class="bc-score has">best ${sc.best}/${sc.total}</span>`
-          : `<span class="bc-score">not started</span>`;
-        const nConcepts = b.review && b.review.concepts ? b.review.concepts.length : 0;
-        const meta = nConcepts
-          ? `Review (${nConcepts}) + ${total} questions`
-          : `${total} questions · easy → advanced`;
-        card.innerHTML =
-          `<div class="bc-top"><span class="bc-num">${idx + 1}</span>` +
-          `<span class="bc-title">${b.title}</span></div>` +
-          `<div class="bc-blurb">${b.blurb}</div>` +
-          `<div class="bc-foot"><span class="bc-meta">${meta}</span>${scoreHtml}</div>`;
-        card.addEventListener("click", () => renderBatch(batchId));
-        grid.appendChild(card);
-      });
-      t.appendChild(grid);
-      app.appendChild(t);
-    });
-
-    const footer = el("div", "home-footer",
+  function footerEl() {
+    return el("div", "home-footer",
       "<b>About.</b> A free, non-commercial study tool. The questions, explanations, and diagrams are original and " +
       "<b>reproduce no text</b> from any source work — they cover standard concepts only (facts and methods, which " +
       "copyright doesn't cover). Those concepts follow widely-taught texts, credited under their stated terms — most " +
@@ -146,7 +133,223 @@
       "Not affiliated with, sponsored by, or endorsed by these authors or publishers. " +
       "This app is released under <a href=\"https://creativecommons.org/licenses/by-nc/4.0/\" target=\"_blank\" rel=\"noopener\">CC BY-NC 4.0</a>; " +
       "full sources &amp; links are in the <a href=\"https://github.com/cafzal/ai-opt-learning#attribution\" target=\"_blank\" rel=\"noopener\">project README</a>.");
-    app.appendChild(footer);
+  }
+
+  /* ============================================================
+     HOME — routes to the tailored Path or the by-source Library
+     ============================================================ */
+  function renderHome() {
+    S = null;
+    const p = getPrefs() || { onboarded: true, goal: "explore", level: "new", view: "path" };
+    window.scrollTo(0, 0);
+    app.innerHTML = "";
+    app.appendChild(renderControls(p));
+    if (p.view === "library" || !DATA.stages || !DATA.stages.length) renderLibrary();
+    else renderPath(p);
+    app.appendChild(footerEl());
+    typeset(app);
+  }
+
+  function renderControls(p) {
+    const c = el("div", "home-controls");
+    const seg = el("div", "seg");
+    const onPath = p.view !== "library";
+    const pb = el("button", "seg-btn" + (onPath ? " on" : ""), "Path");
+    const lb = el("button", "seg-btn" + (!onPath ? " on" : ""), "Library");
+    pb.addEventListener("click", () => { if (!onPath) { savePrefs(Object.assign({}, p, { view: "path" })); renderHome(); } });
+    lb.addEventListener("click", () => { if (onPath) { savePrefs(Object.assign({}, p, { view: "library" })); renderHome(); } });
+    seg.appendChild(pb); seg.appendChild(lb);
+    c.appendChild(seg);
+    if (onPath) {
+      const edit = el("button", "edit-goal", "✎ Edit goal");
+      edit.addEventListener("click", () => renderOnboarding({ edit: true }));
+      c.appendChild(edit);
+    }
+    return c;
+  }
+
+  /* ---------- Library view (the full catalog, by source) ---------- */
+  function renderLibrary() {
+    const scores = loadScores();
+    app.appendChild(el("div", "intro",
+      "The full catalog, by source. Each <b>batch</b> is 10 questions that ramp from recall to synthesis " +
+      "in a GRE-style mix — <b>multiple choice</b>, <b>select-all</b>, <b>numeric</b>, <b>quantitative comparison</b> — " +
+      "after a <b>review</b> of key concepts with diagrams. Scores save in your browser."));
+    DATA.tracks.forEach(track => {
+      const t = el("div", "track");
+      const head = el("div", "track-head");
+      head.appendChild(el("h2", null, track.title));
+      head.appendChild(el("span", "src", track.source));
+      t.appendChild(head);
+      if (track.sub) t.appendChild(el("p", "track-sub", track.sub));
+      const grid = el("div", "batch-grid");
+      track.batches.forEach((batchId, idx) => {
+        const b = DATA.batches[batchId];
+        if (!b) return;
+        const card = el("button", "batch-card");
+        const total = b.questions.length;
+        const nConcepts = b.review && b.review.concepts ? b.review.concepts.length : 0;
+        const meta = nConcepts ? `Review (${nConcepts}) + ${total} questions` : `${total} questions · easy → advanced`;
+        card.innerHTML =
+          `<div class="bc-top"><span class="bc-num">${idx + 1}</span>` +
+          `<span class="bc-title">${b.title}</span></div>` +
+          `<div class="bc-blurb">${b.blurb}</div>` +
+          `<div class="bc-foot"><span class="bc-meta">${meta}</span>${scorePill(batchId, scores)}</div>`;
+        card.addEventListener("click", () => renderBatch(batchId));
+        grid.appendChild(card);
+      });
+      t.appendChild(grid);
+      app.appendChild(t);
+    });
+  }
+
+  /* ---------- Path view (the tailored 6-stage decision-intelligence arc) ---------- */
+  function renderPath(p) {
+    const scores = loadScores();
+    const goal = (DATA.goals || []).find(g => g.key === p.goal) || (DATA.goals || [])[0];
+    const level = (DATA.levels || []).find(l => l.key === p.level) || (DATA.levels || [])[0];
+    const statuses = stageStatus(p.goal, p.level);
+
+    const pathLessons = [];
+    statuses.forEach(({ stage, status }) => {
+      if (status === "core" || status === "skim") stage.batches.forEach(id => { if (DATA.batches[id]) pathLessons.push(id); });
+    });
+    const allLessons = [];
+    DATA.stages.forEach(s => s.batches.forEach(id => { if (DATA.batches[id]) allLessons.push(id); }));
+    const N = pathLessons.length;
+    const off = allLessons.length - N;
+    const masteredCount = pathLessons.filter(id => { const sc = scores[id]; return sc && sc.best / sc.total >= 0.8; }).length;
+    const pct = N ? Math.round(masteredCount / N * 100) : 0;
+    const firstStage = statuses.find(x => x.status === "core" || x.status === "skim");
+    const nextId = pathLessons.find(id => { const sc = scores[id]; return !sc || sc.best < sc.total; }) || pathLessons[0];
+
+    const sum = el("div", "path-summary");
+    const metaBits = [goal ? goal.label : "", level ? level.short : "",
+      firstStage ? `starts at stage ${firstStage.stage.n}` : "", off ? `${off} more in Library` : ""].filter(Boolean);
+    sum.innerHTML =
+      `<div class="ps-row"><span class="ps-label">Your path</span><span class="ps-meta">${metaBits.join(" · ")}</span></div>` +
+      `<div class="ps-big"><span class="ps-n">${N}</span> lessons on your path</div>` +
+      `<div class="ps-bar"><div style="width:${pct}%"></div></div>` +
+      `<div class="ps-mast">${masteredCount} of ${N} mastered · ${pct}%</div>`;
+    if (nextId && DATA.batches[nextId]) {
+      const nb = el("button", "btn nextup", `Next up: ${DATA.batches[nextId].title} →`);
+      nb.addEventListener("click", () => renderBatch(nextId));
+      sum.appendChild(nb);
+    }
+    app.appendChild(sum);
+
+    if (DATA.primer) {
+      const pr = el("button", "primer-card",
+        `<span class="pr-badge">Stage 0</span>` +
+        `<span class="pr-body"><span class="pr-title">${DATA.primer.title}</span>` +
+        `<span class="pr-sub">A 5-min primer — the decision-intelligence mindset. No quiz.</span></span>` +
+        `<span class="pr-arrow">→</span>`);
+      pr.addEventListener("click", () => renderBatch("stage0"));
+      app.appendChild(pr);
+    }
+
+    const wrap = el("div", "stage-list");
+    statuses.forEach(({ stage, status }) => {
+      const onpath = status === "core" || status === "skim";
+      const stEl = el("div", "stage st-" + status + (onpath ? " open" : ""));
+      const cnt = stage.batches.filter(id => DATA.batches[id]).length;
+      const head = el("button", "stage-head",
+        `<span class="st-chevron">▶</span>` +
+        `<span class="st-num">${stage.n}</span>` +
+        `<span class="st-main"><span class="st-name">${stage.name}</span>` +
+        `<span class="st-tagline">${stage.tagline}</span></span>` +
+        `<span class="st-count">${cnt} lesson${cnt > 1 ? "s" : ""}</span>` +
+        `<span class="stage-tag ${status}">${STATUS_LABEL[status] || status}</span>`);
+      head.addEventListener("click", () => stEl.classList.toggle("open"));
+      stEl.appendChild(head);
+
+      const ls = el("div", "stage-lessons");
+      stage.batches.forEach(id => {
+        const b = DATA.batches[id];
+        if (!b) return;
+        const isNext = id === nextId && onpath;
+        const card = el("button", "batch-card lesson" + (onpath ? "" : " dim") + (isNext ? " isnext" : ""));
+        const total = b.questions.length;
+        const nConcepts = b.review && b.review.concepts ? b.review.concepts.length : 0;
+        const meta = nConcepts ? `Review (${nConcepts}) + ${total} Q` : `${total} questions`;
+        card.innerHTML =
+          `<div class="bc-top">` + (isNext ? `<span class="bc-next">Next up</span>` : "") +
+          `<span class="bc-title">${b.title}</span></div>` +
+          `<div class="bc-blurb">${b.blurb}</div>` +
+          `<div class="bc-foot"><span class="bc-meta">${meta}</span>${scorePill(id, scores)}</div>`;
+        card.addEventListener("click", () => renderBatch(id));
+        ls.appendChild(card);
+      });
+      stEl.appendChild(ls);
+      wrap.appendChild(stEl);
+    });
+    app.appendChild(wrap);
+
+    app.appendChild(el("div", "path-hint",
+      `Tailoring only <b>highlights</b> — tap any stage to open it, and switch to <b>Library</b> any time to see all ${allLessons.length} lessons by source.`));
+  }
+
+  /* ============================================================
+     ONBOARDING — two chips that tailor the path
+     ============================================================ */
+  function renderOnboarding(opts) {
+    opts = opts || {};
+    S = null;
+    window.scrollTo(0, 0);
+    app.innerHTML = "";
+    const cur = getPrefs() || { goal: "explore", level: "new", view: "path" };
+    let goal = opts.edit ? cur.goal : null;
+    let level = opts.edit ? cur.level : null;
+
+    const box = el("div", "onb");
+    box.appendChild(el("div", "onb-h", opts.edit ? "Update your path" : "Let’s tailor your path"));
+    box.appendChild(el("div", "onb-sub", "Two taps. Change it anytime — nothing ever gets hidden."));
+
+    box.appendChild(el("div", "onb-q", "What do you want to be able to do?"));
+    const g = el("div", "onb-chips");
+    DATA.goals.forEach(go => {
+      const ch = el("button", "chip" + (goal === go.key ? " sel" : ""),
+        `<span class="chip-label">${go.label}</span><span class="chip-sub">${go.sub}</span>`);
+      ch.addEventListener("click", () => {
+        goal = go.key;
+        g.querySelectorAll(".chip").forEach(x => x.classList.remove("sel"));
+        ch.classList.add("sel"); upd();
+      });
+      g.appendChild(ch);
+    });
+    box.appendChild(g);
+
+    box.appendChild(el("div", "onb-q", "Where are you starting?"));
+    const l = el("div", "onb-chips lvl");
+    DATA.levels.forEach(lv => {
+      const ch = el("button", "chip" + (level === lv.key ? " sel" : ""),
+        `<span class="chip-label">${lv.label}</span>`);
+      ch.addEventListener("click", () => {
+        level = lv.key;
+        l.querySelectorAll(".chip").forEach(x => x.classList.remove("sel"));
+        ch.classList.add("sel"); upd();
+      });
+      l.appendChild(ch);
+    });
+    box.appendChild(l);
+
+    const bar = el("div", "onb-bar");
+    const skip = el("button", "btn ghost", opts.edit ? "Cancel" : "Skip — explore everything");
+    skip.addEventListener("click", () => {
+      if (opts.edit) { renderHome(); }
+      else { savePrefs({ onboarded: true, goal: "explore", level: "new", view: "path" }); renderHome(); }
+    });
+    const go = el("button", "btn", "See my path →");
+    go.disabled = !(goal && level);
+    go.addEventListener("click", () => {
+      savePrefs(Object.assign({}, cur, { onboarded: true, goal: goal, level: level, view: "path" }));
+      renderHome();
+    });
+    bar.appendChild(skip); bar.appendChild(go);
+    box.appendChild(bar);
+    app.appendChild(box);
+
+    function upd() { go.disabled = !(goal && level); }
   }
 
   /* ============================================================
@@ -161,12 +364,12 @@
 
     // top bar
     const top = el("div", "quiz-top");
-    const back = el("button", "btn-back", "← Batches");
+    const back = el("button", "btn-back", "← Back");
     back.addEventListener("click", renderHome);
     top.appendChild(back);
     const tb = el("div", "quiz-titlebox");
     tb.appendChild(el("div", "qt-name", b.title));
-    tb.appendChild(el("div", "qt-prog", "Review, then test yourself"));
+    tb.appendChild(el("div", "qt-prog", b.primer ? "A quick primer — no quiz" : "Review, then test yourself"));
     top.appendChild(tb);
     app.appendChild(top);
 
@@ -227,21 +430,34 @@
       });
     }
 
-    // quiz CTA
-    const scores = loadScores();
-    const sc = scores[batchId];
-    const total = b.questions.length;
-    const cta = el("div", "quiz-cta");
-    const ctaText = el("div", "qc-text");
-    ctaText.innerHTML =
-      `<div class="qc-h">Test your comprehension</div>` +
-      `<div class="qc-sub">${total} questions, easy → advanced, mixed formats with worked explanations.</div>` +
-      (sc ? `<div class="qc-best">Best so far: ${sc.best}/${sc.total}</div>` : "");
-    cta.appendChild(ctaText);
-    const startBtn = el("button", "btn", "Start the " + total + " questions →");
-    startBtn.addEventListener("click", () => startBatch(batchId));
-    cta.appendChild(startBtn);
-    app.appendChild(cta);
+    // quiz CTA — or, for the review-only primer, a path footer
+    const total = b.questions ? b.questions.length : 0;
+    if (b.primer || !total) {
+      const cta = el("div", "quiz-cta");
+      const ctaText = el("div", "qc-text");
+      ctaText.innerHTML =
+        `<div class="qc-h">That’s the lens.</div>` +
+        `<div class="qc-sub">The rest of your path puts these four moves to work.</div>`;
+      cta.appendChild(ctaText);
+      const bk = el("button", "btn", "Back to your path →");
+      bk.addEventListener("click", renderHome);
+      cta.appendChild(bk);
+      app.appendChild(cta);
+    } else {
+      const scores = loadScores();
+      const sc = scores[batchId];
+      const cta = el("div", "quiz-cta");
+      const ctaText = el("div", "qc-text");
+      ctaText.innerHTML =
+        `<div class="qc-h">Test your comprehension</div>` +
+        `<div class="qc-sub">${total} questions, easy → advanced, mixed formats with worked explanations.</div>` +
+        (sc ? `<div class="qc-best">Best so far: ${sc.best}/${sc.total}</div>` : "");
+      cta.appendChild(ctaText);
+      const startBtn = el("button", "btn", "Start the " + total + " questions →");
+      startBtn.addEventListener("click", () => startBatch(batchId));
+      cta.appendChild(startBtn);
+      app.appendChild(cta);
+    }
 
     typeset(app);
   }
@@ -635,6 +851,8 @@
   if (!DATA || !DATA.tracks) {
     app.innerHTML = '<div class="intro">Could not load questions.js.</div>';
   } else {
-    renderHome();
+    const p = getPrefs();
+    if (!p || !p.onboarded) renderOnboarding();
+    else renderHome();
   }
 })();

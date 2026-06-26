@@ -130,6 +130,56 @@
     }
   ];
 
+  /* ---- Decision-intelligence PATH: a 6-stage overlay on the very same batches.
+     The path is the default, goal-tailored view; the TRACKS above remain as the
+     by-source "Library" view. Stage order is the learning arc:
+     frame → predict → reason → optimize → decide-over-time → build. ---- */
+  const STAGES = [
+    { id: "s1", n: 1, name: "Foundations", tagline: "Quantify what you know and don't",
+      batches: ["ml-foundations", "probability", "statistics", "linalg-opt"] },
+    { id: "s2", n: 2, name: "Prediction", tagline: "Turn data into forecasts",
+      batches: ["linear-models", "kernels-trees", "unsupervised", "deep-learning"] },
+    { id: "s3", n: 3, name: "Reasoning & decision theory", tagline: "Update beliefs; put a value on choices",
+      batches: ["inference-graphical", "dm-mdp"] },
+    { id: "s4", n: 4, name: "Optimization", tagline: "Choose the best feasible action",
+      batches: ["opt-foundations", "opt-stochastic", "constrained-opt", "opt-surrogate", "opt-uncertainty"] },
+    { id: "s5", n: 5, name: "Sequential decisions", tagline: "Act, learn, and adapt over time",
+      batches: ["rl", "dm-rl", "dm-pomdp"] },
+    { id: "s6", n: 6, name: "Building decision products", tagline: "Ship it — applied ML, LLMs & agents",
+      batches: ["applied-ml", "genai-arch", "genai-align", "genai-applied"] }
+  ];
+
+  // Each goal tags every stage: "core" (your focus), "skim" (lighter), "off" (kept in Library).
+  const GOALS = [
+    { key: "decisions", label: "Make better decisions under uncertainty",
+      sub: "The decision-intelligence toolkit — decision theory, optimization, and RL for choosing well when outcomes are unknown.",
+      role: { s1: "skim", s2: "skim", s3: "core", s4: "core", s5: "core", s6: "off" } },
+    { key: "ml", label: "Build predictive ML models",
+      sub: "Classic machine learning end to end — from the math to models that generalize.",
+      role: { s1: "core", s2: "core", s3: "skim", s4: "off", s5: "off", s6: "core" } },
+    { key: "llm", label: "Build with LLMs & agents",
+      sub: "How modern language models and agents work — architecture, training, alignment, RAG, and tool use.",
+      role: { s1: "skim", s2: "off", s3: "skim", s4: "off", s5: "core", s6: "core" } },
+    { key: "opt", label: "Tackle optimization & OR problems",
+      sub: "Engineering optimization and operations research — descent, constraints, surrogates, and decisions under uncertainty.",
+      role: { s1: "skim", s2: "off", s3: "skim", s4: "core", s5: "skim", s6: "off" } },
+    { key: "explore", label: "Explore the fundamentals",
+      sub: "Not sure yet? Walk the whole path, foundations first.",
+      role: { s1: "core", s2: "core", s3: "core", s4: "core", s5: "core", s6: "core" } }
+  ];
+
+  // Level sets where the path starts; earlier stages collapse to "review if rusty".
+  const LEVELS = [
+    { key: "new", label: "New to the math", short: "from scratch", start: 1 },
+    { key: "basics", label: "Comfortable with probability & linear algebra", short: "some background", start: 3 },
+    { key: "adv", label: "Experienced — take me to the advanced parts", short: "experienced", start: 4 }
+  ];
+
+  const PRIMER = {
+    title: "Think like a decision scientist",
+    blurb: "A 5-minute primer on the decision-intelligence mindset — framing choices, utility, expected value, and the value of information. No quiz; just the lens the rest of the path builds on."
+  };
+
   // Build final structure, attaching question arrays. Batches with no
   // questions yet are dropped from the home view so nothing looks broken.
   const batches = {};
@@ -138,9 +188,23 @@
     if (qs.length) batches[id] = Object.assign({}, META[id], { questions: qs, review: R[id] || null });
   });
 
+  // Stage 0 primer: review-only (no questions), reachable from the path view.
+  if (R["stage0"]) {
+    batches["stage0"] = Object.assign({}, PRIMER, { questions: [], review: R["stage0"], primer: true });
+  }
+
   const tracks = TRACKS.map(t => Object.assign({}, t, {
     batches: t.batches.filter(id => batches[id])
   })).filter(t => t.batches.length);
 
-  window.QUIZ_DATA = { tracks, batches };
+  // stages keep only batches that actually exist (built above)
+  const stages = STAGES.map(s => Object.assign({}, s, {
+    batches: s.batches.filter(id => batches[id])
+  })).filter(s => s.batches.length);
+
+  window.QUIZ_DATA = {
+    tracks, batches, stages,
+    goals: GOALS, levels: LEVELS,
+    primer: batches["stage0"] || null
+  };
 })();
