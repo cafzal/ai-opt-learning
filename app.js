@@ -87,6 +87,7 @@
 
   /* ---------- state ---------- */
   let S = null; // { batchId, questions[], prepped[], i, selections[], graded[], correctCount }
+  let tailorOpen = false; // persistent tailor bar expanded?
 
   /* ---------- preferences (onboarding / view) ---------- */
   function getPrefs() {
@@ -160,11 +161,6 @@
     lb.addEventListener("click", () => { if (onPath) { savePrefs(Object.assign({}, p, { view: "library" })); renderHome(); } });
     seg.appendChild(pb); seg.appendChild(lb);
     c.appendChild(seg);
-    if (onPath) {
-      const edit = el("button", "edit-goal", "✎ Edit goal");
-      edit.addEventListener("click", () => renderOnboarding({ edit: true }));
-      c.appendChild(edit);
-    }
     return c;
   }
 
@@ -222,9 +218,37 @@
     const firstStage = statuses.find(x => x.status === "core" || x.status === "skim");
     const nextId = pathLessons.find(id => { const sc = scores[id]; return !sc || sc.best < sc.total; }) || pathLessons[0];
 
+    // persistent tailor bar — edit goal/level inline; retunes the path live
+    const tb = el("div", "tailor" + (tailorOpen ? " open" : ""));
+    const th = el("button", "tailor-head",
+      `<span class="tl-label">Tailored for</span>` +
+      `<span class="tl-current">${goal ? goal.label : ""}${level ? " · " + level.short : ""}</span>` +
+      `<span class="tl-toggle">${tailorOpen ? "Done" : "Change"}</span>`);
+    th.addEventListener("click", () => { tailorOpen = !tailorOpen; renderHome(); });
+    tb.appendChild(th);
+    const panel = el("div", "tailor-panel");
+    panel.appendChild(el("div", "tl-q", "What do you want to be able to do?"));
+    const gc = el("div", "tl-chips");
+    DATA.goals.forEach(go => {
+      const ch = el("button", "chip sm" + (p.goal === go.key ? " sel" : ""), `<span class="chip-label">${go.label}</span>`);
+      ch.addEventListener("click", () => { savePrefs(Object.assign({}, p, { goal: go.key })); renderHome(); });
+      gc.appendChild(ch);
+    });
+    panel.appendChild(gc);
+    panel.appendChild(el("div", "tl-q", "Where are you starting?"));
+    const lc = el("div", "tl-chips");
+    DATA.levels.forEach(lv => {
+      const ch = el("button", "chip sm" + (p.level === lv.key ? " sel" : ""), `<span class="chip-label">${lv.label}</span>`);
+      ch.addEventListener("click", () => { savePrefs(Object.assign({}, p, { level: lv.key })); renderHome(); });
+      lc.appendChild(ch);
+    });
+    panel.appendChild(lc);
+    tb.appendChild(panel);
+    app.appendChild(tb);
+
     const sum = el("div", "path-summary");
-    const metaBits = [goal ? goal.label : "", level ? level.short : "",
-      firstStage ? `starts at stage ${firstStage.stage.n}` : "", off ? `${off} more in Library` : ""].filter(Boolean);
+    const metaBits = [firstStage ? `starts at stage ${firstStage.stage.n}` : "",
+      off ? `${off} more in Library` : ""].filter(Boolean);
     sum.innerHTML =
       `<div class="ps-row"><span class="ps-label">Your path</span><span class="ps-meta">${metaBits.join(" · ")}</span></div>` +
       `<div class="ps-big"><span class="ps-n">${N}</span> lessons on your path</div>` +
