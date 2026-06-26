@@ -101,12 +101,13 @@
     {
       id: "ml",
       title: "AI & Machine Learning Fundamentals",
-      source: "ML · deep learning · RL",
-      sub: "Foundations through frontier — original practice material on concepts from the standard graduate texts (Murphy; Fleuret; Sutton & Barto).",
+      source: "ML · deep learning · RL · LLMs",
+      sub: "Foundations through the generative-AI frontier — original practice material on concepts from the standard graduate texts (Murphy; Fleuret; Sutton & Barto) and the modern LLM literature.",
       batches: [
         "ml-foundations", "probability", "statistics", "linalg-opt",
         "linear-models", "kernels-trees", "unsupervised", "deep-learning",
-        "inference-graphical", "rl", "applied-ml"
+        "inference-graphical", "rl", "applied-ml",
+        "genai-arch", "genai-align", "genai-applied"
       ]
     },
     {
@@ -118,13 +119,6 @@
         "opt-foundations", "opt-stochastic", "constrained-opt",
         "opt-advanced", "dm-mdp", "dm-rl-pomdp"
       ]
-    },
-    {
-      id: "genai",
-      title: "Generative AI & Large Language Models",
-      source: "LLMs · GenAI",
-      sub: "The modern LLM stack — architecture & efficiency, training & alignment, serving, RAG/agents, and the generative frontier.",
-      batches: ["genai-arch", "genai-align", "genai-applied"]
     }
   ];
 

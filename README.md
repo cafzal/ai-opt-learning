@@ -23,8 +23,8 @@ python3 -m http.server 4178
 
 ## What's inside
 
-- **3 tracks** → 20 batches (ML Fundamentals · Optimization & Decision-Making · Generative AI & LLMs).
-  Open a batch to **review first, then test**.
+- **2 tracks** → 20 batches: **AI & ML Fundamentals** (classic ML through deep learning, RL, and the
+  GenAI/LLM frontier) and **Optimization & Decision-Making**. Open a batch to **review first, then test**.
 - **Review:** ~6–13 collapsible concept toggles per batch, each with a worked **example**, a practical
   **"why it matters"** takeaway, and — where it helps — an **SVG diagram** (100+ in all: bias–variance
   curves, SVM margins, Pareto frontiers, Bellman backups, attention flow, and so on).
