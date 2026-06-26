@@ -2,7 +2,7 @@
 
 **▶ Live: https://cafzal.github.io/ai-opt-learning/**
 
-A free, no-signup web app for the **AI/ML + optimization fundamentals behind better decisions** —
+An interactive web app for the **AI/ML + optimization fundamentals behind better decisions** —
 from probability and prediction through optimization, sequential decision-making, and the
 LLM / generative-AI frontier. Tell it what you want to learn and where you're starting, and it
 builds you a **tailored path**; or browse the full catalog by source. **229 questions** across

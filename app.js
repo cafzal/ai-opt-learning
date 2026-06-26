@@ -124,7 +124,7 @@
 
   function footerEl() {
     return el("div", "home-footer",
-      "<b>About.</b> A free, non-commercial study tool. The questions, explanations, and diagrams are original and " +
+      "<b>About.</b> A non-commercial study tool. The questions, explanations, and diagrams are original and " +
       "<b>reproduce no text</b> from any source work — they cover standard concepts only (facts and methods, which " +
       "copyright doesn't cover). Those concepts follow widely-taught texts, credited under their stated terms — most " +
       "are Creative Commons <b>BY-NC-ND</b>: Murphy, <a href=\"https://probml.github.io/pml-book/\" target=\"_blank\" rel=\"noopener\"><i>Probabilistic Machine Learning</i></a> (MIT Press, 2022); " +
