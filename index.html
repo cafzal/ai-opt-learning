@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI &amp; Optimization — Self-Quiz</title>
+  <meta name="description" content="Self-study quiz over ML, optimization & decision-making, and LLM/GenAI fundamentals: 20 batches of review concepts (with diagrams) plus 200 mixed-format questions." />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="AI &amp; Optimization — Self-Quiz" />
+  <meta property="og:description" content="Review concepts with diagrams, then test yourself: 20 batches, 200 questions across ML, optimization, and LLM/GenAI fundamentals." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d1117'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%2358a6ff' font-family='sans-serif' font-weight='700'%3E%CE%A3%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // MathJax config must be defined before the library loads.
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        enableMenu: false
+      },
+      startup: { typeset: false }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="app-header">
+      <div>
+        <h1>AI &amp; Optimization — Self-Quiz</h1>
+        <div class="sub">Review, then test — across ML, optimization &amp; decision-making, and LLM/GenAI fundamentals</div>
+      </div>
+      <button class="reset-link" id="resetScores" title="Clear all saved scores">reset progress</button>
+    </div>
+
+    <div id="app"><!-- views render here --></div>
+  </div>
+
+  <!-- Question batches (each populates window.QUIZ_BATCHES). Load before questions.js. -->
+  <script src="batches/ml-foundations.js"></script>
+  <script src="batches/probability.js"></script>
+  <script src="batches/statistics.js"></script>
+  <script src="batches/linalg-opt.js"></script>
+  <script src="batches/linear-models.js"></script>
+  <script src="batches/kernels-trees.js"></script>
+  <script src="batches/unsupervised.js"></script>
+  <script src="batches/deep-learning.js"></script>
+  <script src="batches/inference-graphical.js"></script>
+  <script src="batches/rl.js"></script>
+  <script src="batches/applied-ml.js"></script>
+  <script src="batches/opt-foundations.js"></script>
+  <script src="batches/opt-stochastic.js"></script>
+  <script src="batches/constrained-opt.js"></script>
+  <script src="batches/opt-advanced.js"></script>
+  <script src="batches/dm-mdp.js"></script>
+  <script src="batches/dm-rl-pomdp.js"></script>
+  <script src="batches/genai-arch.js"></script>
+  <script src="batches/genai-align.js"></script>
+  <script src="batches/genai-applied.js"></script>
+
+  <!-- Review/study content (each populates window.QUIZ_REVIEWS). Load before questions.js. -->
+  <script src="reviews/ml-foundations.js"></script>
+  <script src="reviews/probability.js"></script>
+  <script src="reviews/statistics.js"></script>
+  <script src="reviews/linalg-opt.js"></script>
+  <script src="reviews/linear-models.js"></script>
+  <script src="reviews/kernels-trees.js"></script>
+  <script src="reviews/unsupervised.js"></script>
+  <script src="reviews/deep-learning.js"></script>
+  <script src="reviews/inference-graphical.js"></script>
+  <script src="reviews/rl.js"></script>
+  <script src="reviews/applied-ml.js"></script>
+  <script src="reviews/opt-foundations.js"></script>
+  <script src="reviews/opt-stochastic.js"></script>
+  <script src="reviews/constrained-opt.js"></script>
+  <script src="reviews/opt-advanced.js"></script>
+  <script src="reviews/dm-mdp.js"></script>
+  <script src="reviews/dm-rl-pomdp.js"></script>
+  <script src="reviews/genai-arch.js"></script>
+  <script src="reviews/genai-align.js"></script>
+  <script src="reviews/genai-applied.js"></script>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
