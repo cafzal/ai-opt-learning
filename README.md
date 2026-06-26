@@ -103,15 +103,22 @@ Most are Creative Commons **BY-NC-ND** — share with attribution, non-commercia
 derivatives of the text — which this project respects (attribution below; non-commercial; no
 text or abridgement redistributed, concepts only):
 
-| Work | Author(s) | Terms (per front matter) |
-|---|---|---|
-| *Probabilistic Machine Learning: An Introduction* (MIT Press, 2022) | Kevin P. Murphy | CC BY-NC-ND |
-| *Machine Learning: A Probabilistic Perspective* (MIT Press, 2012) | Kevin P. Murphy | © all rights reserved |
-| *The Little Book of Deep Learning* (2023) | François Fleuret | free for personal use |
-| *Reinforcement Learning: An Introduction*, 2nd ed. (MIT Press, 2018) | Sutton & Barto | CC BY-NC-ND 2.0 |
-| *Algorithms for Optimization*, 2nd ed. (MIT Press, 2025) | Kochenderfer & Wheeler | CC BY-NC-ND 4.0 |
-| *Algorithms for Decision Making* (MIT Press, 2022) | Kochenderfer, Wheeler & Wray | CC BY-NC-ND |
+| Work | Author(s) | Terms | Source |
+|---|---|---|---|
+| *Probabilistic Machine Learning: An Introduction* (MIT Press, 2022) | Kevin P. Murphy | CC BY-NC-ND | [probml.github.io/pml-book](https://probml.github.io/pml-book/) |
+| *Machine Learning: A Probabilistic Perspective* (MIT Press, 2012) | Kevin P. Murphy | © all rights reserved | publisher |
+| *The Little Book of Deep Learning* (2023) | François Fleuret | Creative Commons, non-commercial | [fleuret.org/francois/lbdl.html](https://fleuret.org/francois/lbdl.html) |
+| *Reinforcement Learning: An Introduction*, 2nd ed. (MIT Press, 2018) | Sutton & Barto | CC BY-NC-ND 2.0 | [incompleteideas.net/book](http://incompleteideas.net/book/the-book-2nd.html) |
+| *Algorithms for Optimization*, 2nd ed. (MIT Press, 2025) | Kochenderfer & Wheeler | CC BY-NC-ND 4.0 | [algorithmsbook.com/optimization](https://algorithmsbook.com/optimization/) |
+| *Algorithms for Decision Making* (MIT Press, 2022) | Kochenderfer, Wheeler & Wray | CC BY-NC-ND | [algorithmsbook.com](https://algorithmsbook.com/) |
 
-Free PDFs of the openly-licensed titles are available from the authors' / publisher's websites.
 This project is not affiliated with, sponsored by, or endorsed by these authors or publishers;
 titles and trademarks belong to their respective owners.
+
+## License
+
+The app itself — its code, questions, explanations, and diagrams — is © 2026 Cameron Afzal,
+released under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**;
+see [`LICENSE`](LICENSE). NonCommercial is chosen deliberately to respect the non-commercial
+terms of the source texts above. This license covers the original material in this repository
+only; the cited works remain under their own licenses.

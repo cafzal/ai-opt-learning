@@ -143,7 +143,9 @@
       "Sutton &amp; Barto, <i>Reinforcement Learning: An Introduction</i> (MIT Press, 2018); Kochenderfer &amp; Wheeler, " +
       "<i>Algorithms for Optimization</i> (MIT Press, 2025); Kochenderfer, Wheeler &amp; Wray, <i>Algorithms for " +
       "Decision Making</i> (MIT Press, 2022); and Fleuret, <i>The Little Book of Deep Learning</i>. " +
-      "Not affiliated with, sponsored by, or endorsed by these authors or publishers.");
+      "Not affiliated with, sponsored by, or endorsed by these authors or publishers. " +
+      "This app is released under <a href=\"https://creativecommons.org/licenses/by-nc/4.0/\" target=\"_blank\" rel=\"noopener\">CC BY-NC 4.0</a>; " +
+      "full sources &amp; links are in the <a href=\"https://github.com/cafzal/ai-opt-learning#attribution\" target=\"_blank\" rel=\"noopener\">project README</a>.");
     app.appendChild(footer);
   }
 
