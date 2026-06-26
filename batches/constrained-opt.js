@@ -70,6 +70,19 @@
     ref: "Lagrangian duality & KKT (weak duality)"
   },
   {
+    id: "co-11", type: "mc", framing: "conceptual", difficulty: 3,
+    prompt: "While running the <b>simplex method</b> you hit a <i>tie</i> in the minimum-ratio test — a <b>degenerate</b> basic feasible solution. Left unaddressed this can cause the method to <b>cycle</b> (revisit bases without improving the objective). Which pivoting rule <b>guarantees termination</b> by preventing cycling?",
+    options: [
+      "Bland's rule (choose the lowest-index eligible entering and leaving variable)",
+      "Dantzig's rule (choose the most-negative reduced cost)",
+      "Always choose the entering variable with the largest coefficient",
+      "Choose the leaving variable with the largest minimum ratio"
+    ],
+    answer: 0,
+    explanation: "A degenerate vertex (more than $n$ active constraints, signaled by a tie in the minimum-ratio test) lets simplex pivot without moving, and a loop of such pivots is <i>cycling</i>. <b>Bland's rule</b> — always take the lowest-index eligible entering and leaving variable — provably prevents cycling and guarantees termination (the lexicographic/perturbation rule does too). Dantzig's most-negative-reduced-cost rule is the usual fast default but can itself cycle on degenerate problems.",
+    ref: "Degeneracy and cycling in the simplex method"
+  },
+  {
     id: "co-7", type: "ms", framing: "conceptual", difficulty: 4,
     prompt: "Select <b>every</b> condition that belongs to the <b>KKT first-order necessary conditions</b> for $\\min f$ s.t. $\\mathbf{g}\\le\\mathbf{0}$, $\\mathbf{h}=\\mathbf{0}$.",
     options: [

@@ -106,6 +106,20 @@
     ref: "State-space models & the Kalman filter"
   },
   {
+    id: "inf-11", type: "ms", framing: "conceptual", difficulty: 4,
+    prompt: "A confounder $Z$ causes both treatment $X$ and outcome $Y$ ($X\\!\\leftarrow\\!Z\\!\\to\\!Y$), and $X$ also causes $Y$. Select every statement that correctly describes estimating the <b>causal effect</b> of $X$ on $Y$.",
+    options: [
+      "In general $p(y\\mid x)\\neq p(y\\mid \\mathrm{do}(x))$ here, because the open backdoor path $X\\!\\leftarrow\\!Z\\!\\to\\!Y$ leaks non-causal association",
+      "Adjusting for $Z$ identifies the effect: $p(y\\mid \\mathrm{do}(x))=\\sum_z p(y\\mid x,z)\\,p(z)$",
+      "A randomized experiment that assigns $X$ by a coin flip estimates $p(y\\mid \\mathrm{do}(x))$ directly, with no adjustment",
+      "The plain conditional $p(y\\mid x)$ already equals the causal effect, since $X$ is a cause of $Y$",
+      "Adjusting instead for a <i>descendant</i> of $X$ on the $X\\to Y$ path is a valid way to block the backdoor"
+    ],
+    answer: [0, 1, 2],
+    explanation: "Setting $X$ via $\\mathrm{do}(x)$ cuts the edge $Z\\to X$, so the backdoor path $X\\!\\leftarrow\\!Z\\!\\to\\!Y$ is severed; passive conditioning leaves it open, hence $p(y\\mid x)\\neq p(y\\mid \\mathrm{do}(x))$ in general. The backdoor criterion is met by $\\mathbf{Z}=\\{Z\\}$ (it blocks the backdoor and is not a descendant of $X$), so the adjustment formula recovers the effect. Randomization severs $X$'s incoming edges by design, estimating the $\\mathrm{do}$-distribution directly. Option 4 is false (conditioning $\\neq$ intervening under confounding), and option 5 is false — adjusting for a descendant of $X$ can block the causal path or open a collider, biasing the estimate.",
+    ref: "Causality: intervention & counterfactuals (backdoor adjustment)"
+  },
+  {
     id: "inf-10", type: "mc", framing: "conceptual", difficulty: 5,
     prompt: "A chain <b>CRF</b> is globally normalized — its partition function $Z(\\boldsymbol{x},\\boldsymbol{w})$ depends on the whole input $\\boldsymbol{x}$. What key advantage does this global normalization confer over locally-normalized models like MEMMs?",
     options: [

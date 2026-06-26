@@ -3,9 +3,9 @@
   intro: "The vocabulary the rest of the document is built on: what learning <i>is</i>, the three paradigms, how models generalize (or fail to), and the shared toolkit (losses, information theory, the exponential family). Skim the toggles, then test yourself below.",
   concepts: [
     {
-      title: "The three paradigms of learning",
+      title: "The paradigms of learning",
       tag: "core",
-      body: "<p>Machine learning improves at a task <b>T</b> via experience <b>E</b> measured by <b>P</b> (Mitchell). The probabilistic view treats every unknown — predictions and parameters alike — as a random variable. Three paradigms differ in the <i>signal</i> they learn from:</p><ul><li><b>Supervised</b> — labeled pairs $(\\boldsymbol{x},y)$; learn $f:\\mathcal{X}\\to\\mathcal{Y}$ that <i>generalizes</i>.</li><li><b>Unsupervised</b> — unlabeled $\\boldsymbol{x}$ only; discover structure / density $p(\\boldsymbol{x})$.</li><li><b>Reinforcement</b> — occasional, often delayed reward; hard credit assignment.</li></ul><p>LeCun's <i>cake</i> analogy ranks them by information per sample.</p>",
+      body: "<p>Machine learning improves at a task <b>T</b> via experience <b>E</b> measured by <b>P</b> (Mitchell). The probabilistic view treats every unknown — predictions and parameters alike — as a random variable. The paradigms differ in the <i>signal</i> they learn from:</p><ul><li><b>Supervised</b> — labeled pairs $(\\boldsymbol{x},y)$; learn $f:\\mathcal{X}\\to\\mathcal{Y}$ that <i>generalizes</i>.</li><li><b>Unsupervised</b> — unlabeled $\\boldsymbol{x}$ only; discover structure / density $p(\\boldsymbol{x})$.</li><li><b>Reinforcement</b> — occasional, often delayed reward; hard credit assignment.</li><li><b>Self-supervised</b> — labels <i>manufactured from the data itself</i> (e.g. predict a masked or next token), turning unlabeled $\\boldsymbol{x}$ into a supervised proxy task that yields reusable representations. It is the engine behind modern pretraining.</li></ul><p>LeCun's <i>cake</i> analogy ranks them by information per sample (self-supervision lives in the unsupervised 'cake' — dense signal, no human labels).</p>",
       visual: `<svg viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg" role="img">
         <text x="10" y="22" style="fill:var(--text)" font-size="13" font-weight="700">Information per sample (LeCun's cake)</text>
         <g font-size="12">
@@ -24,13 +24,13 @@
         <text x="10" y="150" style="fill:var(--text-dim)" font-size="11">"Cake" = unsupervised (the bulk), "icing" = supervised, "cherry" = RL.</text>
       </svg>`,
       caption: "More signal per sample on the left; RL gets the least, only occasionally.",
-      example: "A spam filter trained on emails labeled spam/not-spam is <b>supervised</b>; grouping customers into segments with no labels is <b>unsupervised</b>; an agent learning to play a game from win/lose rewards is <b>reinforcement</b> learning.",
+      example: "A spam filter trained on emails labeled spam/not-spam is <b>supervised</b>; grouping customers into segments with no labels is <b>unsupervised</b>; an agent learning to play a game from win/lose rewards is <b>reinforcement</b> learning; a language model trained to predict the next token on raw text is <b>self-supervised</b> — the label is just the following word.",
       takeaway: "Decides your whole project shape: if labels are scarce or pricey, lean on unsupervised pretraining and treat scarce labels as the costly icing."
     },
     {
       title: "Generalization & the bias–variance tradeoff",
       tag: "core",
-      body: "<p>The goal is low <b>population risk</b> on unseen data, not low training error. As model capacity grows, training error falls monotonically but test error traces a <b>U</b>: high on the left (<b>underfitting</b> / high bias) and high on the right (<b>overfitting</b> / high variance, large generalization gap).</p><p>Formally MSE $=$ bias$^2$ + variance, so a biased model can win if it cuts variance enough.</p>",
+      body: "<p>The goal is low <b>population risk</b> on unseen data, not low training error. This is only possible under the <b>i.i.d. assumption</b>: train and test data are drawn <i>independently from the same distribution</i> $p^*$. That shared distribution is the bridge that lets a number measured on the training set predict performance on the test set — its violation is <b>distribution shift</b>, when test data is drawn from a different distribution and the guarantee collapses.</p><p>As model capacity grows, training error falls monotonically but test error traces a <b>U</b>: high on the left (<b>underfitting</b> / high bias) and high on the right (<b>overfitting</b> / high variance, large generalization gap).</p><p>Formally MSE $=$ bias$^2$ + variance, so a biased model can win if it cuts variance enough.</p>",
       visual: `<svg viewBox="0 0 520 250" xmlns="http://www.w3.org/2000/svg" role="img">
         <line x1="55" y1="20" x2="55" y2="200" class="vx-axis" stroke-width="1.5"/>
         <line x1="55" y1="200" x2="495" y2="200" class="vx-axis" stroke-width="1.5"/>
@@ -57,6 +57,13 @@
       takeaway: "Reach for non-parametric when you have lots of data and no model in mind, but its $O(N)$ queries can sink you at serving time."
     },
     {
+      title: "Inductive bias & no free lunch",
+      tag: "core",
+      body: "<p><b>Inductive bias</b> is the set of assumptions a learner uses to <i>generalize beyond</i> the finite training data to unseen inputs. It is not optional: the <b>no-free-lunch theorem</b> says no learner beats any other when averaged over <i>all</i> possible problems, so without assumptions there is no reason to prefer one extrapolation over another. Every working model smuggles in bias — and the <b>architecture / representation IS the inductive bias</b>: a CNN assumes locality and translation-invariance, an RNN/transformer assumes sequential structure, a linear model assumes additivity. Choosing a model is choosing which assumptions to bet on.</p>",
+      example: "A CNN's convolution + pooling hard-codes that a cat is a cat wherever it appears in the image (translation invariance). That bias is exactly why a CNN beats a generic fully-connected net on vision — and would <i>hurt</i> on data with no spatial structure, just as no-free-lunch predicts.",
+      takeaway: "There is no assumption-free learner: pick the model whose built-in bias matches your data's structure, because that bias — not raw capacity — is what makes generalization possible."
+    },
+    {
       title: "Loss, empirical risk & maximum likelihood",
       tag: "core",
       body: "<p>A <b>loss</b> $\\ell(y,\\hat y)$ scores predictions (0–1, squared, cross-entropy, hinge). <b>Empirical-risk minimization</b> picks $\\hat{\\boldsymbol\\theta}=\\arg\\min\\frac1N\\sum_n\\ell(y_n,f(\\boldsymbol{x}_n;\\boldsymbol\\theta))$. <b>MLE</b> is just ERM with the negative-log-likelihood loss.</p><p>Key identity: under Gaussian noise, $\\text{NLL}=\\frac{1}{2\\sigma^2}\\text{MSE}+\\text{const}$, so <b>MLE = least squares</b>.</p>",
@@ -66,7 +73,7 @@
     {
       title: "The curse of dimensionality",
       tag: "intuition",
-      body: "<p>In high dimensions data becomes desperately sparse. To capture a fraction $f$ of the data in an axis-aligned hypercube of edge $e$ in $D$ dims, $e_D(f)=f^{1/D}$. Neighborhoods stop being local, which breaks distance-based methods and motivates parametric models with strong priors.</p>",
+      body: "<p>In high dimensions data becomes desperately sparse. To capture a fraction $f$ of the data in an axis-aligned hypercube of edge $e$ in $D$ dims, $e_D(f)=f^{1/D}$. Neighborhoods stop being local, which breaks distance-based methods and motivates parametric models with strong priors.</p><p><b>Why learning survives — the manifold hypothesis:</b> real high-dimensional data (images, text, audio) does not fill its ambient space but concentrates near a much lower-dimensional <b>manifold</b> whose <i>intrinsic dimension</i> is what matters. The effective $D$ is small even when the raw $D$ is huge, so the curse is far milder in practice than the worst case — this is what makes learning feasible at all.</p>",
       visual: `<svg viewBox="0 0 520 250" xmlns="http://www.w3.org/2000/svg" role="img">
         <line x1="55" y1="20" x2="55" y2="200" class="vx-axis" stroke-width="1.5"/>
         <line x1="55" y1="200" x2="495" y2="200" class="vx-axis" stroke-width="1.5"/>
@@ -87,7 +94,7 @@
     {
       title: "Information theory: entropy, cross-entropy, KL",
       tag: "toolkit",
-      body: "<p>Entropy $\\mathbb{H}(X)=-\\sum_k p_k\\log p_k$ (max at uniform). Cross-entropy $\\mathbb{H}_{ce}(p,q)$ is the classification loss. KL divergence $D_{\\text{KL}}(p\\|q)=\\mathbb{H}_{ce}(p,q)-\\mathbb{H}(p)\\ge 0$, so minimizing cross-entropy = minimizing forward KL = MLE.</p><p><b>Forward</b> KL $D_{\\text{KL}}(p\\|q)$ is mode-<i>covering</i>; <b>reverse</b> KL $D_{\\text{KL}}(q\\|p)$ (used in VI/VAEs) is mode-<i>seeking</i>.</p>",
+      body: "<p>Entropy $\\mathbb{H}(X)=-\\sum_k p_k\\log p_k$ (max at uniform). Cross-entropy $\\mathbb{H}_{ce}(p,q)$ is the classification loss. KL divergence $D_{\\text{KL}}(p\\|q)=\\mathbb{H}_{ce}(p,q)-\\mathbb{H}(p)\\ge 0$, so minimizing cross-entropy = minimizing forward KL = MLE.</p><p><b>Forward</b> KL $D_{\\text{KL}}(p\\|q)$ is mode-<i>covering</i>; <b>reverse</b> KL $D_{\\text{KL}}(q\\|p)$ (used in VI/VAEs) is mode-<i>seeking</i>.</p><p><b>Learning as compression (MDL):</b> a model assigning probability $q$ to the data can encode it in $-\\log_2 q$ bits, so minimizing NLL <i>is</i> minimizing code length. The <b>minimum description length</b> principle picks the model that most compresses the data <i>plus its own description</i> — a formal Occam's razor that ties directly to regularization (the model's complexity term is the cost of describing its parameters).</p>",
       visual: `<svg viewBox="0 0 520 230" xmlns="http://www.w3.org/2000/svg" role="img">
         <text x="135" y="20" text-anchor="middle" font-size="12" font-weight="700">Forward KL (p‖q)</text>
         <text x="385" y="20" text-anchor="middle" font-size="12" font-weight="700">Reverse KL (q‖p)</text>

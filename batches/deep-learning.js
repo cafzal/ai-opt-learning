@@ -83,6 +83,19 @@
     ref: "Attention"
   },
   {
+    id: "dl-saddles", type: "mc", framing: "conceptual", difficulty: 3,
+    prompt: "In a <b>high-dimensional</b> non-convex loss landscape, what kind of critical point most often <b>stalls</b> training?",
+    options: [
+      "Saddle points and the surrounding plateaus, where the gradient nearly vanishes",
+      "Sharp, isolated bad local minima far worse than the global minimum",
+      "Points where the Hessian has all-positive eigenvalues",
+      "Discontinuities where the loss is non-differentiable"
+    ],
+    answer: 0,
+    explanation: "A critical point is a minimum only if <i>every</i> Hessian eigenvalue is positive; in high dimensions that is exponentially unlikely, so almost all critical points are <b>saddle points</b>, and the flat plateaus around them are what stall progress. The naive 2-D 'bad local minimum' picture misleads — most local minima are near the global value. SGD noise and momentum help escape saddles.",
+    ref: "Saddle points in high dimensions"
+  },
+  {
     id: "dl-8", type: "ms", framing: "applied", difficulty: 4,
     prompt: "Select every <b>true</b> statement about <b>self-attention</b> as described in the notes.",
     options: [
@@ -104,6 +117,19 @@
     answer: 1,
     explanation: "The table gives the Transformer an $O(1)$ max path length and the RNN an $O(n)$ max path length. Since $O(1)<O(n)$ for long sequences, quantity B (the RNN's) is the larger — which is precisely why transformers handle long-range dependencies better.",
     ref: "CNN vs RNN vs Transformer"
+  },
+  {
+    id: "dl-double-descent", type: "mc", framing: "conceptual", difficulty: 4,
+    prompt: "The classical bias–variance <b>U-curve</b> predicts test error rises once a model can fit the training data. For heavily <b>overparameterized</b> nets, what does <b>double descent</b> say happens as you keep increasing capacity past that point?",
+    options: [
+      "Test error peaks at the interpolation threshold, then descends again as capacity grows further",
+      "Test error keeps rising monotonically — overfitting only gets worse",
+      "Test error stays flat at the U-curve minimum regardless of added capacity",
+      "Training error rises while test error falls"
+    ],
+    answer: 0,
+    explanation: "Double descent adds a second downward slope to the classical U: test error climbs to a sharp peak at the <b>interpolation threshold</b> (just enough parameters to fit the training set exactly), then <b>descends again</b> with more capacity. Past the threshold many solutions interpolate the data and SGD's implicit bias picks a smooth, low-norm one that generalizes — which is why today's large models live deep in this second descent.",
+    ref: "Double descent"
   },
   {
     id: "dl-10", type: "mc", framing: "applied", difficulty: 5,

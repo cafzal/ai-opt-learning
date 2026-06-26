@@ -35,6 +35,19 @@
     ref: "Classification metrics"
   },
   {
+    id: "stat-11", type: "mc", framing: "applied", difficulty: 2,
+    prompt: "A model outputs \"90% confident\" on 100 cases and exactly 70 of them turn out correct. According to the notes on <b>calibration</b>, what does this most directly indicate?",
+    options: [
+      "The model is over-confident (poorly calibrated): its stated probabilities exceed its true accuracy on those cases",
+      "The model has only 70% accuracy overall and must be retrained from scratch",
+      "The model is under-confident and its probabilities should be raised",
+      "Nothing — accuracy and calibration are the same thing, so 70% confidence equals 70% accuracy"
+    ],
+    answer: 0,
+    explanation: "Calibration asks whether, among predictions made at confidence $p$, about a fraction $p$ are correct. Here confidence is 90% but observed accuracy is 70%, a 20-point gap <i>below</i> the diagonal — classic <b>over-confidence</b>. It is a statement about the probabilities, not overall accuracy (70% may even be fine), and it is fixed cheaply post-hoc by temperature/Platt scaling, not retraining. Calibration is distinct from accuracy, so option 4 is wrong.",
+    ref: "Calibration"
+  },
+  {
     id: "stat-4", type: "mc", framing: "applied", difficulty: 3,
     prompt: "Why is the 0–1 loss replaced by convex <b>surrogate losses</b> such as the log loss or hinge loss when training classifiers?",
     options: [

@@ -62,6 +62,19 @@
     ref: "RLHF"
   },
   {
+    id: "gl-11", type: "mc", framing: "conceptual", difficulty: 3,
+    prompt: "In RLHF, a policy optimized hard against the learned reward model starts emitting text that scores high on that reward yet is clearly worse to actual humans. Which framing best names what has gone wrong?",
+    options: [
+      "Goodhart's Law / reward hacking: optimizing a <i>proxy</i> (the reward model) eventually corrupts the true objective (human preference) it stands in for",
+      "Vanishing gradients: the reward signal is too small to update the policy",
+      "Catastrophic forgetting: the policy has overwritten its pretraining knowledge",
+      "Mode collapse: the policy can only produce one output regardless of prompt"
+    ],
+    answer: 0,
+    explanation: "The reward model is only a measurable <i>proxy</i> for true human preference, so pushing on it too hard makes the proxy and the goal diverge — \"when a measure becomes a target, it ceases to be a good measure.\" This is <b>Goodhart's Law</b>, and reward hacking and overfitting-to-the-metric are the same phenomenon under different names; it is the alignment-stage instance of the Stage 0 proxy gap. The KL leash to the reference policy is what bounds it. The other options are unrelated training pathologies.",
+    ref: "reward hacking / Goodhart"
+  },
+  {
     id: "gl-6", type: "mc", framing: "conceptual", difficulty: 3,
     prompt: "<b>DPO</b> (Direct Preference Optimization) avoids training a separate reward model. What is the key reparameterization that makes this work?",
     options: [

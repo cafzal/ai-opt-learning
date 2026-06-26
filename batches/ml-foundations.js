@@ -28,6 +28,19 @@
     ref: "Parametric vs non-parametric models"
   },
   {
+    id: "mlf-11", type: "mc", framing: "conceptual", difficulty: 2,
+    prompt: "Estimating generalization — performance on unseen data — from a held-out test set relies on one core assumption. Which one, and what breaks it?",
+    options: [
+      "Train and test are drawn i.i.d. from the <i>same</i> distribution; it is broken by distribution shift",
+      "The model is parametric; it is broken by adding more parameters",
+      "The loss is convex; it is broken by non-convex losses",
+      "The classes are balanced; it is broken by class imbalance"
+    ],
+    answer: 0,
+    explanation: "The <b>i.i.d. assumption</b> — training and test data drawn independently from the same distribution $p^*$ — is the premise that makes generalization possible: it is the bridge that lets a number measured on one finite sample predict performance on another. When the test distribution differs (<b>distribution shift</b>), the held-out estimate no longer reflects deployment performance. Convexity, parameter count, and class balance are unrelated to this guarantee.",
+    ref: "The i.i.d. assumption and generalization"
+  },
+  {
     id: "mlf-3", type: "numeric", framing: "applied", difficulty: 2,
     prompt: "Curse of dimensionality: to capture a fraction $f$ of the data inside an axis-aligned hypercube of edge length $e$ in $D$ dimensions, $e_D(f)=f^{1/D}$. For $D=10$ and $f=0.10$ (each axis spans $[0,1]$), what edge length is required?",
     answer: 0.794, tolerance: 0.01, unit: "",
@@ -67,6 +80,19 @@
     answer: 0,
     explanation: "$K=1$ gives a Voronoi tessellation: a jagged, high-variance boundary that overfits. Larger $K$ averages over more neighbors, smoothing the boundary — more bias, less variance. KNN stays non-parametric for any $K$.",
     ref: "K-nearest neighbors"
+  },
+  {
+    id: "mlf-12", type: "mc", framing: "conceptual", difficulty: 3,
+    prompt: "The <b>no-free-lunch theorem</b> says that averaged over all possible problems, no learner outperforms any other. What is the practical consequence?",
+    options: [
+      "Generalization requires <b>inductive bias</b> — assumptions, often baked into the architecture/representation — matched to the problem",
+      "All models achieve identical accuracy on any given real dataset",
+      "More training compute always substitutes for a better model class",
+      "A sufficiently large model needs no assumptions about the data"
+    ],
+    answer: 0,
+    explanation: "No-free-lunch means assumptions are <i>necessary</i>: to generalize beyond the data a learner must encode an <b>inductive bias</b>, and the architecture/representation IS that bias (a CNN assumes locality and translation-invariance, etc.). The bias is what lets a model do well on structured real data even though it must do poorly on others. This is distinct from <b>sample complexity</b> — how many samples are needed to reach a target error (the PAC/VC question) — which is a separate axis from raw compute or model size.",
+    ref: "Inductive bias and no free lunch"
   },
   {
     id: "mlf-7", type: "mc", framing: "conceptual", difficulty: 4,
