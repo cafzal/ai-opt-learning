@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI &amp; Optimization — Self-Quiz</title>
   <meta name="description" content="Self-study quiz over ML, optimization & decision-making, and LLM/GenAI fundamentals: 20 batches of review concepts (with diagrams) plus 200 mixed-format questions." />
-  <meta name="color-scheme" content="dark light" />
+  <meta name="color-scheme" content="light dark" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="AI &amp; Optimization — Self-Quiz" />
   <meta property="og:description" content="Review concepts with diagrams, then test yourself: 20 batches, 200 questions across ML, optimization, and LLM/GenAI fundamentals." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d1117'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%2358a6ff' font-family='sans-serif' font-weight='700'%3E%CE%A3%3C/text%3E%3C/svg%3E" />
+  <script>(function(){try{if(localStorage.getItem('mlq_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
   <link rel="stylesheet" href="styles.css" />
   <script>
     // MathJax config must be defined before the library loads.
@@ -35,7 +36,10 @@
         <h1>AI &amp; Optimization — Self-Quiz</h1>
         <div class="sub">Review, then test — across ML, optimization &amp; decision-making, and LLM/GenAI fundamentals</div>
       </div>
-      <button class="reset-link" id="resetScores" title="Clear all saved scores">reset progress</button>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" title="Toggle light / dark" aria-label="Toggle light or dark theme">☾</button>
+        <button class="reset-link" id="resetScores" title="Clear all saved scores">reset progress</button>
+      </div>
     </div>
 
     <div id="app"><!-- views render here --></div>

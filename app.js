@@ -172,9 +172,8 @@
   function renderLibrary() {
     const scores = loadScores();
     app.appendChild(el("div", "intro",
-      "The full catalog, by source. Each <b>batch</b> is 10 questions that ramp from recall to synthesis " +
-      "in a GRE-style mix — <b>multiple choice</b>, <b>select-all</b>, <b>numeric</b>, <b>quantitative comparison</b> — " +
-      "after a <b>review</b> of key concepts with diagrams. Scores save in your browser."));
+      "The full catalog, by source. Every batch pairs a <b>concept review</b> (with diagrams) " +
+      "and a <b>10-question quiz</b> in mixed GRE-style formats."));
     DATA.tracks.forEach(track => {
       const t = el("div", "track");
       const head = el("div", "track-head");
@@ -284,9 +283,6 @@
       wrap.appendChild(stEl);
     });
     app.appendChild(wrap);
-
-    app.appendChild(el("div", "path-hint",
-      `Tailoring only <b>highlights</b> — tap any stage to open it, and switch to <b>Library</b> any time to see all ${allLessons.length} lessons by source.`));
   }
 
   /* ============================================================
@@ -303,7 +299,6 @@
 
     const box = el("div", "onb");
     box.appendChild(el("div", "onb-h", opts.edit ? "Update your path" : "Let’s tailor your path"));
-    box.appendChild(el("div", "onb-sub", "Two taps. Change it anytime — nothing ever gets hidden."));
 
     box.appendChild(el("div", "onb-q", "What do you want to be able to do?"));
     const g = el("div", "onb-chips");
@@ -846,6 +841,22 @@
       renderHome();
     }
   });
+
+  /* ---------- theme toggle (light default; dark persisted) ---------- */
+  (function () {
+    const btn = document.getElementById("themeToggle");
+    if (!btn) return;
+    const isDark = () => document.documentElement.getAttribute("data-theme") === "dark";
+    const paint = () => { btn.textContent = isDark() ? "☀" : "☾"; };
+    paint();
+    btn.addEventListener("click", () => {
+      const next = isDark() ? "light" : "dark";
+      if (next === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      else document.documentElement.removeAttribute("data-theme");
+      try { localStorage.setItem("mlq_theme", next); } catch (e) {}
+      paint();
+    });
+  })();
 
   /* ---------- boot ---------- */
   if (!DATA || !DATA.tracks) {
