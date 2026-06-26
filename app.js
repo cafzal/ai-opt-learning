@@ -136,13 +136,14 @@
     });
 
     const footer = el("div", "home-footer",
-      "<b>About.</b> Original educational practice material on standard concepts in machine learning, optimization, " +
-      "and decision-making. The questions, explanations, and diagrams are the author's own and do not reproduce " +
-      "text from any source work. " +
-      "Concepts follow widely-taught treatments, including Murphy, <i>Probabilistic Machine Learning</i> (MIT Press); " +
-      "Fleuret, <i>The Little Book of Deep Learning</i>; Sutton &amp; Barto, <i>Reinforcement Learning: An Introduction</i>; " +
-      "and Kochenderfer et&nbsp;al., <i>Algorithms for Optimization</i> &amp; <i>Algorithms for Decision Making</i> (MIT Press). " +
-      "Not affiliated with or endorsed by these authors or publishers.");
+      "<b>About.</b> A free, non-commercial study tool. The questions, explanations, and diagrams are original and " +
+      "<b>reproduce no text</b> from any source work — they cover standard concepts only (facts and methods, which " +
+      "copyright doesn't cover). Those concepts follow widely-taught texts, credited under their stated terms — most " +
+      "are Creative Commons <b>BY-NC-ND</b>: Murphy, <i>Probabilistic Machine Learning</i> (MIT Press, 2022); " +
+      "Sutton &amp; Barto, <i>Reinforcement Learning: An Introduction</i> (MIT Press, 2018); Kochenderfer &amp; Wheeler, " +
+      "<i>Algorithms for Optimization</i> (MIT Press, 2025); Kochenderfer, Wheeler &amp; Wray, <i>Algorithms for " +
+      "Decision Making</i> (MIT Press, 2022); and Fleuret, <i>The Little Book of Deep Learning</i>. " +
+      "Not affiliated with, sponsored by, or endorsed by these authors or publishers.");
     app.appendChild(footer);
   }
 

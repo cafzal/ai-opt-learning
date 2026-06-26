@@ -93,16 +93,25 @@ Each file in `reviews/` is `window.QUIZ_REVIEWS["<id>"] = { intro, concepts: [..
 
 ## Attribution
 
-This is original educational practice material covering standard, widely-taught concepts in
-machine learning, optimization, and decision-making. The questions, explanations, and diagrams
-are the author's own and **do not reproduce text from any source work**. The concepts follow
-common treatments in the field, including:
+This is original, **non-commercial** educational material. The questions, explanations, and
+diagrams are the author's own and **reproduce no text** from any source work — they cover
+standard, widely-taught concepts (facts and methods, which copyright does not cover). The
+distilled study notes those concepts were learned from are **not** included in this repository.
 
-- Kevin P. Murphy, *Machine Learning: A Probabilistic Perspective* / *Probabilistic Machine Learning* (MIT Press)
-- François Fleuret, *The Little Book of Deep Learning*
-- Richard S. Sutton & Andrew G. Barto, *Reinforcement Learning: An Introduction*
-- Mykel J. Kochenderfer et al., *Algorithms for Optimization* and *Algorithms for Decision Making* (MIT Press)
+Concepts follow these texts, credited under the terms each one states in its own front matter.
+Most are Creative Commons **BY-NC-ND** — share with attribution, non-commercially, no
+derivatives of the text — which this project respects (attribution below; non-commercial; no
+text or abridgement redistributed, concepts only):
 
-These texts are credited for the underlying concepts only. This project is not affiliated with,
-sponsored by, or endorsed by their authors or publishers. Trademarks and book titles belong to
-their respective owners.
+| Work | Author(s) | Terms (per front matter) |
+|---|---|---|
+| *Probabilistic Machine Learning: An Introduction* (MIT Press, 2022) | Kevin P. Murphy | CC BY-NC-ND |
+| *Machine Learning: A Probabilistic Perspective* (MIT Press, 2012) | Kevin P. Murphy | © all rights reserved |
+| *The Little Book of Deep Learning* (2023) | François Fleuret | free for personal use |
+| *Reinforcement Learning: An Introduction*, 2nd ed. (MIT Press, 2018) | Sutton & Barto | CC BY-NC-ND 2.0 |
+| *Algorithms for Optimization*, 2nd ed. (MIT Press, 2025) | Kochenderfer & Wheeler | CC BY-NC-ND 4.0 |
+| *Algorithms for Decision Making* (MIT Press, 2022) | Kochenderfer, Wheeler & Wray | CC BY-NC-ND |
+
+Free PDFs of the openly-licensed titles are available from the authors' / publisher's websites.
+This project is not affiliated with, sponsored by, or endorsed by these authors or publishers;
+titles and trademarks belong to their respective owners.
