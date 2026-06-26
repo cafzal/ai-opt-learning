@@ -1,4 +1,4 @@
-/* Batch: Approximate Inference & Graphical/Sequential Models  (ML-Fundamentals.md §9–§10) */
+/* Batch: Approximate Inference & Graphical/Sequential Models */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["inference-graphical"] = [
   {
     id: "inf-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 1,
     explanation: "Bayes' rule gives $p(\\boldsymbol\\theta\\mid\\mathcal{D})\\propto p(\\mathcal{D}\\mid\\boldsymbol\\theta)p(\\boldsymbol\\theta)$, but the marginal likelihood (evidence) $p(\\mathcal{D})=\\int p(\\mathcal{D}\\mid\\boldsymbol\\theta)p(\\boldsymbol\\theta)\\,d\\boldsymbol\\theta$ is a high-dimensional integral that is closed-form only under conjugacy. Without it the posterior is unnormalized, so we approximate (Laplace, Monte Carlo, MCMC, variational).",
-    ref: "§9 — Approximate inference (intractable normalizer)"
+    ref: "Approximate inference (intractable normalizer)"
   },
   {
     id: "inf-2", type: "mc", framing: "conceptual", difficulty: 2,
@@ -24,7 +24,7 @@
     ],
     answer: 1,
     explanation: "Laplace does a second-order Taylor expansion of the energy $E=-\\log p(\\mathcal{D}\\mid\\boldsymbol\\theta)-\\log p(\\boldsymbol\\theta)$ at the MAP $\\boldsymbol\\theta^*$ (where $\\nabla E=0$), giving $p(\\boldsymbol\\theta\\mid\\mathcal{D})\\approx\\mathcal{N}(\\boldsymbol\\theta^*,\\mathbf{H}^{-1})$ with $\\mathbf{H}=\\nabla^2 E$. It is cheap and unimodal, justified as posteriors Gaussian-ize with $N$ (Bernstein–von Mises), but poor for skewed or multimodal posteriors.",
-    ref: "§9 — Laplace (Gaussian) approximation"
+    ref: "Laplace (Gaussian) approximation"
   },
   {
     id: "inf-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -32,7 +32,7 @@
     answer: 5000, tolerance: 0, unit: "",
     hint: "Evaluate $K^2 T = 5^2 \\times 200$.",
     explanation: "All the standard HMM inference algorithms are $O(K^2T)$ because each of the $T$ steps updates $K$ states, each summing/maximizing over $K$ predecessors. Here $K^2T = 25 \\times 200 = 5000$. The quadratic-in-$K$ term comes from the dense transition matrix $\\mathbf{A}$.",
-    ref: "§10 — Markov chains & HMMs (complexity)"
+    ref: "Markov chains & HMMs (complexity)"
   },
   {
     id: "inf-4", type: "mc", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     ],
     answer: 1,
     explanation: "The acceptance probability is $\\min\\!\\big(1,\\tfrac{p^*(\\boldsymbol{x}')q(\\boldsymbol{x}\\mid\\boldsymbol{x}')}{p^*(\\boldsymbol{x})q(\\boldsymbol{x}'\\mid\\boldsymbol{x})}\\big)$. Because $p^*$ appears only as a ratio, the intractable normalizer cancels, so an unnormalized target suffices. Symmetric proposals further cancel the $q$ terms but are not what removes $Z$. One tunes the step size to ~25–40% acceptance.",
-    ref: "§9 — MCMC (Metropolis–Hastings)"
+    ref: "MCMC (Metropolis–Hastings)"
   },
   {
     id: "inf-5", type: "numeric", framing: "applied", difficulty: 3,
@@ -53,7 +53,7 @@
     answer: 20.72, tolerance: 0.1, unit: "",
     hint: "Compute $\\tfrac{6}{2}\\,\\ln 1000 = 3\\ln 1000$.",
     explanation: "The BIC penalty is $\\tfrac{D}{2}\\log N = \\tfrac{6}{2}\\ln 1000 = 3 \\times 6.9078 \\approx 20.72$. This term, dropped out of the Laplace approximation to the marginal likelihood, penalizes parameter count scaled by $\\log N$, automatically embodying Occam's razor for model selection.",
-    ref: "§9 — Laplace approximation (recovers BIC)"
+    ref: "Laplace approximation (recovers BIC)"
   },
   {
     id: "inf-6", type: "ms", framing: "conceptual", difficulty: 3,
@@ -67,7 +67,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "MCMC builds a Markov chain whose stationary distribution is the target; detailed balance $p^*(\\boldsymbol{x})T(\\boldsymbol{x}'\\mid\\boldsymbol{x})=p^*(\\boldsymbol{x}')T(\\boldsymbol{x}\\mid\\boldsymbol{x}')$ plus ergodicity guarantee this. Gibbs samples full conditionals (always accepted); HMC/NUTS use gradients for low-autocorrelation moves. The samples are <i>correlated</i>, so we discard burn-in and report effective sample size; $\\hat R\\approx 1$ (not far from 1) signals convergence.",
-    ref: "§9 — MCMC (stationarity, Gibbs, HMC, diagnostics)"
+    ref: "MCMC (stationarity, Gibbs, HMC, diagnostics)"
   },
   {
     id: "inf-7", type: "mc", framing: "applied", difficulty: 3,
@@ -80,7 +80,7 @@
     ],
     answer: 0,
     explanation: "By d-separation, a collider behaves oppositely to chains and forks: $A\\to B\\to C$ and $A\\leftarrow B\\to C$ give $A\\perp C\\mid B$, but a collider $A\\to B\\leftarrow C$ gives $A\\perp C$ (marginal independence) while $A\\not\\perp C\\mid B$ — conditioning on the common effect $B$ couples its causes, the 'explaining away' effect.",
-    ref: "§10 — Graphical models (d-separation, colliders)"
+    ref: "Graphical models (d-separation, colliders)"
   },
   {
     id: "inf-8", type: "ms", framing: "conceptual", difficulty: 4,
@@ -94,7 +94,7 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "VI casts inference as optimization: maximize the ELBO $\\mathcal{L}(q)=\\log p(\\mathcal{D})-D_{\\text{KL}}(q\\,\\|\\,p^*)\\le\\log p(\\mathcal{D})$, equivalently minimizing reverse KL. Mean-field uses a factorized $q$ optimized by CAVI, which monotonically raises the ELBO. Reverse-KL is mode-seeking and underestimates variance. The accuracy claim is backwards: <i>MCMC</i> is asymptotically exact while <i>VI</i> is biased by the $q$ family.",
-    ref: "§9 — Variational inference (ELBO, reverse KL, mean-field)"
+    ref: "Variational inference (ELBO, reverse KL, mean-field)"
   },
   {
     id: "inf-9", type: "qc", framing: "conceptual", difficulty: 4,
@@ -103,7 +103,7 @@
     quantityB: "The weight effectively placed on the innovation/measurement term $\\mathbf{K}_t\\boldsymbol{r}_t$ in that same regime",
     answer: 0,
     explanation: "The new mean is prediction + gain × innovation, and the gain $\\mathbf{K}_t=\\boldsymbol\\Sigma_{t\\mid t-1}\\mathbf{C}^\\top\\mathbf{S}_t^{-1}$ is the prior-to-total uncertainty ratio. When measurement noise $\\mathbf{R}$ is huge, the total innovation covariance $\\mathbf{S}_t$ is dominated by $\\mathbf{R}$, so $\\mathbf{K}_t\\to 0$: the filter trusts its prediction and nearly ignores the measurement. Hence the prediction term dominates — quantity A is greater.",
-    ref: "§10 — State-space models & the Kalman filter"
+    ref: "State-space models & the Kalman filter"
   },
   {
     id: "inf-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: 1,
     explanation: "A CRF is the <i>discriminative</i> undirected model $p(\\boldsymbol{y}\\mid\\boldsymbol{x},\\boldsymbol{w})$ whose normalizer spans the whole output sequence. This global normalization avoids the label-bias problem of locally-normalized MEMMs (where per-step normalization can lock in early labels); with global $Z$, later evidence can revise earlier label choices. CRFs also admit arbitrary, overlapping, global features — the opposite of option 4.",
-    ref: "§10 — Conditional random fields (CRFs)"
+    ref: "Conditional random fields (CRFs)"
   }
 ];

@@ -1,6 +1,6 @@
-/* Review: Reinforcement Learning (ML-Fundamentals.md §11) */
+/* Review: Reinforcement Learning */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["rl"] = {
-  intro: "Reinforcement learning (Sutton &amp; Barto) is learning by trial-and-error from <i>evaluative</i> feedback under delayed consequences. The agent never sees the right action — only a scalar reward — so it must estimate <b>value functions</b> to guide behavior and balance <b>exploration vs exploitation</b>. These toggles build the spine: the MDP and the return, the Bellman equations, the DP / Monte&nbsp;Carlo / TD spectrum, the on- vs off-policy split, the deadly triad, policy gradients, and the dopamine link. Skim them, then test yourself below.",
+  intro: "Reinforcement learning is learning by trial-and-error from <i>evaluative</i> feedback under delayed consequences. The agent never sees the right action — only a scalar reward — so it must estimate <b>value functions</b> to guide behavior and balance <b>exploration vs exploitation</b>. These toggles build the spine: the MDP and the return, the Bellman equations, the DP / Monte&nbsp;Carlo / TD spectrum, the on- vs off-policy split, the deadly triad, policy gradients, and the dopamine link. Skim them, then test yourself below.",
   concepts: [
     {
       title: "The agent–environment loop & evaluative feedback",

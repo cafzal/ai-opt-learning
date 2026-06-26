@@ -1,4 +1,4 @@
-/* Review: Decision Making — Policy Search, RL, POMDPs & Multiagent (optimization fundamentals.md, Book II Ch 10–27 + §S17/S19–S22) */
+/* Review: Decision Making — Policy Search, RL, POMDPs & Multiagent */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["dm-rl-pomdp"] = {
   intro: "From optimizing a policy's parameters directly, through model-based and model-free reinforcement learning, to acting under <i>state</i> uncertainty (POMDPs) and alongside <i>other</i> agents. The thread: when you can't enumerate or fully observe the world, estimate a gradient, a value, a belief, or an equilibrium instead. Skim the toggles, then test yourself below.",
   concepts: [

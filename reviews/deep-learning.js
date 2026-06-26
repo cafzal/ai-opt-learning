@@ -1,4 +1,4 @@
-/* Review: Deep Learning & Generative AI (ML-Fundamentals.md §8) */
+/* Review: Deep Learning & Generative AI */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["deep-learning"] = {
   intro: "From a single neuron to transformers and generative models. The throughline: stacking <i>nonlinear</i> layers builds compositional feature hierarchies, depth and scale follow smooth power laws, and a handful of tricks — residuals, normalization, attention — keep gradients flowing and let path length collapse to $O(1)$. Skim the toggles, then test yourself below.",
   concepts: [

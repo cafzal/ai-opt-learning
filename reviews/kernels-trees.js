@@ -1,4 +1,4 @@
-/* Review: Kernels, SVMs, Trees & Ensembles (ML-Fundamentals.md §6) */
+/* Review: Kernels, SVMs, Trees & Ensembles */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["kernels-trees"] = {
   intro: "Two threads run through this section. First, <b>kernels</b>: a single trick — replacing inner products $\\boldsymbol{x}^\\top\\boldsymbol{x}'$ with a Mercer kernel $\\kappa$ — turns linear methods nonlinear and underpins KNN's cousins, kernel ridge regression, SVMs, and Gaussian processes (which add calibrated uncertainty). Second, <b>trees</b>: a single interpretable-but-unstable learner (CART) that becomes a tabular workhorse once you wrap it in an ensemble — bagging / random forests to cut variance, boosting to cut bias. Skim the toggles, then test yourself below.",
   concepts: [

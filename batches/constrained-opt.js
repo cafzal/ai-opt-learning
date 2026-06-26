@@ -1,4 +1,4 @@
-/* Batch: Constrained Optimization  (Optimization Fundamentals §S8; Book I Ch 10–14) */
+/* Batch: Constrained Optimization */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["constrained-opt"] = [
   {
     id: "co-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "The Lagrangian adds each constraint to the objective scaled by its multiplier: $\\mathcal{L}=f(\\mathbf{x})+\\boldsymbol\\mu^\\top\\mathbf{g}(\\mathbf{x})+\\boldsymbol\\lambda^\\top\\mathbf{h}(\\mathbf{x})$, where $\\boldsymbol\\mu$ multiplies the inequality constraints and $\\boldsymbol\\lambda$ the equality constraints.",
-    ref: "§S8 — Lagrangian duality & KKT"
+    ref: "Lagrangian duality & KKT"
   },
   {
     id: "co-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "Linear objective + linear constraints make the feasible set a convex polytope, and an optimum is attainable at a <i>vertex</i>. This is exactly why the simplex algorithm searches by walking from vertex to vertex.",
-    ref: "Opt Ch 12 — Linear Programming"
+    ref: "Linear Programming"
   },
   {
     id: "co-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -32,7 +32,7 @@
     answer: 0.04, tolerance: 0.001, unit: "",
     hint: "Duality gap $=m/\\rho$.",
     explanation: "With $m$ inequality constraints, the log-barrier yields a duality gap of $m/\\rho=20/500=0.04$. Increasing $\\rho$ shrinks the gap, driving the iterates toward the true optimum.",
-    ref: "Opt Ch 11 — Duality (primal-dual interior point)"
+    ref: "Duality (primal-dual interior point)"
   },
   {
     id: "co-4", type: "mc", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     ],
     answer: 0,
     explanation: "A slack variable converts the inequality $g\\le 0$ into an equality $g+s=0$ together with the nonnegativity constraint $s\\ge 0$. The nonnegative slack absorbs the difference, turning the inequality into an equality the solver can treat directly.",
-    ref: "Opt Ch 10 — Constraints (slack variables)"
+    ref: "Constraints (slack variables)"
   },
   {
     id: "co-5", type: "mc", framing: "conceptual", difficulty: 3,
@@ -58,7 +58,7 @@
     ],
     answer: 0,
     explanation: "Complementary slackness requires $\\boldsymbol\\mu\\odot\\mathbf{g}=\\mathbf{0}$: for each $i$, either the constraint is active ($g_i=0$) or its multiplier is zero. Since $g_i(\\mathbf{x}^*)<0$ here, the constraint is inactive and so $\\mu_i=0$.",
-    ref: "§S8 — Lagrangian duality & KKT"
+    ref: "Lagrangian duality & KKT"
   },
   {
     id: "co-6", type: "qc", framing: "conceptual", difficulty: 3,
@@ -67,7 +67,7 @@
     quantityB: "$d^*$ (optimal dual value)",
     answer: 0,
     explanation: "Weak duality always holds: $d^*\\le p^*$ (the dual lower-bounds the primal). With a <i>nonzero</i> duality gap $p^*-d^*>0$ the inequality is strict, so the primal value (A) is strictly greater than the dual value (B). The gap closes to zero only under strong duality (a convex problem satisfying Slater's condition) — so without a gap the two could instead be equal.",
-    ref: "§S8 — Lagrangian duality & KKT (weak duality)"
+    ref: "Lagrangian duality & KKT (weak duality)"
   },
   {
     id: "co-7", type: "ms", framing: "conceptual", difficulty: 4,
@@ -81,7 +81,7 @@
     ],
     answer: [0, 1, 2, 3],
     explanation: "The four KKT conditions are primal feasibility, dual feasibility ($\\boldsymbol\\mu\\ge\\mathbf{0}$), complementary slackness ($\\boldsymbol\\mu\\odot\\mathbf{g}=\\mathbf{0}$), and stationarity. The equality multipliers $\\boldsymbol\\lambda$ are <i>sign-free</i>, so requiring $\\boldsymbol\\lambda\\ge\\mathbf{0}$ is not a KKT condition.",
-    ref: "§S8 — Lagrangian duality & KKT"
+    ref: "Lagrangian duality & KKT"
   },
   {
     id: "co-8", type: "numeric", framing: "applied", difficulty: 4,
@@ -89,7 +89,7 @@
     answer: 20, tolerance: 0, unit: "",
     hint: "Only positive (violated) $g_i$ contribute; every $h_j$ contributes its square.",
     explanation: "The quadratic penalty is $\\sum_i\\max(g_i,0)^2+\\sum_j h_j^2$. Here $\\max(-3,0)^2=0$ (satisfied), $\\max(2,0)^2=4$ (violated), and $h^2=4^2=16$. Total $=0+4+16=20$.",
-    ref: "Opt Ch 10 — Constraints (penalty methods)"
+    ref: "Constraints (penalty methods)"
   },
   {
     id: "co-9", type: "ms", framing: "conceptual", difficulty: 5,
@@ -103,7 +103,7 @@
     ],
     answer: [0, 1, 2, 3],
     explanation: "The dual function $\\mathcal{D}=\\min_\\mathbf{x}\\mathcal{L}$ is always concave; dual ascent alternates $\\mathbf{x}$-minimization with dual gradient ascent and <i>tolerates infeasible iterates</i> (so option 5 is false), though it can fail for linear objectives. ADMM splits a separable objective under an affine coupling and scales to distributed/consensus settings. A primal/dual feasible pair with equal objective certifies optimality.",
-    ref: "§S8 / Opt Ch 11 — Duality"
+    ref: "Duality"
   },
   {
     id: "co-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: 0,
     explanation: "DCP's composition rule certifies $f(g(\\mathbf{x}))$ convex if [$f$ convex nondecreasing and $g$ convex] or [$f$ convex nonincreasing and $g$ concave] (and can be inconclusive otherwise). The curvature is propagated by sign and composition rules over an atom library so software can verify convexity before transcribing to a solver.",
-    ref: "Opt Ch 14 — Disciplined Convex Programming"
+    ref: "Disciplined Convex Programming"
   }
 ];

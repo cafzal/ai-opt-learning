@@ -1,6 +1,6 @@
-/* Review: Optimization Foundations (optimization fundamentals.md — Book I Ch 1–7, §S5–S7) */
+/* Review: Optimization Foundations */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["opt-foundations"] = {
-  intro: "The grammar of continuous optimization: what a minimum <i>is</i>, how to certify one, how to get the derivatives that point the way, and the four families of methods that descend — bracketing line searches, first-order, second-order, and derivative-free. Everything here is Kochenderfer &amp; Wheeler's <i>Algorithms for Optimization</i> (Book I, Ch 1–7) plus the shared stepping/Newton/trust-region cores. Skim the toggles, then test yourself below.",
+  intro: "The grammar of continuous optimization: what a minimum <i>is</i>, how to certify one, how to get the derivatives that point the way, and the four families of methods that descend — bracketing line searches, first-order, second-order, and derivative-free. These concepts follow the standard treatment in Kochenderfer &amp; Wheeler's <i>Algorithms for Optimization</i>, plus the shared stepping/Newton/trust-region cores. Skim the toggles, then test yourself below.",
   concepts: [
     {
       title: "Standard form & the minima you're hunting",

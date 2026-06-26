@@ -1,4 +1,4 @@
-/* Batch: Applied ML  (ML-Fundamentals.md §12–§13) */
+/* Batch: Applied ML */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["applied-ml"] = [
   {
     id: "app-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "Data augmentation exploits <i>known invariances</i>: you apply label-preserving perturbations to each example so the model trains on the neighborhood of each point (vicinal risk). The other options are the extra signals behind semi-supervised learning ($p(\\boldsymbol{x})$), meta/few-shot (a distribution of tasks), and active learning (a labeling budget).",
-    ref: "§12 — Learning with fewer labels (techniques table)"
+    ref: "Learning with fewer labels (techniques table)"
   },
   {
     id: "app-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "With 99% negatives, a model that always predicts 'negative' is right 99% of the time while being useless on the positive class. That is why the notes recommend PR curves / F1, class weights $\\propto 1/f_c$, resampling (SMOTE), and threshold tuning on validation instead.",
-    ref: "§13 — Class imbalance"
+    ref: "Class imbalance"
   },
   {
     id: "app-3", type: "mc", framing: "applied", difficulty: 2,
@@ -37,7 +37,7 @@
     ],
     answer: 0,
     explanation: "The preprocessing table notes that trees are <i>scale-invariant</i>, so z-score / min-max scaling matters only for scale-sensitive models, not trees. Encoding categoricals and handling missing values (impute + 'was-missing' indicator) are still required regardless of model.",
-    ref: "§13 — Preprocessing (scale numeric)"
+    ref: "Preprocessing (scale numeric)"
   },
   {
     id: "app-4", type: "numeric", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     answer: 1.5, tolerance: 0.01, unit: "",
     hint: "Compute $(85-70)/10$.",
     explanation: "$\\frac{x-\\mu}{\\sigma}=\\frac{85-70}{10}=1.5$ — the point sits 1.5 standard deviations above the mean. Crucially $\\mu$ and $\\sigma$ must be estimated on the <i>training set only</i>; fitting them on all data is leakage.",
-    ref: "§13 — Preprocessing (z-score standardization)"
+    ref: "Preprocessing (z-score standardization)"
   },
   {
     id: "app-5", type: "mc", framing: "conceptual", difficulty: 2,
@@ -58,7 +58,7 @@
     ],
     answer: 0,
     explanation: "Contrastive learning pulls together positives — augmented views of the same image, or matched image–caption pairs — and pushes apart negatives in a shared embedding space. For CLIP this enables zero-shot transfer via text prompts. Label propagation and oracle queries are semi-supervised / active-learning ideas, not contrastive ones.",
-    ref: "§12 — Contrastive (SimCLR/CLIP)"
+    ref: "Contrastive (SimCLR/CLIP)"
   },
   {
     id: "app-6", type: "ms", framing: "conceptual", difficulty: 3,
@@ -72,7 +72,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "The cluster assumption places boundaries in low-density regions; the manifold assumption says labels are smooth on the data manifold; and self-training can amplify its own mistakes (confirmation bias), so pseudo-labels are thresholded. Consistency / VAT <i>penalize</i> prediction <i>change</i> under (worst-case) perturbations — not reward it — and the whole point of semi-supervised learning is to <i>use</i> the unlabeled $p(\\boldsymbol{x})$.",
-    ref: "§12 — Semi-supervised assumptions"
+    ref: "Semi-supervised assumptions"
   },
   {
     id: "app-7", type: "mc", framing: "applied", difficulty: 3,
@@ -85,7 +85,7 @@
     ],
     answer: 0,
     explanation: "MCAR is ignorable, and MAR (missingness depends only on observed values) is ignorable for estimation. MNAR is informative — the fact that a value is missing carries signal — so you must model the mechanism. Either way, discriminative models can't take missing inputs, so you impute first.",
-    ref: "§13 — Missing data (MCAR/MAR/MNAR)"
+    ref: "Missing data (MCAR/MAR/MNAR)"
   },
   {
     id: "app-8", type: "numeric", framing: "applied", difficulty: 4,
@@ -93,7 +93,7 @@
     answer: 2, tolerance: 0.01, unit: "",
     hint: "$\\log_{10}(9{+}1)\\cdot\\log_{10}\\!\\big(1000/(1{+}9)\\big)$.",
     explanation: "$\\log_{10}(9{+}1)=\\log_{10}10=1$ and $\\log_{10}\\frac{1000}{1+9}=\\log_{10}100=2$, so the weight is $1\\cdot 2=2$. The $\\log(\\text{TF}{+}1)$ term dampens raw counts while $\\log\\frac{N}{1+\\text{DF}}$ down-weights terms common across many documents.",
-    ref: "§13 — Vectorize text (TF-IDF)"
+    ref: "Vectorize text (TF-IDF)"
   },
   {
     id: "app-9", type: "ms", framing: "applied", difficulty: 4,
@@ -107,7 +107,7 @@
     ],
     answer: [0, 1, 3],
     explanation: "Leakage is prevented by making preprocessing <i>part of the model</i> and fitting it inside each CV fold, by splitting time-series by time and groups by group, and by touching the test set only once. Fitting a scaler on train+test, or selecting features using target correlations computed over all data, both leak information from the held-out set into training.",
-    ref: "§13 — Data leakage (the cardinal sin)"
+    ref: "Data leakage (the cardinal sin)"
   },
   {
     id: "app-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -120,6 +120,6 @@
     ],
     answer: 0,
     explanation: "Shallow methods (DeepWalk / node2vec = skip-gram on random walks) are transductive, ignore node features, and can't embed unseen nodes. GNNs do inductive message passing — aggregating transformed neighbor features — and stacking $L$ layers yields an $L$-hop receptive field, so they generalize to new nodes and use node features.",
-    ref: "§13 — Graph embeddings & GNNs"
+    ref: "Graph embeddings & GNNs"
   }
 ];

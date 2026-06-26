@@ -1,4 +1,4 @@
-/* Review: Advanced Optimization — Multiobjective, Surrogates & Uncertainty (Opt Ch 15–24, §S14, §S18) */
+/* Review: Advanced Optimization — Multiobjective, Surrogates & Uncertainty */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["opt-advanced"] = {
   intro: "When a problem has competing objectives, expensive evaluations, or uncontrollable inputs, the deterministic toolkit isn't enough. This batch covers four threads: <b>multiobjective</b> optimization (Pareto frontiers, scalarization, population methods), <b>surrogate</b> modeling (sampling plans, model selection, Gaussian processes, acquisition functions), <b>optimization under uncertainty</b> (robustness, VaR/CVaR, Markowitz, uncertainty propagation), and the structural cases — <b>discrete</b> and <b>multidisciplinary</b> optimization. Skim the toggles, then test yourself below.",
   concepts: [

@@ -1,4 +1,4 @@
-/* Batch: Decision Making & MDPs  (Optimization Fundamentals — §S15–S17, §S1–S4; DM Book II Ch 1–9) */
+/* Batch: Decision Making & MDPs */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["dm-mdp"] = [
   {
     id: "dm-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "A Bayesian network is a DAG together with a conditional $P(X_i\\mid\\text{Pa}(X_i))$ for each node. The <b>chain rule</b> $P(x_{1:n})=\\prod_i P(x_i\\mid\\text{pa}(x_i))$ then reconstructs the full joint, giving big parameter savings over the $2^n-1$ entries a flat joint over $n$ binaries would need.",
-    ref: "DM Ch 2 — Representation"
+    ref: "Representation"
   },
   {
     id: "dm-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "An MDP $(\\mathcal{S},\\mathcal{A},T,R,\\gamma)$ has the <b>Markov property</b> (the next state depends only on the current state and action). The discount factor $\\gamma$ weights the <b>discounted return</b> $\\sum_t\\gamma^{t-1}r_t$, which is finite for $0\\le\\gamma<1$.",
-    ref: "§S15 — Bellman equations, value & policy iteration"
+    ref: "Bellman equations, value & policy iteration"
   },
   {
     id: "dm-3", type: "mc", framing: "conceptual", difficulty: 2,
@@ -37,7 +37,7 @@
     ],
     answer: 0,
     explanation: "The vNM axioms (completeness, transitivity, continuity, independence) yield a real-valued $U$ that is <b>unique up to a positive affine transform</b>. The utility of a lottery is the expectation $\\sum_i p_i U(S_i)$. Risk attitude shows up in the curvature of $U$: concave = risk-averse, linear = neutral, convex = risk-seeking.",
-    ref: "DM Ch 6 — Simple Decisions"
+    ref: "Simple Decisions"
   },
   {
     id: "dm-4", type: "numeric", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     answer: 0.7273, tolerance: 0.005, unit: "",
     hint: "Plug into $(w+1)/(w+\\ell+2)$.",
     explanation: "$\\rho=\\frac{7+1}{7+2+2}=\\frac{8}{11}\\approx 0.727$. This is the posterior mean of a $\\text{Beta}(\\alpha,\\beta)$ with a uniform prior ($\\alpha=\\beta=1$): the $+1$ and $+2$ are the pseudocounts, which avoid the zero-count degeneracy of plain MLE.",
-    ref: "§S4 — Conjugate Bayesian updates (Beta / Dirichlet)"
+    ref: "Conjugate Bayesian updates (Beta / Dirichlet)"
   },
   {
     id: "dm-5", type: "mc", framing: "applied", difficulty: 3,
@@ -58,7 +58,7 @@
     ],
     answer: 0,
     explanation: "Direct sampling draws in topological order and is wasteful with rare evidence (most samples disagree with it and are thrown away). <b>Likelihood-weighted sampling</b> clamps the evidence variables to their observed values and weights each sample by the probability of those observations — the special case of importance sampling whose proposal $P'$ clamps evidence.",
-    ref: "DM Ch 3 — Inference"
+    ref: "Inference"
   },
   {
     id: "dm-6", type: "numeric", framing: "applied", difficulty: 3,
@@ -66,7 +66,7 @@
     answer: 8.3, tolerance: 0.05, unit: "",
     hint: "First take the expected next-state value $\\sum_{s'}T\\cdot U$, then add $R$ after scaling by $\\gamma$.",
     explanation: "Expected next-state value $=0.5(10)+0.5(4)=7$. Then $Q=R+\\gamma\\cdot 7=2+0.9(7)=2+6.3=8.3$. This single backup is the atomic operation iterated by value iteration; $U=\\max_a Q$ at convergence.",
-    ref: "§S15 — action value $Q(s,a)$"
+    ref: "action value $Q(s,a)$"
   },
   {
     id: "dm-7", type: "ms", framing: "conceptual", difficulty: 4,
@@ -80,7 +80,7 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "VOI is the expected gain in utility from observing $O'$: $\\big(\\sum_{o'}P(o'\\mid o)EU^*(o,o')\\big)-EU^*(o)$. It is <b>always nonnegative</b> (more information can never hurt expected utility), and it is exactly $0$ when the observation never changes the optimal action. It ignores the observation's cost, which must be subtracted separately — so it is never negative.",
-    ref: "DM Ch 6 — Simple Decisions"
+    ref: "Simple Decisions"
   },
   {
     id: "dm-8", type: "ms", framing: "conceptual", difficulty: 4,
@@ -94,7 +94,7 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "Policy iteration alternates evaluation and greedy improvement and converges in finitely many steps; both methods depend on the backup being a contraction (Banach fixed point). Exact evaluation is the linear solve $(\\mathbf{I}-\\gamma\\mathbf{T}^\\pi)^{-1}\\mathbf{R}^\\pi$, and the Bellman residual is a valid stopping rule. The false claim: $\\gamma$ near $1$ makes value iteration converge <i>slower</i>, not faster.",
-    ref: "§S15 — value & policy iteration, contraction"
+    ref: "value & policy iteration, contraction"
   },
   {
     id: "dm-9", type: "mc", framing: "conceptual", difficulty: 4,
@@ -107,7 +107,7 @@
     ],
     answer: 0,
     explanation: "UCB1 embodies <i>optimism under uncertainty</i>: the exploration bonus $c\\sqrt{\\log N/N(a)}$ is <b>infinite when $N(a)=0$</b>, guaranteeing each action is tried at least once before exploitation dominates. As $N(a)$ grows the bonus shrinks and selection leans on the value estimate $Q(a)$.",
-    ref: "§S17 — Action selection & exploration (UCB1)"
+    ref: "Action selection & exploration (UCB1)"
   },
   {
     id: "dm-10", type: "qc", framing: "applied", difficulty: 5,
@@ -116,6 +116,6 @@
     quantityB: "The Bellman residual $\\delta = 0.5$",
     answer: 0,
     explanation: "The bound is $\\frac{\\delta\\gamma}{1-\\gamma}=\\frac{0.5\\cdot 0.9}{0.1}=\\frac{0.45}{0.1}=4.5$, which is far larger than the residual $0.5$. Because $\\gamma=0.9$ is near $1$, the multiplier $\\gamma/(1-\\gamma)=9$ inflates the residual into a loose bound — the same reason value iteration converges slowly when $\\gamma\\to 1$. So Quantity A $>$ Quantity B.",
-    ref: "§S15 — error bound $\\delta\\gamma/(1-\\gamma)$"
+    ref: "error bound $\\delta\\gamma/(1-\\gamma)$"
   }
 ];

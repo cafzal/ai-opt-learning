@@ -1,4 +1,4 @@
-/* Review: Linear Algebra & Optimization (ML-Fundamentals.md §4) */
+/* Review: Linear Algebra & Optimization */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["linalg-opt"] = {
   intro: "The computational engine of ML: how we measure vectors and matrices (norms), factor them (EVD/SVD), and then <i>minimize</i> things over them. Convexity tells us when a local solution is the answer; gradient, second-order, stochastic, and adaptive methods tell us how to get there; KKT and proximal methods handle constraints and sparsity; EM reframes hard likelihoods as a bound we push up. Skim the toggles, then test yourself below.",
   concepts: [

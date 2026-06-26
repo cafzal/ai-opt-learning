@@ -1,4 +1,4 @@
-/* Batch: Stochastic, Population & Derivative-Free Optimization  (Optimization Fundamentals §S9–§S13, Opt Ch 5/8/9) */
+/* Batch: Stochastic, Population & Derivative-Free Optimization */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["opt-stochastic"] = [
   {
     id: "os-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "Temperature $t$ controls the stochasticity of the search: high temperature explores widely, and the schedule cools $t$ so the method converges. Simulated annealing is a derivative-free method, so there is no gradient direction, and it tracks a single candidate rather than a population.",
-    ref: "§S13 — Simulated annealing"
+    ref: "Simulated annealing"
   },
   {
     id: "os-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "The cross-entropy method keeps the $m_{\\text{elite}}$ best samples and refits $\\psi$ to those elites by MLE, which is equivalent to minimizing the cross-entropy (KL) to the elite set. For an MVN, $\\mu\\leftarrow$ mean of elites and $\\Sigma\\leftarrow$ their covariance. Updating $\\psi$ by a gradient step instead is what evolution strategies (NES) do.",
-    ref: "§S10 — Cross-entropy method"
+    ref: "Cross-entropy method"
   },
   {
     id: "os-3", type: "mc", framing: "conceptual", difficulty: 2,
@@ -37,7 +37,7 @@
     ],
     answer: 0,
     explanation: "Nesterov momentum evaluates the gradient at the projected point $\\mathbf{x}+\\beta\\mathbf{v}$ — where momentum is about to carry the iterate — rather than at the current $\\mathbf{x}$. Using a squared-gradient average describes RMSProp, and removing the step-factor describes Adadelta.",
-    ref: "Opt Ch 5 — First-Order Methods"
+    ref: "First-Order Methods"
   },
   {
     id: "os-4", type: "numeric", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     answer: 1, tolerance: 0, unit: "",
     hint: "Check the sign of $\\Delta y$ before reaching for the exponential.",
     explanation: "Because $\\Delta y=-3\\le 0$ the move improves the objective, so it is accepted with probability exactly $1$ — the exponential branch $e^{-\\Delta y/t}$ only applies to uphill ($\\Delta y>0$) moves, which are accepted with some probability so the search can escape local minima.",
-    ref: "§S13 — Simulated annealing"
+    ref: "Simulated annealing"
   },
   {
     id: "os-5", type: "numeric", framing: "applied", difficulty: 3,
@@ -53,7 +53,7 @@
     answer: 0.368, tolerance: 0.01, unit: "",
     hint: "$\\Delta y=t$ makes the exponent $-1$.",
     explanation: "With $\\Delta y=t$ the exponent is $-\\Delta y/t=-1$, so the acceptance probability is $e^{-1}\\approx 0.368$. Allowing uphill moves with nonzero probability is exactly how simulated annealing escapes local minima; as $t$ is cooled this probability shrinks toward $0$.",
-    ref: "§S13 — Simulated annealing"
+    ref: "Simulated annealing"
   },
   {
     id: "os-6", type: "ms", framing: "conceptual", difficulty: 3,
@@ -67,7 +67,7 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "The trick differentiates an expectation by differentiating only $\\log p$, so $f$ may be black-box (non-differentiable) — option 4 is therefore false. The estimator is unbiased but high-variance (reduced via baselines / reward-to-go), the transition model cancels for trajectory gradients, and NES updates its parameters with exactly this gradient.",
-    ref: "§S9 — The log-derivative (likelihood-ratio) trick"
+    ref: "The log-derivative (likelihood-ratio) trick"
   },
   {
     id: "os-7", type: "ms", framing: "applied", difficulty: 4,
@@ -81,7 +81,7 @@
     ],
     answer: [0, 1, 2, 3],
     explanation: "A genetic algorithm combines selection (truncation / tournament / roulette), crossover (single / two-point / uniform / interpolation), mutation (rate ~$1/m$, e.g. additive Gaussian), and elitism. The Metropolis acceptance test belongs to simulated annealing, not GA recombination.",
-    ref: "§S12 — Genetic, population & local search"
+    ref: "Genetic, population & local search"
   },
   {
     id: "os-8", type: "mc", framing: "conceptual", difficulty: 4,
@@ -94,7 +94,7 @@
     ],
     answer: 0,
     explanation: "Adam tracks $\\mathbf{v}\\leftarrow\\gamma_v\\mathbf{v}+(1-\\gamma_v)\\mathbf{g}$ and $\\mathbf{s}\\leftarrow\\gamma_s\\mathbf{s}+(1-\\gamma_s)\\mathbf{g}\\odot\\mathbf{g}$, bias-corrects both, and steps with $\\hat{\\mathbf{v}}/(\\epsilon+\\sqrt{\\hat{\\mathbf{s}}})$. AdaGrad's per-component factor $\\alpha/(\\epsilon+\\sqrt{\\sum_j g_i^{(j)2}})$ only shrinks (it decays too far); removing the step-factor is Adadelta; the look-ahead point is Nesterov momentum.",
-    ref: "Opt Ch 5 — First-Order Methods"
+    ref: "First-Order Methods"
   },
   {
     id: "os-9", type: "numeric", framing: "applied", difficulty: 4,
@@ -102,7 +102,7 @@
     answer: 0.001, tolerance: 0, unit: "",
     hint: "The defaults are written $(0.001,\\,0.9,\\,0.999)$.",
     explanation: "Adam's defaults are $\\alpha=0.001$, $\\gamma_v=0.9$ (first-moment / momentum decay), and $\\gamma_s=0.999$ (second-moment / squared-gradient decay). The slower decay on $\\mathbf{s}$ gives a longer-memory estimate of the gradient's magnitude.",
-    ref: "Opt Ch 5 — First-Order Methods"
+    ref: "First-Order Methods"
   },
   {
     id: "os-10", type: "qc", framing: "conceptual", difficulty: 5,
@@ -111,6 +111,6 @@
     quantityB: "Theoretical guarantee of converging to the global optimum, exponential schedule",
     answer: 0,
     explanation: "The logarithmic schedule is the one that carries the global-optimum guarantee (though it is very slow); the faster exponential schedule $t\\leftarrow\\gamma t$ trades that guarantee for speed. So Quantity A — the schedule with the guarantee — is greater.",
-    ref: "§S13 — Simulated annealing"
+    ref: "Simulated annealing"
   }
 ];

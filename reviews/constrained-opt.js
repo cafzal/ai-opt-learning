@@ -1,4 +1,4 @@
-/* Review: Constrained Optimization (Opt §S8 duality/KKT; Ch 10 Constraints, 11 Duality, 12 LP, 13 QP, 14 DCP) */
+/* Review: Constrained Optimization */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["constrained-opt"] = {
   intro: "Real designs come with limits: budgets, physical laws, safety bounds. This batch covers how to <i>handle</i> constraints (transform them away, add slack, penalize, or stay strictly feasible), the <b>Lagrangian</b> and the four <b>KKT</b> conditions that pin down a constrained optimum, the <b>duality</b> that turns a $\\min$-$\\max$ into a $\\max$-$\\min$ and hands you an optimality certificate, and the algorithm families that exploit all this — dual ascent, primal-dual interior point, and ADMM — ending with the three flagship convex problem classes: <b>LP</b>, <b>QP</b>, and the <b>DCP</b> grammar that lets software verify and solve them for you.",
   concepts: [

@@ -1,4 +1,4 @@
-/* Review: Unsupervised & Latent-Variable Models (ML-Fundamentals.md §7) */
+/* Review: Unsupervised & Latent-Variable Models */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["unsupervised"] = {
   intro: "No labels — just $\\boldsymbol{x}$. The task is to discover structure: cluster the data, model its density, or compress it to a few latent dimensions. The recurring idea is a <b>latent variable</b> $z$ behind each observation, fit by EM or by an eigen/SVD decomposition. We move from mixtures (GMM) and clustering (K-means) through PCA and its probabilistic cousins (FA, ICA) up to the VAE. Skim the toggles, then test yourself.",
   concepts: [

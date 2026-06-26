@@ -1,4 +1,4 @@
-/* Review: Applied ML — Fewer Labels & ML in Practice (ML-Fundamentals.md §12–§13) */
+/* Review: Applied ML — Fewer Labels & ML in Practice */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["applied-ml"] = {
   intro: "Labels are expensive and the real world is messy. This batch covers how to <i>learn with fewer labels</i> (augmentation, transfer, self-supervised, semi-/active/meta-learning, weak supervision) and the practical lifecycle that makes a model survive contact with production: preprocessing, missing data, class imbalance, the cardinal sin of <b>leakage</b>, honest evaluation, deployment drift, plus two specialized model families — recommenders and graph networks. Skim the toggles, then test yourself below.",
   concepts: [

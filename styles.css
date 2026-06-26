@@ -536,4 +536,15 @@ a:hover { text-decoration: underline; }
 .quiz-cta .qc-text .qc-sub { color: var(--text-dim); font-size: 0.88rem; margin-top: 3px; }
 .quiz-cta .qc-best { color: var(--good); font-size: 0.82rem; margin-top: 4px; }
 
+.home-footer {
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+.home-footer b { color: var(--text-dim); font-weight: 600; }
+.home-footer i { color: var(--text-dim); }
+
 .hidden { display: none !important; }

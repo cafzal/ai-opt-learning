@@ -1,4 +1,4 @@
-/* Review: ML Foundations & Generalization (ML-Fundamentals.md §0–§1) */
+/* Review: ML Foundations & Generalization */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["ml-foundations"] = {
   intro: "The vocabulary the rest of the document is built on: what learning <i>is</i>, the three paradigms, how models generalize (or fail to), and the shared toolkit (losses, information theory, the exponential family). Skim the toggles, then test yourself below.",
   concepts: [

@@ -1,4 +1,4 @@
-/* Batch: Probability  (ML-Fundamentals.md §2) */
+/* Batch: Probability */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["probability"] = [
   {
     id: "prob-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "Aleatoric uncertainty is the irreducible randomness in the process (a fair coin) and sits in the likelihood. Epistemic uncertainty is reducible — it comes from lack of data/knowledge and is tracked by the posterior.",
-    ref: "§2 — Interpretations & types of uncertainty"
+    ref: "Interpretations & types of uncertainty"
   },
   {
     id: "prob-2", type: "mc", framing: "conceptual", difficulty: 2,
@@ -24,7 +24,7 @@
     ],
     answer: 2,
     explanation: "The denominator $p(Y{=}y)$ is the marginal likelihood (a normalizing constant). The prior is $p(X{=}x)$, the likelihood is $p(Y{=}y\\mid X{=}x)$, and the posterior is the whole quotient $p(X{=}x\\mid Y{=}y)$.",
-    ref: "§2 — Bayes' rule"
+    ref: "Bayes' rule"
   },
   {
     id: "prob-3", type: "ms", framing: "conceptual", difficulty: 3,
@@ -39,7 +39,7 @@
     ],
     answer: [0, 2, 4, 5],
     explanation: "Gaussian ($\\mathbb{R}$), Beta ($[0,1]$), Gamma ($(0,\\infty)$), and Pareto (power-law) are continuous distributions. Poisson (event counts $\\{0,1,\\dots\\}$) and Bernoulli ($\\{0,1\\}$) are discrete.",
-    ref: "§2 — Common continuous vs discrete distributions"
+    ref: "Common continuous vs discrete distributions"
   },
   {
     id: "prob-4", type: "numeric", framing: "applied", difficulty: 3,
@@ -47,7 +47,7 @@
     answer: 0.031, tolerance: 0.003, unit: "",
     hint: "Compute $\\frac{0.8\\cdot0.004}{0.8\\cdot0.004+0.1\\cdot0.996}$.",
     explanation: "$p(\\text{cancer}\\mid +)=\\frac{0.8\\cdot0.004}{0.8\\cdot0.004+0.1\\cdot0.996}=\\frac{0.0032}{0.1028}\\approx 0.031$. Even an 80%-sensitive test yields only ~3% posterior because the disease is rare — a high-accuracy classifier on a rare class produces mostly false positives.",
-    ref: "§2 — Bayes' rule (base-rate fallacy)"
+    ref: "Bayes' rule (base-rate fallacy)"
   },
   {
     id: "prob-5", type: "mc", framing: "applied", difficulty: 3,
@@ -60,7 +60,7 @@
     ],
     answer: 0,
     explanation: "For the Poisson, mean $=$ var $=\\lambda$. The form $\\theta(1-\\theta)$ is the Bernoulli variance, and $N\\theta(1-\\theta)$ is the Binomial variance.",
-    ref: "§2 — Common discrete distributions"
+    ref: "Common discrete distributions"
   },
   {
     id: "prob-6", type: "qc", framing: "applied", difficulty: 3,
@@ -69,7 +69,7 @@
     quantityB: "$4\\sigma$",
     answer: 1,
     explanation: "The central 95% region for a Gaussian is $\\mu\\pm1.96\\sigma\\approx\\mu\\pm2\\sigma$, so its width is $\\approx 3.92\\sigma$ (about $4\\sigma$ only under the rounded rule of thumb). Using the stated $1.96$ factor, the exact width $3.92\\sigma$ is less than $4\\sigma$, so B is greater.",
-    ref: "§2 — Random variables (quantiles)"
+    ref: "Random variables (quantiles)"
   },
   {
     id: "prob-7", type: "numeric", framing: "applied", difficulty: 4,
@@ -77,7 +77,7 @@
     answer: 2.1, tolerance: 0.05, unit: "",
     hint: "Binomial variance is $N\\theta(1-\\theta)$.",
     explanation: "$\\mathbb{V}[X]=N\\theta(1-\\theta)=10\\cdot0.3\\cdot0.7=2.1$. The mean would be $N\\theta=3$; do not confuse the Bernoulli variance $\\theta(1-\\theta)=0.21$ (a single trial) with the Binomial.",
-    ref: "§2 — Common discrete distributions"
+    ref: "Common discrete distributions"
   },
   {
     id: "prob-8", type: "ms", framing: "applied", difficulty: 4,
@@ -91,7 +91,7 @@
     ],
     answer: [0, 1, 3, 4],
     explanation: "For an MVN, $p(\\boldsymbol{y}_1)=\\mathcal{N}(\\boldsymbol\\mu_1,\\boldsymbol\\Sigma_{11})$, the conditional mean is linear in $\\boldsymbol{y}_2$, and the conditional covariance is the constant Schur complement $\\boldsymbol\\Sigma_{11}-\\boldsymbol\\Sigma_{12}\\boldsymbol\\Sigma_{22}^{-1}\\boldsymbol\\Sigma_{21}$ — which does <i>not</i> depend on the observed $\\boldsymbol{y}_2$, so option 3 is false.",
-    ref: "§2 — The multivariate Gaussian (marginals and conditionals)"
+    ref: "The multivariate Gaussian (marginals and conditionals)"
   },
   {
     id: "prob-9", type: "mc", framing: "conceptual", difficulty: 4,
@@ -104,7 +104,7 @@
     ],
     answer: 0,
     explanation: "Correlation measures only <i>linear</i> dependence, so variables can be uncorrelated yet dependent ($Y=X^2$): uncorrelated $\\ne$ independent. Mutual information (§4) captures any dependence. Option 4 states the exact fallacy being refuted.",
-    ref: "§2 — Moments (uncorrelated vs independent)"
+    ref: "Moments (uncorrelated vs independent)"
   },
   {
     id: "prob-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -117,6 +117,6 @@
     ],
     answer: 1,
     explanation: "The Monte Carlo standard error scales as $1/\\sqrt{S}$ <i>independent of dimension</i>, so the claim that it grows with dimension is false. The other three are stated directly: the $1/\\sqrt{S}$ rate, the CLT limit, and Monte Carlo as the basis of SGD minibatches, dropout, MCMC, and VI.",
-    ref: "§2 — Transformations, CLT, Monte Carlo"
+    ref: "Transformations, CLT, Monte Carlo"
   }
 ];

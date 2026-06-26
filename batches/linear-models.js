@@ -1,4 +1,4 @@
-/* Batch: Linear & Sparse Models  (ML-Fundamentals.md §5) */
+/* Batch: Linear & Sparse Models */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["linear-models"] = [
   {
     id: "lin-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "Under a Gaussian likelihood the negative log-likelihood reduces to the residual sum of squares, so <b>MLE = least squares</b>: minimize RSS $=\\tfrac12\\|\\mathbf{X}\\boldsymbol{w}-\\boldsymbol{y}\\|^2$. The $\\ell_1$ residual penalty corresponds instead to a Laplace likelihood (robust regression).",
-    ref: "§5 — Linear regression"
+    ref: "Linear regression"
   },
   {
     id: "lin-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "Ridge = MAP with a <b>Gaussian</b> prior, giving $\\hat{\\boldsymbol{w}}_{\\text{ridge}}=(\\mathbf{X}^\\top\\mathbf{X}+\\lambda\\mathbf{I})^{-1}\\mathbf{X}^\\top\\boldsymbol{y}$. A Laplace prior gives the lasso; a flat prior gives ordinary MLE (no shrinkage).",
-    ref: "§5 — Ridge (L2) and Lasso (L1)"
+    ref: "Ridge (L2) and Lasso (L1)"
   },
   {
     id: "lin-3", type: "mc", framing: "conceptual", difficulty: 2,
@@ -37,7 +37,7 @@
     ],
     answer: 0,
     explanation: "Because $\\hat{\\boldsymbol{y}}$ is the orthogonal projection onto the column space, the residual is perpendicular to that space — i.e. the residual $\\perp$ every column of $\\mathbf{X}$. This orthogonality is exactly the content of the normal equations.",
-    ref: "§5 — Linear regression"
+    ref: "Linear regression"
   },
   {
     id: "lin-4", type: "numeric", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     answer: 0.5, tolerance: 0.001, unit: "",
     hint: "Shrink the magnitude by $\\lambda$, keeping the sign; clamp at 0.",
     explanation: "Soft-thresholding: $\\text{sign}(0.8)\\,(|0.8|-0.3)_+ = 1\\cdot(0.5)_+ = 0.5$. The coefficient is pulled toward zero by exactly $\\lambda$; had $|\\hat w_d|\\le\\lambda$ it would have been set to exactly $0$ (sparsity).",
-    ref: "§5 — Ridge (L2) and Lasso (L1)"
+    ref: "Ridge (L2) and Lasso (L1)"
   },
   {
     id: "lin-5", type: "mc", framing: "applied", difficulty: 3,
@@ -58,7 +58,7 @@
     ],
     answer: 0,
     explanation: "On linearly separable data the logistic MLE diverges ($\\|\\boldsymbol{w}\\|\\to\\infty$) as the model pushes probabilities to 0/1. Adding an L2 penalty (equivalently, a Gaussian prior / MAP estimate) keeps the weights finite and the problem well-posed.",
-    ref: "§5 — Logistic regression (binary)"
+    ref: "Logistic regression (binary)"
   },
   {
     id: "lin-6", type: "ms", framing: "conceptual", difficulty: 3,
@@ -72,7 +72,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "Lasso's $\\ell_1$ corners on the axes produce exact zeros (selection); ridge only shrinks. Ridge has the closed form $(\\mathbf{X}^\\top\\mathbf{X}+\\lambda\\mathbf{I})^{-1}\\mathbf{X}^\\top\\boldsymbol{y}$ while lasso is non-smooth at 0. On correlated features ridge shrinks together while lasso picks one. The priors are reversed in option 4 (ridge=Gaussian, lasso=Laplace), and it is <i>lasso</i>, not ridge, that gives exact zeros.",
-    ref: "§5 — Ridge (L2) and Lasso (L1)"
+    ref: "Ridge (L2) and Lasso (L1)"
   },
   {
     id: "lin-7", type: "qc", framing: "conceptual", difficulty: 3,
@@ -81,7 +81,7 @@
     quantityB: "Number of exact zeros under <b>ridge</b> (L2)",
     answer: 0,
     explanation: "Ridge shrinks but never sets coefficients to exactly zero, so quantity B is $0$. Lasso's $\\ell_1$ geometry produces exact zeros and, among correlated features, tends to pick one and zero out the rest. Hence A $>$ B.",
-    ref: "§5 — Ridge (L2) and Lasso (L1)"
+    ref: "Ridge (L2) and Lasso (L1)"
   },
   {
     id: "lin-8", type: "numeric", framing: "applied", difficulty: 4,
@@ -89,7 +89,7 @@
     answer: 0.25, tolerance: 0.001, unit: "",
     hint: "$\\lambda=\\sigma^2/\\tau^2$.",
     explanation: "$\\lambda=\\sigma^2/\\tau^2 = 4/16 = 0.25$. A broader prior (larger $\\tau^2$) means weaker regularization (smaller $\\lambda$); a noisier likelihood (larger $\\sigma^2$) means stronger regularization.",
-    ref: "§5 — Bayesian linear regression"
+    ref: "Bayesian linear regression"
   },
   {
     id: "lin-9", type: "ms", framing: "applied", difficulty: 4,
@@ -103,7 +103,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "Generative models specify $p(\\boldsymbol{x},y)=p(\\boldsymbol{x}\\mid y)p(y)$, which lets them marginalize missing inputs and lean on priors when data is scarce (Ng & Jordan: NB beats logistic with little data). Discriminative models specify $p(y\\mid\\boldsymbol{x})$ directly, are more robust to misspecification, win asymptotically, and generally need <i>more</i> data — so options 4 (it reverses the two) and 5 are false.",
-    ref: "§5 — Generative vs discriminative"
+    ref: "Generative vs discriminative"
   },
   {
     id: "lin-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: 0,
     explanation: "For a Poisson response the canonical link is the <b>log</b>, giving mean $\\mu=e^\\eta$ — which keeps the predicted rate positive. The identity link is canonical for the Gaussian, logit for Bernoulli, and softmax for the multinomial; all share the gradient $\\sum_i(y_i-\\mu_i)\\boldsymbol{x}_i$ under the canonical link.",
-    ref: "§5 — Generalized linear models (GLMs)"
+    ref: "Generalized linear models (GLMs)"
   }
 ];

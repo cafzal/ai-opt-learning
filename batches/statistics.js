@@ -1,4 +1,4 @@
-/* Batch: Statistics, Estimation & Decision Theory  (ML-Fundamentals.md §3) */
+/* Batch: Statistics, Estimation & Decision Theory */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["statistics"] = [
   {
     id: "stat-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "The closed-form Bernoulli MLE is simply the empirical success frequency $\\hat\\theta=N_1/N$. $(N_1+1)/(N+2)$ is the Bayesian posterior mean under a Beta(1,1) prior (Laplace's rule of succession), not the MLE; the other two are not valid estimators.",
-    ref: "§3 — Maximum likelihood estimation (closed forms)"
+    ref: "Maximum likelihood estimation (closed forms)"
   },
   {
     id: "stat-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "Frequentism holds the parameter <i>fixed</i> and treats the <i>data</i> as random; the sampling distribution of $\\hat\\theta$ comes from repeatedly resampling datasets. The Bayesian view is the reverse: it conditions on the observed data and treats the parameter as random (giving it a prior).",
-    ref: "§3 — Frequentist statistics"
+    ref: "Frequentist statistics"
   },
   {
     id: "stat-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -32,7 +32,7 @@
     answer: 0.75, tolerance: 0.01, unit: "",
     hint: "$F_1=\\frac{2PR}{P+R}$ with $P=TP/(TP+FP)$ and $R=TP/(TP+FN)$.",
     explanation: "Precision $P=30/(30+10)=0.75$ and recall $R=30/(30+10)=0.75$, so $F_1=\\frac{2(0.75)(0.75)}{0.75+0.75}=0.75$. Equivalently $F_1=\\frac{TP}{TP+\\frac12(FP+FN)}=\\frac{30}{30+10}=0.75$.",
-    ref: "§3 — Classification metrics"
+    ref: "Classification metrics"
   },
   {
     id: "stat-4", type: "mc", framing: "applied", difficulty: 3,
@@ -45,7 +45,7 @@
     ],
     answer: 0,
     explanation: "The 0–1 loss is non-smooth and NP-hard to minimize, so we substitute convex surrogates — log loss $\\log(1+e^{-\\tilde y\\eta})$ (logistic) or hinge loss $\\max(0,1-\\tilde y\\eta)$ (SVM) — that are tractable. The 0–1 loss is bounded (not unbounded), surrogates do not generally share its exact minimizer, and neither requires a prior.",
-    ref: "§3 — ERM & surrogate losses"
+    ref: "ERM & surrogate losses"
   },
   {
     id: "stat-5", type: "mc", framing: "applied", difficulty: 3,
@@ -58,7 +58,7 @@
     ],
     answer: 0,
     explanation: "Adding a penalty $C(\\boldsymbol\\theta)=-\\log p(\\boldsymbol\\theta)$ turns NLL minimization into MAP; for L2/ridge that penalty is $\\lambda\\|\\boldsymbol{w}\\|^2$, which is exactly the negative log of a zero-mean Gaussian prior (biasing weights toward 0, lowering variance). A uniform prior recovers plain MLE; Jeffreys is the reparameterization-invariant prior, not the ridge penalty.",
-    ref: "§3 — Regularization & MAP"
+    ref: "Regularization & MAP"
   },
   {
     id: "stat-6", type: "numeric", framing: "applied", difficulty: 3,
@@ -66,7 +66,7 @@
     answer: 0.2, tolerance: 0.005, unit: "",
     hint: "Predict positive iff $p_1\\ge 1/(1+c)$.",
     explanation: "The cost-sensitive rule is: predict positive iff $p_1\\ge 1/(1+c)=1/(1+4)=1/5=0.2$. Because missing a positive is 4× as costly as a false alarm, the threshold drops well below 0.5, making the classifier more willing to predict positive.",
-    ref: "§3 — Classification metrics (cost-sensitive)"
+    ref: "Classification metrics (cost-sensitive)"
   },
   {
     id: "stat-7", type: "mc", framing: "applied", difficulty: 4,
@@ -79,7 +79,7 @@
     ],
     answer: 0,
     explanation: "Because $V_N^{-1}=V_0^{-1}+N\\sigma^{-2}$, the data's contribution to the precision grows with $N$: the prior dominates for small $N$ and the data dominates for large $N$. The prior's pull therefore vanishes asymptotically rather than persisting or oscillating.",
-    ref: "§3 — Conjugate priors (precision-weighted mean)"
+    ref: "Conjugate priors (precision-weighted mean)"
   },
   {
     id: "stat-8", type: "qc", framing: "conceptual", difficulty: 4,
@@ -88,7 +88,7 @@
     quantityB: "The Bayes estimator under absolute $\\ell_1$ loss",
     answer: 3,
     explanation: "Squared loss yields the posterior <i>mean</i>; absolute loss yields the posterior <i>median</i>. For a symmetric posterior the mean and median coincide (equal), but for a skewed posterior they differ and either can be larger. Without knowing the posterior's shape, the comparison cannot be determined.",
-    ref: "§3 — Bayesian decision theory (loss → estimator)"
+    ref: "Bayesian decision theory (loss → estimator)"
   },
   {
     id: "stat-9", type: "ms", framing: "conceptual", difficulty: 4,
@@ -102,7 +102,7 @@
     ],
     answer: [0, 2, 3, 4],
     explanation: "A confidence interval is a <i>coverage</i> procedure: across repeated samples it contains $\\theta^*$ a fraction $1-\\alpha$ of the time, and for any single observed dataset $\\theta$ is simply in or out — a valid 95% CI can even exclude the truth. The intuitive 'the parameter is in here with 95% probability' statement, $P(\\theta\\in I\\mid\\mathcal{D})$, is the <i>credible</i> interval, not the CI, so option 2 is false.",
-    ref: "§3 — Frequentist statistics (confidence interval)"
+    ref: "Frequentist statistics (confidence interval)"
   },
   {
     id: "stat-10", type: "ms", framing: "conceptual", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "The notes stress that a p-value is <i>not</i> $P(H_0\\mid\\mathcal{D})$ (p≈0.05 can leave $P(H_0)\\ge30\\%$), that it depends on the stopping rule and design, suffers multiple-comparison inflation, and can only reject — never confirm — $H_0$ (so the colleague's 'confirmed' conclusion is invalid). Hence option 4, claiming immunity to multiple-comparison inflation, is false. The recommended Bayesian alternative is $p(\\Delta>\\epsilon\\mid\\mathcal{D})$ over a ROPE.",
-    ref: "§3 — P-values considered harmful"
+    ref: "P-values considered harmful"
   }
 ];

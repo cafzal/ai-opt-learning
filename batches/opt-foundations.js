@@ -1,4 +1,4 @@
-/* Batch: Optimization Foundations  (Opt Ch 1–7; shared primitives §S5–§S7) */
+/* Batch: Optimization Foundations */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["opt-foundations"] = [
   {
     id: "of-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "In the standard form, $\\mathbf{x}$ is the design point/variables, $f$ is the objective, $\\mathcal{X}$ is the feasible set, and $\\mathbf{x}^*$ is the minimizer. A caution from the text: strict-inequality feasible sets may have no solution, so one includes the constraint boundary.",
-    ref: "Opt Ch 1 — Introduction"
+    ref: "Introduction"
   },
   {
     id: "of-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "The gradient $\\nabla f$ is the direction of steepest ascent, the Hessian $\\nabla^2 f$ captures curvature, and the directional derivative is $\\nabla_\\mathbf{s} f=\\nabla f^\\top\\mathbf{s}$. (Descent methods therefore step along $-\\nabla f$.)",
-    ref: "Opt Ch 2 — Derivatives and Gradients"
+    ref: "Derivatives and Gradients"
   },
   {
     id: "of-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -32,7 +32,7 @@
     answer: 3, tolerance: 0, unit: "",
     hint: "Subtract $f'(x)/f''(x)$ from the current point.",
     explanation: "The Newton step is $\\mathbf{x}^{(k+1)}=\\mathbf{x}^{(k)}-(\\mathbf{H}^{(k)})^{-1}\\mathbf{g}^{(k)}$; in one scalar dimension that is $x-f'(x)/f''(x)=5-4/2=5-2=3$. On a quadratic this reaches the minimum in a single step.",
-    ref: "§S6 — Newton & quasi-Newton"
+    ref: "Newton & quasi-Newton"
   },
   {
     id: "of-4", type: "mc", framing: "conceptual", difficulty: 2,
@@ -45,7 +45,7 @@
     ],
     answer: 0,
     explanation: "No free lunch says no method is superior to another averaged over all problems; any claimed superiority requires problem-class assumptions such as Lipschitz continuity or convexity. It does not single out any one algorithm as universally best.",
-    ref: "Opt Ch 1 — Introduction"
+    ref: "Introduction"
   },
   {
     id: "of-5", type: "ms", framing: "conceptual", difficulty: 3,
@@ -59,7 +59,7 @@
     ],
     answer: [0, 1],
     explanation: "The second-order sufficient condition is $\\nabla f=\\mathbf{0}$ <b>and</b> $\\nabla^2 f$ positive definite, which guarantees a strong local minimum (a bowl). A merely PSD Hessian is only the second-order <i>necessary</i> condition; a negative-definite Hessian gives a hill (local maximum).",
-    ref: "Opt Ch 1 — Introduction"
+    ref: "Introduction"
   },
   {
     id: "of-6", type: "numeric", framing: "applied", difficulty: 3,
@@ -67,7 +67,7 @@
     answer: 2, tolerance: 0, unit: "",
     hint: "Forward differences are $O(h)$; central differences are one order more accurate.",
     explanation: "Forward differences are $O(h)$ and central differences are $O(h^2)$, so $p=2$. Shrinking $h$ reduces truncation error but eventually triggers subtractive cancellation, so usable steps sit near the square (forward) or cube (central) root of machine precision.",
-    ref: "Opt Ch 2 — Derivatives and Gradients"
+    ref: "Derivatives and Gradients"
   },
   {
     id: "of-7", type: "mc", framing: "conceptual", difficulty: 3,
@@ -80,7 +80,7 @@
     ],
     answer: 0,
     explanation: "Line search chooses a descent direction $\\mathbf{d}$ first and then solves $\\min_\\alpha f(\\mathbf{x}+\\alpha\\mathbf{d})$ for the step. A trust region instead fixes a maximum step size (radius $\\delta$) first, then minimizes the model $\\hat f$ within $\\|\\mathbf{x}-\\mathbf{x}'\\|\\le\\delta$ to get the direction.",
-    ref: "§S7 — Trust region / restricted step"
+    ref: "Trust region / restricted step"
   },
   {
     id: "of-8", type: "mc", framing: "applied", difficulty: 4,
@@ -93,7 +93,7 @@
     ],
     answer: 0,
     explanation: "Reverse mode does one forward pass plus one backward pass to produce the full gradient regardless of input dimension, making it best for high-dimensional inputs (its cost is per-output). Forward mode (via dual numbers $a+b\\epsilon$, $\\epsilon^2=0$) needs $n$ passes for $n$ inputs. Reverse mode's cost is memory to store the graph.",
-    ref: "Opt Ch 2 — Derivatives and Gradients"
+    ref: "Derivatives and Gradients"
   },
   {
     id: "of-9", type: "ms", framing: "applied", difficulty: 4,
@@ -107,7 +107,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "Steepest descent normalizes the negative gradient, $\\mathbf{d}=-\\mathbf{g}/\\|\\mathbf{g}\\|$, and its exact-line-search directions are orthogonal, producing zig-zag. Conjugate gradient uses $\\mathbf{d}^{(k)}=-\\mathbf{g}^{(k)}+\\beta^{(k)}\\mathbf{d}^{(k-1)}$ — it explicitly reuses the prior direction — and solves an $n$-dim quadratic in $n$ steps. Fletcher–Reeves and Polak–Ribière define $\\beta$ (the conjugacy weight), not the step size.",
-    ref: "Opt Ch 5 — First-Order Methods"
+    ref: "First-Order Methods"
   },
   {
     id: "of-10", type: "qc", framing: "conceptual", difficulty: 5,
@@ -116,6 +116,6 @@
     quantityB: "How much the step resembles plain gradient descent when $\\delta$ is very small",
     answer: 0,
     explanation: "As $\\delta\\to\\infty$, $\\mathbf{H}+\\delta\\mathbf{I}\\approx\\delta\\mathbf{I}$, so the step $\\to-\\tfrac{1}{\\delta}\\mathbf{g}$, a scaled gradient-descent step; as $\\delta\\to0$ it recovers the Newton step $-\\mathbf{H}^{-1}\\mathbf{g}$. So large $\\delta$ resembles gradient descent more (A is greater). This damping is the second-order-method link to the trust region.",
-    ref: "§S7 — Trust region / restricted step"
+    ref: "Trust region / restricted step"
   }
 ];

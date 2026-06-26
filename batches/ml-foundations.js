@@ -1,4 +1,4 @@
-/* Batch: ML Foundations & Generalization  (ML-Fundamentals.md §0–§1) */
+/* Batch: ML Foundations & Generalization */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["ml-foundations"] = [
   {
     id: "mlf-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 1,
     explanation: "In RL an agent follows a policy $\\boldsymbol{a}=\\pi(\\boldsymbol{x})$ and receives only occasional, possibly delayed reward, which makes credit assignment hard. Labeled pairs are supervised learning; density estimation and reconstruction are unsupervised. In LeCun's cake analogy, RL is the 'cherry' — a few bits, occasionally.",
-    ref: "§1 — The three types of machine learning"
+    ref: "The three types of machine learning"
   },
   {
     id: "mlf-2", type: "ms", framing: "conceptual", difficulty: 2,
@@ -25,7 +25,7 @@
     ],
     answer: [0, 2, 3],
     explanation: "Non-parametric models (KNN, kernel density estimation) effectively <i>are</i> the training set: their complexity grows with $N$, so prediction can be slow for large $N$. A strong inductive bias and a fixed parameter count are properties of <i>parametric</i> models, which bake in assumptions to combat the curse of dimensionality.",
-    ref: "§1 — Parametric vs non-parametric models"
+    ref: "Parametric vs non-parametric models"
   },
   {
     id: "mlf-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -33,7 +33,7 @@
     answer: 0.794, tolerance: 0.01, unit: "",
     hint: "Compute $0.1^{1/10}$.",
     explanation: "$e_{10}(0.1)=0.1^{1/10}=10^{-0.1}\\approx 0.794$ — capturing just 10% of the data needs ~79% of the range on <i>every</i> axis, so a 'neighborhood' is no longer local. This is why high-dimensional methods lean on parametric models with strong inductive biases.",
-    ref: "§1 — The curse of dimensionality"
+    ref: "The curse of dimensionality"
   },
   {
     id: "mlf-4", type: "mc", framing: "applied", difficulty: 3,
@@ -46,14 +46,14 @@
     ],
     answer: 0,
     explanation: "With Gaussian noise, $\\text{NLL}=\\frac{1}{2\\sigma^2}\\,\\text{MSE}+\\text{const}$, so MLE is exactly least squares. More generally, MLE is empirical-risk minimization using the NLL loss.",
-    ref: "§0 / §1 — Maximum likelihood"
+    ref: "Maximum likelihood"
   },
   {
     id: "mlf-5", type: "numeric", framing: "applied", difficulty: 3,
     prompt: "A language model assigns a uniform predictive distribution over a vocabulary of 4 equally-likely next tokens, giving entropy $\\mathbb{H}=2$ bits. What is its <b>perplexity</b>?",
     answer: 4, tolerance: 0, unit: "",
     explanation: "Perplexity $=2^{\\mathbb{H}}=2^{2}=4$, the 'effective number of outcomes.' A uniform distribution over $k$ outcomes has entropy $\\log_2 k$ and perplexity exactly $k$.",
-    ref: "§0 — Information-theoretic quantities"
+    ref: "Information-theoretic quantities"
   },
   {
     id: "mlf-6", type: "mc", framing: "conceptual", difficulty: 3,
@@ -66,7 +66,7 @@
     ],
     answer: 0,
     explanation: "$K=1$ gives a Voronoi tessellation: a jagged, high-variance boundary that overfits. Larger $K$ averages over more neighbors, smoothing the boundary — more bias, less variance. KNN stays non-parametric for any $K$.",
-    ref: "§1 / §6 — K-nearest neighbors"
+    ref: "K-nearest neighbors"
   },
   {
     id: "mlf-7", type: "mc", framing: "conceptual", difficulty: 4,
@@ -79,7 +79,7 @@
     ],
     answer: 0,
     explanation: "$D_{\\text{KL}}(p\\,\\|\\,q)=\\mathbb{H}_{ce}(p,q)-\\mathbb{H}(p)$. Because the data entropy $\\mathbb{H}(p)$ is independent of the parameters, minimizing cross-entropy = minimizing forward KL = MLE. Forward KL is mode-<i>covering</i>; reverse KL (used in variational inference and VAEs) is mode-<i>seeking</i>.",
-    ref: "§0 — Information-theoretic quantities"
+    ref: "Information-theoretic quantities"
   },
   {
     id: "mlf-8", type: "qc", framing: "conceptual", difficulty: 4,
@@ -88,7 +88,7 @@
     quantityB: "MSE of a biased ridge/MAP estimator that shrinks toward 0",
     answer: 3,
     explanation: "MSE $=$ bias$^2$ + variance. A biased estimator can have <i>lower</i> MSE when it cuts variance by more than it adds bias² — the entire rationale for ridge/MAP shrinkage — but it need not. Without knowing the variances, the comparison cannot be resolved.",
-    ref: "§0 / §3 — Bias–variance identity"
+    ref: "Bias–variance identity"
   },
   {
     id: "mlf-9", type: "ms", framing: "applied", difficulty: 4,
@@ -102,7 +102,7 @@
     ],
     answer: [0, 1, 3],
     explanation: "The test set is a one-shot, final estimate; using it to pick among models implicitly fits to it and inflates the estimate. Validation / cross-validation is the proper selection tool, and preprocessing must be fit on training data only (fitting on test data is leakage).",
-    ref: "§1 — Model selection: train / validation / test"
+    ref: "Model selection: train / validation / test"
   },
   {
     id: "mlf-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -115,6 +115,6 @@
     ],
     answer: 0,
     explanation: "The exponential family is the <i>maximum</i>-entropy distribution under its moment constraints, not the minimum. The other three are core facts: $A$ is convex with gradient $\\mathbb{E}[\\boldsymbol\\phi]$, MLE equals moment matching, and conjugacy holds iff the likelihood is exponential-family.",
-    ref: "§0 — Exponential family (canonical form)"
+    ref: "Exponential family (canonical form)"
   }
 ];

@@ -1,4 +1,4 @@
-/* Review: Approximate Inference & Graphical/Sequential Models (ML-Fundamentals.md §9–§10) */
+/* Review: Approximate Inference & Graphical/Sequential Models */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["inference-graphical"] = {
   intro: "Exact Bayesian posteriors $p(\\boldsymbol\\theta\\mid\\mathcal{D})$ need the intractable normalizer $p(\\mathcal{D})$, so most of the work is <i>approximating</i> it — Laplace, Monte Carlo, MCMC, variational — each trading accuracy for speed. The second half turns to <b>structure</b>: graphical models that encode conditional independence, and the sequential models (Markov chains, HMMs, Kalman filters, CRFs) built on them. Skim the toggles, then test yourself below.",
   concepts: [

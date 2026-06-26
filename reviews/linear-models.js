@@ -1,4 +1,4 @@
-/* Review: Linear & Sparse Models (ML-Fundamentals.md §5) */
+/* Review: Linear & Sparse Models */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["linear-models"] = {
   intro: "Models that are <i>linear in their parameters</i> — even after a nonlinear feature map $\\boldsymbol\\phi(\\boldsymbol{x})$. We start at ordinary least squares (with its clean projection geometry), make it robust to outliers, then add priors: ridge shrinks, lasso zeros. Logistic and softmax regression carry the same linear core into classification; GDA and naive Bayes take the generative route; and GLMs unify the lot under one link-function recipe.",
   concepts: [

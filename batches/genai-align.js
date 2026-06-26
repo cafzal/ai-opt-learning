@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "The guiding slogan is that <i>the magic is the data curriculum, not the loss</i> &mdash; every stage is still next-token prediction. Pretraining sees raw web text, supervised fine-tuning sees chat-formatted demonstrations, and the RL stage optimizes against preference data, but the underlying objective never changes; what changes is which (increasingly curated) data the model predicts.",
-    ref: "LLM lifecycle — five stages"
+    ref: "five stages"
   },
   {
     id: "gl-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "Pretraining is self-supervised: the &lsquo;label&rsquo; for each position is simply the next token in the raw text, so the model minimizes next-token cross-entropy over huge unlabeled corpora. This is where the model learns grammar, facts, and reasoning patterns &mdash; &lsquo;how language works.&rsquo; Human preferences and instruction demonstrations enter only at the later fine-tuning and RL stages.",
-    ref: "LLM lifecycle — pretraining objective"
+    ref: "pretraining objective"
   },
   {
     id: "gl-3", type: "mc", framing: "applied", difficulty: 2,
@@ -37,7 +37,7 @@
     ],
     answer: 0,
     explanation: "Supervised fine-tuning continues next-token training, but on chat-formatted demonstrations of good assistant behavior, teaching the model &lsquo;what an assistant turn looks like&rsquo; &mdash; format and helpfulness. It precedes any preference-based RL. Reward-model training and decoding are different stages; pretraining uses raw, uncurated text.",
-    ref: "LLM lifecycle — supervised fine-tuning"
+    ref: "supervised fine-tuning"
   },
   {
     id: "gl-4", type: "numeric", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     answer: 3, tolerance: 0, unit: "",
     hint: "Add the sorted probabilities until the running total first reaches $0.9$.",
     explanation: "Accumulate from the top: $0.6$, then $0.6+0.25=0.85$ (still $<0.9$), then $0.85+0.10=0.95\\ge0.9$ &mdash; so 3 tokens are kept and the $0.05$ tail is truncated. Top-p adapts the candidate-set size to the shape of the distribution, unlike top-k which fixes the count.",
-    ref: "LLM decoding — top-p / nucleus sampling"
+    ref: "top-p / nucleus sampling"
   },
   {
     id: "gl-5", type: "ms", framing: "conceptual", difficulty: 3,
@@ -59,7 +59,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "Classic RLHF fits a reward model from pairwise preferences via the Bradley-Terry model, then runs PPO on the policy under a KL penalty toward a frozen reference (the SFT model) to prevent reward hacking and distribution drift. It is a multi-model pipeline with sampling in the loop. Options 4&ndash;5 describe DPO, which removes the explicit reward model and RL loop.",
-    ref: "LLM alignment — RLHF"
+    ref: "RLHF"
   },
   {
     id: "gl-6", type: "mc", framing: "conceptual", difficulty: 3,
@@ -72,7 +72,7 @@
     ],
     answer: 0,
     explanation: "The KL-constrained RLHF optimum has a closed form in which the implied reward is $r(x,y)=\\beta\\log\\frac{\\pi_\\theta(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}+\\beta\\log Z(x)$. Because Bradley-Terry depends only on the <i>difference</i> of two rewards for the same prompt, the intractable normalizer $Z(x)$ cancels, leaving a simple classification-style loss on preference pairs. The policy becomes its own implicit reward model.",
-    ref: "LLM alignment — DPO"
+    ref: "DPO"
   },
   {
     id: "gl-7", type: "numeric", framing: "applied", difficulty: 3,
@@ -80,7 +80,7 @@
     answer: 4, tolerance: 0, unit: "x",
     hint: "Compare bits per weight before and after.",
     explanation: "$16/4 = 4$, so INT4 weights occupy about one-quarter the memory of FP16 &mdash; a ~4&times; reduction (e.g., a model needing 16 GB in FP16 fits in ~4 GB). Post-training quantization methods such as GPTQ and AWQ exploit this to cut the memory-bandwidth cost that dominates autoregressive decoding, usually with modest quality loss.",
-    ref: "LLM serving — quantization"
+    ref: "quantization"
   },
   {
     id: "gl-8", type: "ms", framing: "applied", difficulty: 4,
@@ -94,7 +94,7 @@
     ],
     answer: [0, 1, 3],
     explanation: "The KV cache reuses past keys/values to cut redundant compute, but it does <i>not</i> break the serial chain &mdash; token $N$ still waits for token $N-1$ &mdash; and the cache itself grows with context &times; layers &times; batch, creating a memory-bandwidth bottleneck. Speculative decoding lets a cheap draft model propose tokens that one big-model pass verifies. Quantization <i>reduces</i> bytes per weight, easing bandwidth, so option 5 is false.",
-    ref: "LLM serving — KV cache, speculative decoding"
+    ref: "KV cache, speculative decoding"
   },
   {
     id: "gl-9", type: "qc", framing: "conceptual", difficulty: 4,
@@ -103,7 +103,7 @@
     quantityB: "Number of distinct models DPO needs (policy + frozen reference)",
     answer: 0,
     explanation: "Classic RLHF's PPO stage juggles several models &mdash; the trainable policy, a frozen reference for the KL penalty, the separately-trained reward model, and typically a value/critic head &mdash; so quantity A is about 4. DPO collapses this to just the trainable policy plus a frozen reference (quantity B = 2), with no reward model and no RL loop. A is greater.",
-    ref: "LLM alignment — DPO vs RLHF"
+    ref: "DPO vs RLHF"
   },
   {
     id: "gl-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: 0,
     explanation: "It is reversed: as $T\\to 0^+$ the softmax concentrates all mass on the largest logit &mdash; argmax / greedy decoding &mdash; not uniform. The uniform limit is $T\\to\\infty$, where $z_i/T\\to 0$ and every token becomes equally likely. So lower $T$ sharpens (less diverse, more deterministic) and higher $T$ flattens (more diverse). Option 1 swaps the two limits and is the false statement.",
-    ref: "LLM decoding — temperature & softmax"
+    ref: "temperature & softmax"
   }
 ];

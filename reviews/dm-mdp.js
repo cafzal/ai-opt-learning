@@ -1,6 +1,6 @@
-/* Review: Decision Making — Bayesian Networks, Decisions & MDPs (Optimization Fundamentals: §S1–S4, §S15–S17; Book II "Algorithms for Decision Making" Ch 1–9) */
+/* Review: Decision Making — Bayesian Networks, Decisions & MDPs */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["dm-mdp"] = {
-  intro: "Kochenderfer's <i>Algorithms for Decision Making</i> frames an <b>agent</b> running an observe&ndash;act loop under four kinds of uncertainty (outcome, model, state, interaction). This batch walks the first two parts: <b>probabilistic reasoning</b> &mdash; representing beliefs as Bayesian networks, doing inference, and learning their parameters and structure &mdash; then <b>simple decisions</b> (utility theory) and <b>sequential decisions</b> (MDPs), where the Bellman equations and value/policy iteration take over. Open each toggle, then test yourself below.",
+  intro: "Following Kochenderfer et al.'s <i>Algorithms for Decision Making</i>, an <b>agent</b> runs an observe&ndash;act loop under four kinds of uncertainty (outcome, model, state, interaction). This batch walks the first two parts: <b>probabilistic reasoning</b> &mdash; representing beliefs as Bayesian networks, doing inference, and learning their parameters and structure &mdash; then <b>simple decisions</b> (utility theory) and <b>sequential decisions</b> (MDPs), where the Bellman equations and value/policy iteration take over. Open each toggle, then test yourself below.",
   concepts: [
     {
       title: "Bayesian networks: DAG + chain rule",

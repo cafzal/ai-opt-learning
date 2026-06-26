@@ -1,4 +1,4 @@
-/* Review: Probability (ML-Fundamentals.md §2) */
+/* Review: Probability */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["probability"] = {
   intro: "Probability is the language ML uses to quantify uncertainty: what the rules are, how Bayes flips a likelihood into a belief, which distributions model which data, and why sums and averages keep turning out Gaussian. Skim the toggles, then test yourself below.",
   concepts: [

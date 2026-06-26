@@ -1,4 +1,4 @@
-/* Review: Stochastic & Population Optimization (optimization fundamentals.md §S9–§S13, Ch 5/8/9) */
+/* Review: Stochastic & Population Optimization */
 (window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["opt-stochastic"] = {
   intro: "When the objective is a narrow ravine, a black box, or riddled with local minima, plain gradient descent struggles. This batch covers the escape routes: the first-order optimizer catalog that smooths and adapts the gradient step, the log-derivative trick that lets you differentiate <i>through a distribution</i>, and the derivative-free family — cross-entropy, evolution strategies, genetic/population, pattern search, and simulated annealing. Skim the toggles, then test yourself below.",
   concepts: [

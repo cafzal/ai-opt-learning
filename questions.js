@@ -101,8 +101,8 @@
     {
       id: "ml",
       title: "AI & Machine Learning Fundamentals",
-      source: "ML-Fundamentals.md",
-      sub: "Murphy (MLAPP / PML), Fleuret (LBDL), Sutton & Barto — foundations through frontier.",
+      source: "ML · deep learning · RL",
+      sub: "Foundations through frontier — original practice material on concepts from the standard graduate texts (Murphy; Fleuret; Sutton & Barto).",
       batches: [
         "ml-foundations", "probability", "statistics", "linalg-opt",
         "linear-models", "kernels-trees", "unsupervised", "deep-learning",
@@ -112,8 +112,8 @@
     {
       id: "opt",
       title: "Optimization & Decision-Making Fundamentals",
-      source: "optimization fundamentals.md",
-      sub: "Kochenderfer et al. — optimization of engineering systems & decision-making under uncertainty.",
+      source: "optimization · decision-making",
+      sub: "Engineering optimization & decision-making under uncertainty — concepts after Kochenderfer et al. (MIT Press).",
       batches: [
         "opt-foundations", "opt-stochastic", "constrained-opt",
         "opt-advanced", "dm-mdp", "dm-rl-pomdp"
@@ -122,7 +122,7 @@
     {
       id: "genai",
       title: "Generative AI & Large Language Models",
-      source: "diffusion-llms-study-guide",
+      source: "LLMs · GenAI",
       sub: "The modern LLM stack — architecture & efficiency, training & alignment, serving, RAG/agents, and the generative frontier.",
       batches: ["genai-arch", "genai-align", "genai-applied"]
     }

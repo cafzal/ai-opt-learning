@@ -98,7 +98,7 @@
       "Each <b>batch</b> is 10 related questions that ramp from recall to synthesis. " +
       "Formats mix like the GRE — <b>multiple choice</b>, <b>select-all</b>, <b>numeric entry</b>, and " +
       "<b>quantitative comparison</b> — across <b>conceptual</b> and <b>applied</b> framings. " +
-      "Every answer gets a worked explanation and a section reference. Scores save in your browser.");
+      "Every answer gets a worked explanation and the topic it tests. Scores save in your browser.");
     app.appendChild(intro);
 
     DATA.tracks.forEach(track => {
@@ -134,6 +134,16 @@
       t.appendChild(grid);
       app.appendChild(t);
     });
+
+    const footer = el("div", "home-footer",
+      "<b>About.</b> Original educational practice material on standard concepts in machine learning, optimization, " +
+      "and decision-making. The questions, explanations, and diagrams are the author's own and do not reproduce " +
+      "text from any source work. " +
+      "Concepts follow widely-taught treatments, including Murphy, <i>Probabilistic Machine Learning</i> (MIT Press); " +
+      "Fleuret, <i>The Little Book of Deep Learning</i>; Sutton &amp; Barto, <i>Reinforcement Learning: An Introduction</i>; " +
+      "and Kochenderfer et&nbsp;al., <i>Algorithms for Optimization</i> &amp; <i>Algorithms for Decision Making</i> (MIT Press). " +
+      "Not affiliated with or endorsed by these authors or publishers.");
+    app.appendChild(footer);
   }
 
   /* ============================================================
@@ -461,7 +471,7 @@
       `<div class="fb-head">${ok ? "✓ Correct" : "✗ Not quite"}</div>` +
       answerLine +
       `<div class="fb-expl">${q.explanation}</div>` +
-      (q.ref ? `<div class="fb-ref">Reference: ${q.ref}</div>` : "");
+      (q.ref ? `<div class="fb-ref">Topic: ${q.ref}</div>` : "");
     typeset(fb);
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }

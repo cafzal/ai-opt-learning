@@ -1,4 +1,4 @@
-/* Batch: Deep Learning & Generative AI  (ML-Fundamentals.md §8) */
+/* Batch: Deep Learning & Generative AI */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["deep-learning"] = [
   {
     id: "dl-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "Without the nonlinearity, composing affine maps yields another affine map, so the entire deep stack collapses to one linear transformation $\\mathbf{W}\\boldsymbol{x}+\\boldsymbol{b}$ — depth buys nothing. The nonlinearity is exactly what gives the network its expressive power.",
-    ref: "§8 — Neural network basics"
+    ref: "Neural network basics"
   },
   {
     id: "dl-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 1,
     explanation: "BatchNorm normalizes over the batch, making it batch-size-dependent. <b>LayerNorm</b> normalizes over the features of each example, so it is batch-independent and is the standard for transformers (pre-norm is more stable for deep models).",
-    ref: "§8 — Layers & components"
+    ref: "Layers & components"
   },
   {
     id: "dl-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -32,7 +32,7 @@
     answer: 11, tolerance: 0, unit: "",
     hint: "Plug $L=5,\\ K=3$ into $1+L(K-1)$.",
     explanation: "$1+L(K-1)=1+5(3-1)=1+10=11$. Each layer adds $K-1=2$ to the field, so stacking small kernels deepens the receptive field linearly — one reason deep CNNs use many small filters instead of one large one.",
-    ref: "§8 — Convolution"
+    ref: "Convolution"
   },
   {
     id: "dl-4", type: "mc", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     ],
     answer: 0,
     explanation: "The autoregressive framework trains by <b>per-token cross-entropy</b> (each token predicted from its predecessors) and generates by feeding sampled tokens back as input — this is the foundation of language models. The contrastive and variational-denoising options describe CLIP and diffusion respectively.",
-    ref: "§8 — Losses"
+    ref: "Losses"
   },
   {
     id: "dl-5", type: "numeric", framing: "applied", difficulty: 3,
@@ -53,7 +53,7 @@
     answer: 1.25, tolerance: 0.01, unit: "",
     hint: "Compute $1/(1-p)$ with $p=0.2$.",
     explanation: "$\\frac{1}{1-p}=\\frac{1}{1-0.2}=\\frac{1}{0.8}=1.25$. Scaling survivors at train time (inverted dropout) keeps the expected activation unchanged, so dropout can simply be disabled at test time with no rescaling.",
-    ref: "§8 — Dropout"
+    ref: "Dropout"
   },
   {
     id: "dl-6", type: "ms", framing: "conceptual", difficulty: 3,
@@ -67,7 +67,7 @@
     ],
     answer: [0, 1, 2, 3],
     explanation: "Vanishing/exploding gradients arise from products of many Jacobians and are mitigated by ReLU, residual connections, normalization, careful init, gradient clipping, and gating (LSTM/GRU). Minibatch size controls SGD noise (implicit regularization), not the gradient-magnitude problem.",
-    ref: "§8 — Training"
+    ref: "Training"
   },
   {
     id: "dl-7", type: "mc", framing: "conceptual", difficulty: 3,
@@ -80,7 +80,7 @@
     ],
     answer: 0,
     explanation: "Self-attention treats its inputs as an unordered set — it is <b>permutation-invariant</b> — so order must be injected explicitly via positional encoding (sinusoidal or learned; modern variants RoPE/ALiBi). The $\\sqrt d$ scaling, not positional encoding, controls softmax saturation.",
-    ref: "§8 — Attention"
+    ref: "Attention"
   },
   {
     id: "dl-8", type: "ms", framing: "applied", difficulty: 4,
@@ -94,7 +94,7 @@
     ],
     answer: [0, 1, 2, 3],
     explanation: "Self-attention connects any two tokens with $O(1)$ path length (vs $O(n)$ for RNNs) at $O(n^2 d)$ cost. Masked/causal attention enforces the autoregressive constraint in decoders, and cross-attention links encoder to decoder. The $O(n)$ path-length claim describes RNNs, not self-attention.",
-    ref: "§8 — Attention"
+    ref: "Attention"
   },
   {
     id: "dl-9", type: "qc", framing: "conceptual", difficulty: 4,
@@ -103,7 +103,7 @@
     quantityB: "Max path length in an RNN",
     answer: 1,
     explanation: "The table gives the Transformer an $O(1)$ max path length and the RNN an $O(n)$ max path length. Since $O(1)<O(n)$ for long sequences, quantity B (the RNN's) is the larger — which is precisely why transformers handle long-range dependencies better.",
-    ref: "§8 — CNN vs RNN vs Transformer"
+    ref: "CNN vs RNN vs Transformer"
   },
   {
     id: "dl-10", type: "mc", framing: "applied", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: 0,
     explanation: "LoRA <i>merges</i> the low-rank update $\\mathbf{B}\\mathbf{A}$ into $\\mathbf{W}$ at inference, giving zero added latency — the claim that it must stay separate and add latency is false. The other statements are correct: $R\\ll\\min(C,D)$ trains a few percent of params, it is typically applied to $\\mathbf{W}_Q,\\mathbf{W}_V$, and QLoRA = 4-bit base + LoRA adapters.",
-    ref: "§8 — Parameter-efficient fine-tuning (LoRA)"
+    ref: "Parameter-efficient fine-tuning (LoRA)"
   }
 ];

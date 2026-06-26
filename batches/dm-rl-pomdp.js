@@ -1,4 +1,4 @@
-/* Batch: Decision Making — RL, Policy Methods, POMDPs & Multiagent  (DM Book II Ch 10–27; §S17, §S19–§S22) */
+/* Batch: Decision Making — RL, Policy Methods, POMDPs & Multiagent */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["dm-rl-pomdp"] = [
   {
     id: "drp-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "Policy search optimizes the parameters of a parametrized policy $\\pi_\\theta$ directly and gradient-free — local search/GA, the cross-entropy method, and evolution strategies are simply applied to the policy-return objective $U(\\pi)=\\mathbb{E}_\\tau[R(\\tau)]$. Estimating $Q$ via TD is model-free RL (Ch 17); maintaining a belief is the POMDP setting (Ch 19).",
-    ref: "DM Ch 10 — Policy Search"
+    ref: "Policy Search"
   },
   {
     id: "drp-2", type: "mc", framing: "conceptual", difficulty: 2,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "Q-learning is off-policy: $Q\\leftarrow Q+\\alpha(r+\\gamma\\max_{a'}Q(s',a')-Q)$, bootstrapping off the greedy next value. Sarsa is on-policy: it uses $r+\\gamma Q(s',a')$ for the action actually taken next. Both are model-free. The $\\max$ in Q-learning introduces optimism bias, which double Q-learning corrects.",
-    ref: "DM Ch 17 — Model-Free Methods"
+    ref: "Model-Free Methods"
   },
   {
     id: "drp-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -32,7 +32,7 @@
     answer: 0.8, tolerance: 0, unit: "",
     hint: "Compute $1-\\epsilon$.",
     explanation: "PPO clamps the ratio to $[1-\\epsilon,1+\\epsilon]=[0.8,1.2]$ for $\\epsilon=0.2$, so the lower bound is $0.8$. This clamping removes the explicit trust-region constraint and line search of TRPO while still discouraging overly large policy updates, and it lets trajectories be reused.",
-    ref: "DM Ch 12 — Policy Gradient Optimization"
+    ref: "Policy Gradient Optimization"
   },
   {
     id: "drp-4", type: "mc", framing: "conceptual", difficulty: 3,
@@ -45,7 +45,7 @@
     ],
     answer: 0,
     explanation: "Every Nash equilibrium is a correlated equilibrium, but not every correlated equilibrium is a Nash. A correlated equilibrium (a single coordinating joint policy) is computable by a linear program, whereas computing a Nash equilibrium is PPAD-complete. A Nash needs every agent to best-respond, not a dominant strategy (which is rare).",
-    ref: "§S22 — Equilibrium concepts & solving"
+    ref: "Equilibrium concepts & solving"
   },
   {
     id: "drp-5", type: "ms", framing: "conceptual", difficulty: 3,
@@ -59,7 +59,7 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "Reward-to-go credits each reward only to prior actions and approximates $Q_\\theta$; baseline subtraction is unbiased since $\\mathbb{E}_a[\\nabla\\log\\pi_\\theta]=0$; combining likelihood-ratio + reward-to-go + baseline is exactly REINFORCE; and using $U(s)$ as the baseline gives the advantage $A=Q-U$. The TD residual $r+\\gamma U(s')-U(s)$ is an <i>unbiased</i> advantage estimate, so the fourth option is false.",
-    ref: "DM Ch 11 — Policy Gradient Estimation"
+    ref: "Policy Gradient Estimation"
   },
   {
     id: "drp-6", type: "numeric", framing: "applied", difficulty: 3,
@@ -67,7 +67,7 @@
     answer: 6, tolerance: 0, unit: "",
     hint: "TD target $=r+\\gamma\\max_{a'}Q(s',a')$; then move halfway toward it.",
     explanation: "TD target $=1+0.9(10)=10$, so the TD error is $10-2=8$. Update: $Q\\leftarrow 2+0.5(8)=6$. The update nudges $Q$ from its old value toward the bootstrapped target by a fraction $\\alpha$.",
-    ref: "DM Ch 17 — Model-Free Methods"
+    ref: "Model-Free Methods"
   },
   {
     id: "drp-7", type: "mc", framing: "conceptual", difficulty: 4,
@@ -80,7 +80,7 @@
     ],
     answer: 0,
     explanation: "GAE forms $\\hat A^{\\text{GAE}}=\\mathbb{E}[\\sum_k(\\gamma\\lambda)^{k-1}\\delta_k]$. At $\\lambda=0$ it collapses to the single-step TD residual — high bias, low variance; at $\\lambda=1$ it becomes the unbiased Monte-Carlo-style estimate — no bias but high variance. Intermediate $\\lambda$ interpolates the bias–variance tradeoff.",
-    ref: "DM Ch 13 — Actor-Critic Methods"
+    ref: "Actor-Critic Methods"
   },
   {
     id: "drp-8", type: "ms", framing: "applied", difficulty: 4,
@@ -94,7 +94,7 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "The Kalman filter is the exact linear-Gaussian belief update; the EKF linearizes with Jacobians (losing exactness/multimodality); the UKF is derivative-free using sigma points; and the discrete filter applies Bayes' rule as $b'(s')\\propto O(o\\mid a,s')\\sum_s T(s'\\mid s,a)b(s)$. The particle filter is in fact <i>multimodal</i> and is precisely the method that can suffer particle deprivation, so that option is false.",
-    ref: "DM Ch 19 — Beliefs (Filters)"
+    ref: "Beliefs (Filters)"
   },
   {
     id: "drp-9", type: "qc", framing: "conceptual", difficulty: 4,
@@ -103,7 +103,7 @@
     quantityB: "Complexity of solving a Dec-POMDP (shared-reward multiagent)",
     answer: 1,
     explanation: "Exact POMDPs are PSPACE-complete, while Dec-POMDPs are NEXP-complete. NEXP-complete is a strictly harder class than PSPACE-complete, so the Dec-POMDP (quantity B) is the more computationally demanding — B is greater.",
-    ref: "DM Ch 21 / Ch 27 — Belief planning & Dec-POMDPs"
+    ref: "Belief planning & Dec-POMDPs"
   },
   {
     id: "drp-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: 0,
     explanation: "QMDP is an upper bound (one alpha vector per action, assuming full observability after step 1) that is poor at valuing information-gathering; the fast informed bound partly accounts for observations and is never looser than QMDP. PBVI is a <i>lower</i>-bound method (backups at chosen belief points preserve the lower bound), and the blind lower bound commits to one action forever — it is QMDP, not blind, that assumes observability after step 1.",
-    ref: "DM Ch 21 — Offline Belief-State Planning"
+    ref: "Offline Belief-State Planning"
   }
 ];

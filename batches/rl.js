@@ -1,4 +1,4 @@
-/* Batch: Reinforcement Learning  (ML-Fundamentals.md §11) */
+/* Batch: Reinforcement Learning */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["rl"] = [
   {
     id: "rl-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "In RL the agent takes action $a_t\\sim\\pi(a\\mid s)$, gets reward $r_{t+1}$, and transitions to $s_{t+1}$, learning by trial-and-error under delayed consequences and the exploration-exploitation dilemma. The feedback is <i>evaluative</i> (how good was that action) rather than the <i>instructive</i> labels of supervised learning.",
-    ref: "§11 — Reinforcement Learning (intro)"
+    ref: "Reinforcement Learning (intro)"
   },
   {
     id: "rl-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "In the return $G_t=\\sum_{k\\ge0}\\gamma^k r_{t+k+1}$, the factor $\\gamma\\in[0,1)$ discounts the future: a reward $k$ steps away is scaled by $\\gamma^k$. The return also satisfies the recursion $G_t=r_{t+1}+\\gamma G_{t+1}$.",
-    ref: "§11 — MDPs, returns & value functions"
+    ref: "MDPs, returns & value functions"
   },
   {
     id: "rl-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -32,7 +32,7 @@
     answer: 10, tolerance: 0.01, unit: "",
     hint: "A constant reward of 1 gives the geometric sum $\\sum_{k\\ge0}\\gamma^k=1/(1-\\gamma)$.",
     explanation: "With every reward equal to 1, $G_t=\\sum_{k\\ge0}\\gamma^k\\cdot1=\\frac{1}{1-\\gamma}=\\frac{1}{1-0.9}=10$. This infinite-horizon geometric sum converges precisely because $\\gamma\\in[0,1)$.",
-    ref: "§11 — MDPs, returns & value functions"
+    ref: "MDPs, returns & value functions"
   },
   {
     id: "rl-4", type: "numeric", framing: "applied", difficulty: 2,
@@ -40,7 +40,7 @@
     answer: 0, tolerance: 0.001, unit: "",
     hint: "Substitute directly into $\\delta_t=r_{t+1}+\\gamma V(s_{t+1})-V(s_t)$.",
     explanation: "$\\delta_t=2+0.5\\cdot8-6=2+4-6=0$. A zero TD error means the current estimate $V(s_t)$ already matches the bootstrapped target $r_{t+1}+\\gamma V(s_{t+1})$, so no update is made. TD learning is the central idea: MC's sampling plus DP's bootstrapping, learning online from $\\delta_t$.",
-    ref: "§11 — Tabular solution methods (TD error)"
+    ref: "Tabular solution methods (TD error)"
   },
   {
     id: "rl-5", type: "mc", framing: "conceptual", difficulty: 3,
@@ -53,7 +53,7 @@
     ],
     answer: 0,
     explanation: "The expectation equation averages over the policy, $v_\\pi(s)=\\sum_a\\pi(a\\mid s)\\sum_{s',r}p(s',r\\mid s,a)[r+\\gamma v_\\pi(s')]$. The optimality equation instead takes a maximum: $v_*(s)=\\max_a\\sum_{s',r}p(s',r\\mid s,a)[r+\\gamma v_*(s')]$ — a $\\max$ replaces the policy-average. Given $q_*$, the optimal policy is greedy: $\\pi_*(s)=\\arg\\max_a q_*(s,a)$.",
-    ref: "§11 — MDPs, returns & value functions"
+    ref: "MDPs, returns & value functions"
   },
   {
     id: "rl-6", type: "ms", framing: "conceptual", difficulty: 3,
@@ -67,7 +67,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "DP: model = yes, bootstrap = yes, full/expected backups. MC: model = no, bootstrap = no, sample full-episode return. TD: model = no, bootstrap = yes, sample one-step. MC does <i>not</i> bootstrap, and TD needs <i>no</i> model — so the last two options are false. All are forms of generalized policy iteration (GPI).",
-    ref: "§11 — Tabular solution methods"
+    ref: "Tabular solution methods"
   },
   {
     id: "rl-7", type: "mc", framing: "applied", difficulty: 3,
@@ -80,7 +80,7 @@
     ],
     answer: 0,
     explanation: "Sarsa is on-policy with target $r+\\gamma Q(s',a')$ — the action actually taken — so it learns <i>safe</i> behavior. Q-learning is off-policy with target $r+\\gamma\\max_{a'}Q(s',a')$, learning $q_*$ regardless of the behavior policy. Expected Sarsa averages over $a'$.",
-    ref: "§11 — Tabular solution methods (Sarsa vs Q-learning)"
+    ref: "Tabular solution methods (Sarsa vs Q-learning)"
   },
   {
     id: "rl-8", type: "mc", framing: "conceptual", difficulty: 4,
@@ -93,7 +93,7 @@
     ],
     answer: 0,
     explanation: "The n-step return bootstraps after $n$ real rewards: $n{=}1$ is TD(0), and $n{\\to}\\infty$ (no bootstrapping) is Monte Carlo; intermediate $n$ usually wins. Eligibility traces / TD($\\lambda$) achieve the same continuum online and cheaply via the $\\lambda$-return and a decaying trace.",
-    ref: "§11 — The TD↔MC spectrum (n-step & eligibility traces)"
+    ref: "The TD↔MC spectrum (n-step & eligibility traces)"
   },
   {
     id: "rl-9", type: "ms", framing: "conceptual", difficulty: 4,
@@ -107,7 +107,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "The deadly triad is function approximation + bootstrapping + off-policy training; together they can diverge (Baird's counterexample sends weights to infinity even with linear features and exact expected updates), but any <i>two</i> of the three is safe. On-policy MC and tabular representation are not part of the triad — they are precisely what makes things safe.",
-    ref: "§11 — Function approximation & the deadly triad"
+    ref: "Function approximation & the deadly triad"
   },
   {
     id: "rl-10", type: "qc", framing: "applied", difficulty: 5,
@@ -116,6 +116,6 @@
     quantityB: "Variance of actor-critic (uses bootstrapped $\\delta_t$)",
     answer: 0,
     explanation: "REINFORCE plugs in the Monte Carlo return $G_t$ — unbiased but high variance. Actor-critic replaces $G_t$ with the bootstrapped TD error $\\delta_t=r+\\gamma\\hat v(s')-\\hat v(s)$ as the advantage — biased but low variance. So Quantity A (REINFORCE's variance) is the greater. The policy-gradient theorem itself needs no model and no derivative of the state distribution.",
-    ref: "§11 — Policy-gradient methods (bias–variance ladder)"
+    ref: "Policy-gradient methods (bias–variance ladder)"
   }
 ];

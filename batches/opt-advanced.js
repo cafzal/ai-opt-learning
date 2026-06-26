@@ -1,4 +1,4 @@
-/* Batch: Advanced Optimization — Multiobjective, Surrogates & Uncertainty  (Opt Ch 15–24, §S14, §S18) */
+/* Batch: Advanced Optimization — Multiobjective, Surrogates & Uncertainty */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["opt-advanced"] = [
   {
     id: "oa-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "Dominance means better in at least one objective and worse in none: $f_i(\\mathbf{x})\\le f_i(\\mathbf{x}')$ for all $i$ and strict $<$ for some $i$. Requiring strict improvement in <i>every</i> objective is too strong, and a single $\\le$ is too weak. The set of un-dominated points is the Pareto frontier.",
-    ref: "§S14 — Pareto optimality & dominance"
+    ref: "Pareto optimality & dominance"
   },
   {
     id: "oa-2", type: "mc", framing: "conceptual", difficulty: 1,
@@ -24,7 +24,7 @@
     ],
     answer: 0,
     explanation: "A full factorial grid has $m^n$ points, exponential in $n$, which becomes infeasible in high dimensions. This motivates space-filling alternatives like uniform-projection (Latin hypercube) plans and low-discrepancy sequences.",
-    ref: "Opt Ch 16 — Sampling Plans"
+    ref: "Sampling Plans"
   },
   {
     id: "oa-3", type: "numeric", framing: "applied", difficulty: 2,
@@ -32,7 +32,7 @@
     answer: 4.98, tolerance: 0.01, unit: "",
     hint: "Compute $4.0+1.96\\times 0.5$.",
     explanation: "The 95% region is $\\hat\\mu\\pm1.96\\hat\\sigma=4.0\\pm1.96(0.5)=4.0\\pm0.98$, so the upper bound is $4.98$ (and the lower bound $3.02$). Because the GP covariance depends only on where you've sampled — not on the observed $\\mathbf{y}$ — this interval widens away from the data.",
-    ref: "§S18 — Gaussian processes"
+    ref: "Gaussian processes"
   },
   {
     id: "oa-4", type: "ms", framing: "conceptual", difficulty: 2,
@@ -46,7 +46,7 @@
     ],
     answer: [0, 1, 2],
     explanation: "The constraint method and weighted min-max (Tchebycheff) both reach nonconvex frontier regions; the weighted sum $\\mathbf{w}^\\top\\mathbf{f}$ cannot. So weighted-sum is <i>not</i> a full-coverage method, and lexicographic scalarization is explicitly ordering-sensitive.",
-    ref: "Opt Ch 15 — Multiobjective Optimization"
+    ref: "Multiobjective Optimization"
   },
   {
     id: "oa-5", type: "mc", framing: "applied", difficulty: 3,
@@ -59,7 +59,7 @@
     ],
     answer: 0,
     explanation: "Generalization error is not directly computable, and training error <i>underestimates</i> it because the model is fit to the same data. Honest estimates come from holdout, $k$-fold cross-validation (leave-one-out is $k=m$), or the bootstrap — capturing the bias-variance tradeoff.",
-    ref: "Opt Ch 17 — Surrogate Models"
+    ref: "Surrogate Models"
   },
   {
     id: "oa-6", type: "numeric", framing: "applied", difficulty: 3,
@@ -67,7 +67,7 @@
     answer: 0.2264, tolerance: 0.001, unit: "",
     hint: "Compute $0.632(0.30)+0.368(0.10)$.",
     explanation: "$\\epsilon_{0.632}=0.632(0.30)+0.368(0.10)=0.1896+0.0368=0.2264$. The weights arise because a given index is absent from a bootstrap resample with probability $\\approx e^{-1}\\approx0.368$, so about $0.632$ of the data appears in each resample.",
-    ref: "Opt Ch 17 — Surrogate Models"
+    ref: "Surrogate Models"
   },
   {
     id: "oa-7", type: "mc", framing: "conceptual", difficulty: 3,
@@ -80,7 +80,7 @@
     ],
     answer: 0,
     explanation: "Expected improvement weights how much the objective could improve, not just the chance it improves, and is usually the fastest acquisition strategy. Prediction-based $\\min\\hat\\mu$ can get stuck; error-based $\\max\\hat\\sigma$ is pure exploration; probability of improvement ignores improvement magnitude.",
-    ref: "Opt Ch 19 — Surrogate Optimization"
+    ref: "Surrogate Optimization"
   },
   {
     id: "oa-8", type: "qc", framing: "conceptual", difficulty: 4,
@@ -89,7 +89,7 @@
     quantityB: "Conditional Value at Risk (CVaR), the expected loss in the worst $1-\\alpha$ tail",
     answer: 1,
     explanation: "CVaR is the <i>expected</i> loss over the worst $1-\\alpha$ tail — it averages outcomes at or beyond the VaR quantile — so it is at least as large as VaR and strictly larger whenever the tail carries mass beyond the quantile. CVaR is coherent, less estimation-sensitive, and accounts for the extreme losses VaR ignores.",
-    ref: "Opt Ch 20 — Optimization under Uncertainty"
+    ref: "Optimization under Uncertainty"
   },
   {
     id: "oa-9", type: "mc", framing: "conceptual", difficulty: 4,
@@ -102,7 +102,7 @@
     ],
     answer: 0,
     explanation: "A deep but narrow basin can give a great noise-free value yet large variation under perturbation, so the robust optimum need not be the noise-free one. Aleatory uncertainty is inherent and irreducible; epistemic uncertainty stems from limited knowledge and is reducible (e.g. with more data).",
-    ref: "Opt Ch 20 — Optimization under Uncertainty"
+    ref: "Optimization under Uncertainty"
   },
   {
     id: "oa-10", type: "ms", framing: "applied", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: [0, 1, 2],
     explanation: "Totally unimodular $\\mathbf{A}$ lets simplex return integers (solve as an LP); polynomial chaos with orthogonal bases collapses the moments to $\\hat\\mu=\\theta_1$ with Hermite for Gaussian inputs; and MDA uses Gauss-Seidel for cyclic couplings and topological ordering for acyclic ones. Rounding the LP relaxation is unreliable alone, and branch and bound prunes by an LP-relaxation bound — not an acquisition function.",
-    ref: "Opt Ch 22 / Ch 21 / Ch 24"
+    ref: "Discrete optimization, uncertainty propagation & MDO"
   }
 ];

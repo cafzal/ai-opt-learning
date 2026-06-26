@@ -1,4 +1,4 @@
-/* Batch: Kernels, SVMs, Trees & Ensembles  (ML-Fundamentals.md §6) */
+/* Batch: Kernels, SVMs, Trees & Ensembles */
 (window.QUIZ_BATCHES = window.QUIZ_BATCHES || {})["kernels-trees"] = [
   {
     id: "ker-1", type: "mc", framing: "conceptual", difficulty: 1,
@@ -11,7 +11,7 @@
     ],
     answer: 0,
     explanation: "Instance-based learning stores the data and predicts from neighbors at query time, doing no real work during 'training' — hence lazy. For classification it takes a majority vote of the $K$ nearest; for regression, the average of the $K$ nearest.",
-    ref: "§6 — Instance-based learning & KNN"
+    ref: "Instance-based learning & KNN"
   },
   {
     id: "ker-2", type: "numeric", framing: "applied", difficulty: 2,
@@ -19,7 +19,7 @@
     answer: 0.5, tolerance: 0.001, unit: "",
     hint: "Plug into $2/\\|\\boldsymbol{w}\\|$.",
     explanation: "The (hard-margin) SVM maximizes the geometric margin $2/\\|\\boldsymbol{w}\\|$, so with $\\|\\boldsymbol{w}\\|=4$ the width is $2/4=0.5$. Maximizing the margin corresponds to minimizing $\\tfrac12\\|\\boldsymbol{w}\\|^2$.",
-    ref: "§6 — Support vector machines"
+    ref: "Support vector machines"
   },
   {
     id: "ker-3", type: "mc", framing: "conceptual", difficulty: 2,
@@ -32,7 +32,7 @@
     ],
     answer: 0,
     explanation: "A kernel is Mercer/PD iff every Gram matrix $\\mathbf{K}$ (with $K_{ij}=\\kappa(\\boldsymbol{x}_i,\\boldsymbol{x}_j)$) is PSD. That guarantees a feature map with $\\kappa(\\boldsymbol{x},\\boldsymbol{x}')=\\boldsymbol\\phi(\\boldsymbol{x})^\\top\\boldsymbol\\phi(\\boldsymbol{x}')$, possibly infinite-dimensional — the basis for the kernel trick.",
-    ref: "§6 — Mercer kernels & the kernel trick"
+    ref: "Mercer kernels & the kernel trick"
   },
   {
     id: "ker-4", type: "mc", framing: "applied", difficulty: 2,
@@ -45,7 +45,7 @@
     ],
     answer: 0,
     explanation: "Primal cost is $O(D^3)$ and dual cost is $O(N^3)$, so the dual wins when $D>N$ or $D=\\infty$ (e.g. the RBF kernel). Note the kernel-ridge solution is <i>dense</i> — every $\\alpha_i$ is generally nonzero — so it is not a sparsity tool.",
-    ref: "§6 — Kernel ridge regression / representer theorem"
+    ref: "Kernel ridge regression / representer theorem"
   },
   {
     id: "ker-5", type: "mc", framing: "applied", difficulty: 3,
@@ -58,7 +58,7 @@
     ],
     answer: 0,
     explanation: "Gini $=1-(0.9^2+0.1^2)=1-(0.81+0.01)=1-0.82=0.18$. CART chooses splits greedily to minimize Gini (or entropy) for classification, and MSE for regression. A pure node would have Gini $0$; a 50/50 split gives the maximum $0.5$.",
-    ref: "§6 — Decision trees (CART)"
+    ref: "Decision trees (CART)"
   },
   {
     id: "ker-6", type: "ms", framing: "conceptual", difficulty: 3,
@@ -72,7 +72,7 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "By the KKT conditions a point is either ignored ($\\alpha_n=0$) or a support vector, and prediction uses only the latter. Larger $C$ penalizes slack more, narrowing the margin. The soft-margin primal equals $\\sum_n\\max(0,1-\\tilde y_n f_n)+\\lambda\\|\\boldsymbol{w}\\|^2$, and the hinge is exactly 0 for $\\tilde y\\eta>1$ (hence sparse). SVMs do <i>not</i> give native probabilities — only Platt scaling $\\sigma(af+b)$, which is poorly calibrated.",
-    ref: "§6 — Support vector machines"
+    ref: "Support vector machines"
   },
   {
     id: "ker-7", type: "qc", framing: "conceptual", difficulty: 3,
@@ -81,7 +81,7 @@
     quantityB: "The GP posterior mean prediction",
     answer: 2,
     explanation: "The GP posterior mean $\\boldsymbol\\mu_*=\\mathbf{K}_{*X}\\mathbf{K}_\\sigma^{-1}\\boldsymbol{y}$ equals kernel ridge regression exactly when $\\lambda=\\sigma_y^2$. The GP's extra value is the <i>predictive variance</i> (epistemic uncertainty growing away from data), not a different mean — so the point predictions are equal.",
-    ref: "§6 — Gaussian processes (GPs)"
+    ref: "Gaussian processes (GPs)"
   },
   {
     id: "ker-8", type: "numeric", framing: "applied", difficulty: 4,
@@ -89,7 +89,7 @@
     answer: 0.549, tolerance: 0.01, unit: "",
     hint: "Evaluate $\\tfrac12\\ln(0.75/0.25)=\\tfrac12\\ln 3$.",
     explanation: "$\\beta_m=\\tfrac12\\ln\\frac{1-0.25}{0.25}=\\tfrac12\\ln\\frac{0.75}{0.25}=\\tfrac12\\ln 3\\approx\\tfrac12(1.0986)=0.549$. A lower error gives a larger weight; an error of $0.5$ gives $\\beta_m=0$ (a useless learner). AdaBoost minimizes exponential loss and reweights misclassified points upward.",
-    ref: "§6 — Ensembles: bagging, random forests, boosting"
+    ref: "Ensembles: bagging, random forests, boosting"
   },
   {
     id: "ker-9", type: "ms", framing: "conceptual", difficulty: 4,
@@ -103,7 +103,7 @@
     ],
     answer: [0, 1, 2, 4],
     explanation: "Bagging averages independently trained bootstrap models to cut variance (bias unchanged); boosting is a sequential forward-stagewise fit that cuts bias. Random forests add $\\sim\\!\\sqrt D$ random feature subsets per node to decorrelate, and OOB (~37%) gives a free error estimate. The robustness claim is backwards: boosting (especially AdaBoost) is <i>sensitive</i> to outliers and noisy labels, while bagging is robust.",
-    ref: "§6 — Ensembles: bagging, random forests, boosting"
+    ref: "Ensembles: bagging, random forests, boosting"
   },
   {
     id: "ker-10", type: "mc", framing: "conceptual", difficulty: 5,
@@ -116,6 +116,6 @@
     ],
     answer: 0,
     explanation: "Gradient boosting / MART is functional gradient descent: each tree is fit to the <i>negative</i>-gradient pseudo-residuals (for squared loss these are the residuals). The other three are stated facts: ensemble variance $\\to\\rho\\sigma^2$, so decorrelation matters; GP hyperparameters come from the (non-convex, $O(N^3)$) log marginal likelihood; and PD kernels are closed under sums, products, and positive scalings.",
-    ref: "§6 — Ensembles & kernels"
+    ref: "Ensembles & kernels"
   }
 ];
