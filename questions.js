@@ -13,61 +13,61 @@
     /* ---- ML Fundamentals track ---- */
     "ml-foundations": {
       title: "ML Foundations & Generalization",
-      blurb: "Types of ML, parametric vs non-parametric, generalization, bias–variance, and the shared toolkit. (§0–§1)"
+      blurb: "Types of ML, parametric vs non-parametric, generalization, bias–variance, and the shared toolkit."
     },
     "probability": {
       title: "Probability & Distributions",
-      blurb: "Bayes' rule & base rates, independence, moments, key distributions, the multivariate Gaussian, CLT & Monte Carlo. (§2)"
+      blurb: "Bayes' rule & base rates, independence, moments, key distributions, the multivariate Gaussian, CLT & Monte Carlo."
     },
     "statistics": {
       title: "Estimation, Bayes & Decision Theory",
-      blurb: "MLE/MAP, conjugate priors, Bayesian vs frequentist, decision theory, and classification metrics. (§3)"
+      blurb: "MLE/MAP, conjugate priors, Bayesian vs frequentist, decision theory, and classification metrics."
     },
     "linalg-opt": {
       title: "Linear Algebra & Optimization Core",
-      blurb: "Norms, eigen/SVD, convexity, gradient descent, momentum/Adam, Newton, KKT, and EM. (§4)"
+      blurb: "Norms, eigen/SVD, convexity, gradient descent, momentum/Adam, Newton, KKT, and EM."
     },
     "linear-models": {
       title: "Linear & Sparse Models",
-      blurb: "Linear & robust regression, ridge vs lasso, logistic/softmax, GDA, naive Bayes, GLMs, generative vs discriminative. (§5)"
+      blurb: "Linear & robust regression, ridge vs lasso, logistic/softmax, GDA, naive Bayes, GLMs, generative vs discriminative."
     },
     "kernels-trees": {
       title: "Kernels, SVMs, Trees & Ensembles",
-      blurb: "Kernel trick, SVMs, Gaussian processes, decision trees, bagging, random forests, and boosting. (§6)"
+      blurb: "Kernel trick, SVMs, Gaussian processes, decision trees, bagging, random forests, and boosting."
     },
     "unsupervised": {
       title: "Unsupervised & Latent-Variable Models",
-      blurb: "Mixtures & EM, K-means, PCA, factor analysis, ICA, autoencoders & VAEs. (§7)"
+      blurb: "Mixtures & EM, K-means, PCA, factor analysis, ICA, autoencoders & VAEs."
     },
     "deep-learning": {
       title: "Deep Learning & Generative AI",
-      blurb: "MLPs & backprop, normalization & residuals, attention & transformers, CNN/RNN, diffusion, LoRA & PEFT. (§8)"
+      blurb: "MLPs & backprop, normalization & residuals, attention & transformers, CNN/RNN, diffusion, LoRA & PEFT."
     },
     "inference-graphical": {
       title: "Inference & Graphical / Sequential Models",
-      blurb: "Laplace, MCMC & variational inference; Bayes nets, HMMs, Kalman filters, and CRFs. (§9–§10)"
+      blurb: "Laplace, MCMC & variational inference; Bayes nets, HMMs, Kalman filters, and CRFs."
     },
     "rl": {
       title: "Reinforcement Learning",
-      blurb: "MDPs & Bellman, TD / Sarsa / Q-learning, function approximation & the deadly triad, policy gradients. (§11)"
+      blurb: "MDPs & Bellman, TD / Sarsa / Q-learning, function approximation & the deadly triad, policy gradients."
     },
     "applied-ml": {
       title: "Applied ML & Specialized Models",
-      blurb: "Learning with fewer labels, the ML lifecycle, leakage & imbalance, recommenders, and GNNs. (§12–§13)"
+      blurb: "Learning with fewer labels, the ML lifecycle, leakage & imbalance, recommenders, and GNNs."
     },
 
     /* ---- Optimization & Decision-Making track ---- */
     "opt-foundations": {
       title: "Optimization Foundations & Derivatives",
-      blurb: "Optimality conditions, derivatives & autodiff, bracketing/line search, descent, trust region, Newton & direct methods. (Opt Ch 1–7)"
+      blurb: "Optimality conditions, derivatives & autodiff, bracketing/line search, descent, trust region, Newton & direct methods."
     },
     "opt-stochastic": {
       title: "Descent, Stochastic & Population Methods",
-      blurb: "First-order optimizers (CG, momentum, Adam), simulated annealing, cross-entropy, CMA-ES, and population methods. (Opt Ch 5, 8, 9)"
+      blurb: "First-order optimizers (CG, momentum, Adam), simulated annealing, cross-entropy, CMA-ES, and population methods."
     },
     "constrained-opt": {
       title: "Constraints, Duality, LP, QP & Convex",
-      blurb: "Constraint handling, Lagrangian duality & KKT, simplex/LP, quadratic programming, and disciplined convex programming. (Opt Ch 10–14)"
+      blurb: "Constraint handling, Lagrangian duality & KKT, simplex/LP, quadratic programming, and disciplined convex programming."
     },
     "opt-surrogate": {
       title: "Multiobjective & Surrogate Optimization",
@@ -79,7 +79,7 @@
     },
     "dm-mdp": {
       title: "Probabilistic Reasoning & MDPs",
-      blurb: "Bayesian networks & inference, utility theory & value of information, MDPs, value/policy iteration, LQR, and online planning. (DM Ch 1–9)"
+      blurb: "Bayesian networks & inference, utility theory & value of information, MDPs, value/policy iteration, LQR, and online planning."
     },
     "dm-rl": {
       title: "Reinforcement Learning & Policy Optimization",
