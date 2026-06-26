@@ -6,7 +6,8 @@
       title: "Standard form & the minima you're hunting",
       tag: "core",
       body: "<p>Every problem reduces to one shape: $\\min_\\mathbf{x} f(\\mathbf{x})$ subject to $\\mathbf{x}\\in\\mathcal{X}$. Here $\\mathbf{x}$ is the <b>design point</b>, $f$ the <b>objective</b>, $\\mathcal{X}$ the <b>feasible set</b>, and $\\mathbf{x}^*$ the <b>minimizer</b>. (Watch strict-inequality feasible sets — they may have <i>no</i> solution, so include the boundary.)</p><p>Three flavors of minimum: a <b>global</b> min is lowest anywhere (hard to prove); a <b>local</b> min satisfies $f(\\mathbf{x}^*)\\le f(\\mathbf{x})$ only in a neighborhood; a <b>strong</b> (strict) min is the unique lowest point in its neighborhood. The <b>No Free Lunch</b> theorem (Wolpert &amp; Macready) is the catch: averaged over <i>all</i> problems no optimizer beats any other — superiority requires assumptions about the problem class (Lipschitz, convexity).</p>",
-      example: "Maximizing profit becomes minimizing $-\\text{profit}$. If the feasible region is \"$x>0$\" (strict), the infimum at $x=0$ is never attained — rewrite it as \"$x\\ge 0$\" so a minimizer exists."
+      example: "Maximizing profit becomes minimizing $-\\text{profit}$. If the feasible region is \"$x>0$\" (strict), the infimum at $x=0$ is never attained — rewrite it as \"$x\\ge 0$\" so a minimizer exists.",
+      takeaway: "Casting every goal into one standard form lets you reuse the same solver everywhere, and No Free Lunch warns you to pick a method that matches your problem's structure."
     },
     {
       title: "Optimality conditions: reading the Hessian",
@@ -35,7 +36,8 @@
         <text x="417" y="213" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">saddle (indefinite)</text>
       </svg>`,
       caption: "All three have a flat tangent (∇f = 0). Only the Hessian's sign tells them apart.",
-      example: "For $f(x)=x^4$ at $x=0$: $f'=0$ and $f''=0$, so the second-order <i>sufficient</i> test is inconclusive — yet it is a strong min. For $f(x,y)=x^2-y^2$ the origin is stationary but the indefinite Hessian makes it a saddle."
+      example: "For $f(x)=x^4$ at $x=0$: $f'=0$ and $f''=0$, so the second-order <i>sufficient</i> test is inconclusive — yet it is a strong min. For $f(x,y)=x^2-y^2$ the origin is stationary but the indefinite Hessian makes it a saddle.",
+      takeaway: "These conditions are your local stopping test and your saddle-point detector — without the Hessian check you can't tell a converged minimum from a saddle that traps gradient methods."
     },
     {
       title: "Derivatives & five ways to get them",
@@ -57,7 +59,8 @@
         <text x="70" y="232" font-size="10" style="fill:var(--text-faint)">complex step &amp; AD avoid the right-hand wall entirely</text>
       </svg>`,
       caption: "Finite differences trade truncation (large h) against subtractive cancellation (tiny h) — a U-shaped total error. Complex-step and AD sidestep it.",
-      example: "Approximating $f'$ for $f(x)=e^x$ at $x=1$: forward diff with $h=10^{-1}$ is off by truncation; with $h=10^{-14}$ it is wrecked by cancellation. The complex step $\\operatorname{Im}(f(1+ih))/h$ stays accurate even at $h=10^{-200}$."
+      example: "Approximating $f'$ for $f(x)=e^x$ at $x=1$: forward diff with $h=10^{-1}$ is off by truncation; with $h=10^{-14}$ it is wrecked by cancellation. The complex step $\\operatorname{Im}(f(1+ih))/h$ stays accurate even at $h=10^{-200}$.",
+      takeaway: "Reverse-mode AD is why backprop trains billion-parameter models cheaply; reach for finite differences only to sanity-check a hand-coded gradient, never as your production derivative."
     },
     {
       title: "Bracketing: 1-D line searches",
@@ -84,7 +87,8 @@
         <text x="412" y="146" font-size="10.5" style="fill:var(--text-dim)">ratio φ⁻¹ ≈ 0.618</text>
       </svg>`,
       caption: "Two interior probes at the golden ratio; whichever is lower keeps its side, shrinking the bracket by φ⁻¹ each step — and reusing one probe.",
-      example: "On a unimodal cost over step length, golden section needs no budget up front and contracts the interval ~38% per iteration; if you know you have exactly 10 evaluations, Fibonacci search squeezes it slightly tighter."
+      example: "On a unimodal cost over step length, golden section needs no budget up front and contracts the interval ~38% per iteration; if you know you have exactly 10 evaluations, Fibonacci search squeezes it slightly tighter.",
+      takeaway: "Every multivariate optimizer calls a line search inside its loop, so a robust 1-D solver like Brent directly governs how fast and reliably the whole method converges."
     },
     {
       title: "Local descent: direction then step",
@@ -121,7 +125,8 @@
         </defs>
       </svg>`,
       caption: "Line search commits to a direction, then hunts the step. Trust region commits to a step radius δ, then hunts the direction inside it.",
-      example: "Backtracking line search starts at $\\alpha=1$, halving until $f$ drops by the Armijo amount. A trust-region method instead solves a constrained subproblem $\\min\\hat f(\\mathbf{x}')$ s.t. $\\|\\mathbf{x}-\\mathbf{x}'\\|\\le\\delta$, then grows or shrinks $\\delta$ by how well $\\hat f$ predicted the real drop."
+      example: "Backtracking line search starts at $\\alpha=1$, halving until $f$ drops by the Armijo amount. A trust-region method instead solves a constrained subproblem $\\min\\hat f(\\mathbf{x}')$ s.t. $\\|\\mathbf{x}-\\mathbf{x}'\\|\\le\\delta$, then grows or shrinks $\\delta$ by how well $\\hat f$ predicted the real drop.",
+      takeaway: "Prefer a trust region when the Hessian is indefinite or the local model is unreliable, since capping the step keeps a bad model from leaping catastrophically."
     },
     {
       title: "First-order methods: gradient & conjugate gradient",
@@ -142,7 +147,8 @@
         <text x="160" y="205" font-size="10.5" style="fill:var(--text-dim)">each step ⟂ the last → slow staircase to the minimum</text>
       </svg>`,
       caption: "With exact line search, steepest-descent steps meet at right angles, producing the classic zig-zag in elongated valleys. Conjugate gradient straightens it.",
-      example: "On the ill-conditioned quadratic $f(x,y)=x^2+100y^2$, steepest descent ping-pongs across the narrow valley for many iterations; conjugate gradient reaches the exact minimum in just 2 steps (it's 2-dimensional)."
+      example: "On the ill-conditioned quadratic $f(x,y)=x^2+100y^2$, steepest descent ping-pongs across the narrow valley for many iterations; conjugate gradient reaches the exact minimum in just 2 steps (it's 2-dimensional).",
+      takeaway: "Conjugate gradient is the practical default for large sparse quadratics and linear systems where forming a Hessian is infeasible but plain steepest descent would crawl through ill-conditioned valleys."
     },
     {
       title: "Second-order methods: Newton & friends",
@@ -171,19 +177,22 @@
         </defs>
       </svg>`,
       caption: "Newton models f as a parabola through the current point and leaps straight to that parabola's vertex — exact in one step when f really is quadratic.",
-      example: "For sum-of-squares fits ($f=\\sum_i f_i^2$), Levenberg–Marquardt blends Gauss–Newton with gradient descent via $\\delta$: far from the solution a large $\\delta$ takes safe gradient-like steps; near it, $\\delta\\to0$ recovers Newton's fast convergence. L-BFGS is the go-to when the Hessian is too big to store."
+      example: "For sum-of-squares fits ($f=\\sum_i f_i^2$), Levenberg–Marquardt blends Gauss–Newton with gradient descent via $\\delta$: far from the solution a large $\\delta$ takes safe gradient-like steps; near it, $\\delta\\to0$ recovers Newton's fast convergence. L-BFGS is the go-to when the Hessian is too big to store.",
+      takeaway: "Quadratic convergence lets second-order methods hit high precision in a few iterations, so use L-BFGS for smooth large-scale problems with expensive evaluations."
     },
     {
       title: "Direct (derivative-free) methods",
       tag: "algorithm",
       body: "<p>When derivatives are unavailable, noisy, or expensive, optimize using <b>only evaluations of $f$</b> (black-box / pattern search):</p><ul><li><b>Hooke–Jeeves</b> — from the current point, probe $\\pm$ a step along each coordinate; move to any improvement, otherwise shrink the step.</li><li><b>Generalized pattern search</b> — generalizes this to a <b>positive spanning set</b> of directions (directions that can express any vector with non-negative weights), guaranteeing at least one is a descent direction; shrink the mesh on failure.</li><li><b>Nelder–Mead (simplex)</b> — maintain a simplex of $n+1$ points and <i>reflect / expand / contract / shrink</i> it to crawl downhill.</li></ul><p>No gradient, no Hessian — just structured sampling of the objective.</p>",
-      example: "Tuning a few hyperparameters of a simulator with no usable gradient: Nelder–Mead reflects the worst vertex of its simplex through the centroid, expanding when that helps and contracting when it overshoots — steadily walking the simplex toward a minimum using function values alone."
+      example: "Tuning a few hyperparameters of a simulator with no usable gradient: Nelder–Mead reflects the worst vertex of its simplex through the centroid, expanding when that helps and contracting when it overshoots — steadily walking the simplex toward a minimum using function values alone.",
+      takeaway: "Use a derivative-free method when the objective is a black box, noisy, or non-differentiable, but expect poor scaling past a few dozen dimensions."
     },
     {
       title: "Step-size control: scaling vs clipping & termination",
       tag: "core",
       body: "<p>Beyond picking a <i>direction</i>, you must control the <i>step</i>. Two ways to tame huge or uneven gradients: <b>gradient scaling</b> caps the gradient's $L_2$ norm so the <i>direction is preserved</i> (the whole vector is shrunk uniformly), while <b>gradient clipping</b> clamps each component independently — so the <i>direction can change</i>. Both keep an exploding gradient from blowing up a step.</p><p>To size $\\alpha$ itself, the <b>Wolfe conditions</b> (sufficient-decrease/Armijo plus a curvature condition) certify a step is \"good enough\"; <b>backtracking</b> shrinks $\\alpha$ until Armijo holds. If a step must keep $\\mathbf{x}$ a valid distribution, <b>project onto the probability simplex</b>: $\\min_\\mathbf{b}\\tfrac12\\|\\mathbf{y}-\\mathbf{b}\\|_2^2$ s.t. $\\mathbf{b}\\ge0,\\ \\mathbf{1}^\\top\\mathbf{b}=1$ (the nearest valid distribution to the raw update $\\mathbf{y}$). <b>Terminate</b> on max iterations/time, small absolute/relative improvement, or $\\|\\nabla f\\|<\\epsilon_g$ — and use <b>random restarts</b> when the landscape has many local optima.</p>",
-      example: "Training an RNN, gradients <b>explode</b> through the unrolled time steps and a single update sends the weights to NaN. Clipping the gradient to a max norm (e.g. 5) rescales that giant vector back down so each step stays sane — scaling preserves the descent direction, whereas per-component clipping may tilt it. Separately, after a softmax-policy update you renormalize by projecting onto the simplex so the action probabilities still sum to 1."
+      example: "Training an RNN, gradients <b>explode</b> through the unrolled time steps and a single update sends the weights to NaN. Clipping the gradient to a max norm (e.g. 5) rescales that giant vector back down so each step stays sane — scaling preserves the descent direction, whereas per-component clipping may tilt it. Separately, after a softmax-policy update you renormalize by projecting onto the simplex so the action probabilities still sum to 1.",
+      takeaway: "Gradient clipping keeps deep and recurrent training from diverging to NaN, and simplex projection enforces a valid probability distribution after each update."
     }
   ]
 };

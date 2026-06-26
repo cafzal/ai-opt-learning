@@ -20,13 +20,15 @@
         <text x="22" y="110" font-size="12" transform="rotate(-90 22 110)" text-anchor="middle" style="fill:var(--text-dim)">added cost</text>
       </svg>`,
       caption: "The barrier rises before you reach b, so iterates stay inside; a penalty is zero until the constraint is broken, then grows outside.",
-      example: "To enforce $x\\ge 0$ cheaply, optimize over $\\hat x$ with $x=\\hat x^2$ (a transform). For a harder $g(\\mathbf{x})\\le 0$, an inverse barrier adds $-\\tfrac{1}{\\rho}\\,\\tfrac{1}{g(\\mathbf{x})}$; as $\\rho$ increases the barrier thins and the minimizer slides toward the true boundary optimum while never leaving the feasible interior."
+      example: "To enforce $x\\ge 0$ cheaply, optimize over $\\hat x$ with $x=\\hat x^2$ (a transform). For a harder $g(\\mathbf{x})\\le 0$, an inverse barrier adds $-\\tfrac{1}{\\rho}\\,\\tfrac{1}{g(\\mathbf{x})}$; as $\\rho$ increases the barrier thins and the minimizer slides toward the true boundary optimum while never leaving the feasible interior.",
+      takeaway: "Pick the lightest tool that fits: a transform if one exists, augmented Lagrangian when plain penalties stall on conditioning, and a barrier when every iterate must stay feasible (e.g. physical limits you can't even momentarily violate)."
     },
     {
       title: "The Lagrangian & the four KKT conditions",
       tag: "core",
       body: "<p>Fold the constraints into one function — the <b>Lagrangian</b> $\\mathcal{L}(\\mathbf{x},\\boldsymbol\\mu,\\boldsymbol\\lambda)=f(\\mathbf{x})+\\boldsymbol\\mu^\\top\\mathbf{g}(\\mathbf{x})+\\boldsymbol\\lambda^\\top\\mathbf{h}(\\mathbf{x})$ for $\\min f$ s.t. $\\mathbf{g}\\le\\mathbf{0},\\,\\mathbf{h}=\\mathbf{0}$. The <b>KKT conditions</b> are the first-order <i>necessary</i> conditions for an optimum:</p><ol><li><b>Primal feasibility:</b> $\\mathbf{g}\\le\\mathbf{0},\\ \\mathbf{h}=\\mathbf{0}$.</li><li><b>Dual feasibility:</b> $\\boldsymbol\\mu\\ge\\mathbf{0}$ (inequality multipliers nonnegative).</li><li><b>Complementary slackness:</b> $\\boldsymbol\\mu\\odot\\mathbf{g}=\\mathbf{0}$ — an active constraint ($g=0$) may carry a multiplier; an inactive one ($g<0$) forces its multiplier to $0$.</li><li><b>Stationarity:</b> $\\nabla f+\\sum_i\\mu_i\\nabla g_i+\\sum_j\\lambda_j\\nabla h_j=\\mathbf{0}$ (the $\\lambda_j$ are sign-free).</li></ol><p>With equality constraints only this collapses to $\\nabla f=\\sum_i\\lambda_i\\nabla h_i$. When the problem is <b>convex</b>, KKT is not just necessary but <i>sufficient</i> — a KKT point is a global optimum.</p>",
-      example: "Minimizing $f$ subject to $g_1\\le 0$ (tight at the solution) and $g_2\\le 0$ (slack): complementary slackness sets $\\mu_2=0$, so stationarity reads $\\nabla f+\\mu_1\\nabla g_1=\\mathbf{0}$ with $\\mu_1\\ge 0$ — only the active constraint enters."
+      example: "Minimizing $f$ subject to $g_1\\le 0$ (tight at the solution) and $g_2\\le 0$ (slack): complementary slackness sets $\\mu_2=0$, so stationarity reads $\\nabla f+\\mu_1\\nabla g_1=\\mathbf{0}$ with $\\mu_1\\ge 0$ — only the active constraint enters.",
+      takeaway: "KKT is the checklist a constrained optimum must satisfy and the system solvers actually solve; checking it on a candidate tells you whether you're done or which condition is being violated."
     },
     {
       title: "Complementary-slackness geometry at a constrained optimum",
@@ -55,7 +57,8 @@
         <text x="160" y="120" font-size="11" style="fill:var(--text-dim)">−∇f = μ₁∇g₁ + μ₂∇g₂,  μ ≥ 0</text>
       </svg>`,
       caption: "At x* the negative objective gradient lies in the cone spanned by the active gradients; the inactive constraint contributes nothing (μ = 0).",
-      example: "On a tight corner where $g_1$ and $g_2$ both hold with equality, $-\\nabla f$ points <i>into</i> the wedge between $\\nabla g_1$ and $\\nabla g_2$; if $-\\nabla f$ fell outside that cone you could still descend along the boundary, so it wouldn't be optimal."
+      example: "On a tight corner where $g_1$ and $g_2$ both hold with equality, $-\\nabla f$ points <i>into</i> the wedge between $\\nabla g_1$ and $\\nabla g_2$; if $-\\nabla f$ fell outside that cone you could still descend along the boundary, so it wouldn't be optimal.",
+      takeaway: "This geometry tells you which constraints actually bind, so you can ignore inactive ones and read each active multiplier as the price of tightening that limit."
     },
     {
       title: "Duality: primal min-max vs dual max-min",
@@ -77,14 +80,16 @@
         <text x="60" y="34" font-size="11" style="fill:var(--text-faint)">objective</text>
       </svg>`,
       caption: "The dual is always a lower bound (d* ≤ p*); under convexity + Slater the two bounds meet and the gap closes.",
-      example: "If a feasible design gives primal objective $12.0$ and a dual-feasible $(\\boldsymbol\\mu,\\boldsymbol\\lambda)$ gives $\\mathcal{D}=12.0$, the gap is $0$ — you have <i>proof</i> the design is optimal without searching further, even on a problem you can't solve in closed form."
+      example: "If a feasible design gives primal objective $12.0$ and a dual-feasible $(\\boldsymbol\\mu,\\boldsymbol\\lambda)$ gives $\\mathcal{D}=12.0$, the gap is $0$ — you have <i>proof</i> the design is optimal without searching further, even on a problem you can't solve in closed form.",
+      takeaway: "Weak duality gives you a free lower bound to certify how close any solution is to optimal, so you can stop early with a guaranteed quality bound instead of guessing."
     },
     {
       title: "Duality algorithms: dual ascent, primal-dual, ADMM",
       tag: "algorithm",
       body: "<p>Ch 11 turns duality into solvers:</p><ul><li><b>Dual ascent</b> alternates a primal minimization $\\mathbf{x}=\\arg\\min_{\\mathbf{x}}\\mathcal{L}$ with gradient ascent on the duals, $\\boldsymbol\\mu\\leftarrow\\max(\\boldsymbol\\mu+\\alpha\\,\\mathbf{g},\\mathbf{0})$ and $\\boldsymbol\\lambda\\leftarrow\\boldsymbol\\lambda+\\alpha\\,\\mathbf{h}$. It tolerates infeasible iterates but can fail when the objective is linear (the inner min is unbounded or flat).</li><li><b>Primal-dual interior point</b> updates primals and duals together and drives a residual $\\mathbf{r}=\\mathbf{0}$ by Newton; with $m$ inequalities the log-barrier yields a clean <b>duality gap $=m/\\rho$</b>, so you know exactly how far from optimal you are.</li><li><b>ADMM</b> splits a separable objective $\\min f_1(\\mathbf{x}_1)+f_2(\\mathbf{x}_2)$ s.t. $\\mathbf{A}_1\\mathbf{x}_1+\\mathbf{A}_2\\mathbf{x}_2=\\mathbf{b}$: minimize the augmented Lagrangian over $\\mathbf{x}_1$, then $\\mathbf{x}_2$, then update $\\boldsymbol\\lambda$ (scaled form $\\mathbf{u}=\\boldsymbol\\lambda/\\rho$). It scales to large/distributed/consensus problems since only summaries cross between machines.</li></ul>",
       caption: "",
-      example: "ADMM with soft-thresholding $S_\\kappa$ powers sparse-recovery workhorses — <b>lasso</b> and <b>basis pursuit</b> — and least-absolute-deviation / Huber fits; the primal-dual interior gap $m/\\rho$ gives a live optimality bound during the solve."
+      example: "ADMM with soft-thresholding $S_\\kappa$ powers sparse-recovery workhorses — <b>lasso</b> and <b>basis pursuit</b> — and least-absolute-deviation / Huber fits; the primal-dual interior gap $m/\\rho$ gives a live optimality bound during the solve.",
+      takeaway: "Match the solver to the structure: ADMM when the problem splits across machines or has a separable regularizer, primal-dual interior point when you want a reliable, tight gap on a single box."
     },
     {
       title: "Linear programming: optimum at a vertex, and its dual",
@@ -108,7 +113,8 @@
         <circle cx="120" cy="210" r="3.5" style="fill:var(--text-faint)"/>
       </svg>`,
       caption: "Level lines of the linear objective are parallel; sliding them in the descent direction, the last feasible contact is a corner — so simplex only needs to inspect vertices.",
-      example: "For a 2-variable LP, the feasible region is a polygon; simplex starts at one corner and hops along edges, lowering $\\mathbf{c}^\\top\\mathbf{x}$ each step, until no neighboring vertex improves — guaranteed optimal because no interior point can beat the best corner."
+      example: "For a 2-variable LP, the feasible region is a polygon; simplex starts at one corner and hops along edges, lowering $\\mathbf{c}^\\top\\mathbf{x}$ each step, until no neighboring vertex improves — guaranteed optimal because no interior point can beat the best corner.",
+      takeaway: "Knowing the optimum is always a vertex is why LP search is finite and tractable, and the dual LP hands you shadow prices that say how much each constraint is worth relaxing."
     },
     {
       title: "Quadratic programming & the transformation chain",
@@ -136,14 +142,16 @@
         <text x="262" y="160" text-anchor="middle" font-size="10.5" style="fill:var(--text-faint)">active-set, simplex-like — vs interior-point iteration counts</text>
       </svg>`,
       caption: "Each arrow is an exact reformulation; the final NNLS is always solvable by an active-set method, giving a bounded, predictable runtime.",
-      example: "A model-predictive controller solving the same QP every control cycle uses the NNLS route so each solve finishes within a fixed number of active-set pivots — a worst-case time bound an interior-point method cannot promise."
+      example: "A model-predictive controller solving the same QP every control cycle uses the NNLS route so each solve finishes within a fixed number of active-set pivots — a worst-case time bound an interior-point method cannot promise.",
+      takeaway: "Reducing a QP to NNLS buys a finite, predictable pivot count, which is exactly the hard worst-case timing guarantee real-time control and embedded solvers need."
     },
     {
       title: "Disciplined convex programming: verify, then transcribe",
       tag: "core",
       body: "<p><b>DCP</b> is a discipline for writing a convex program so software can <i>verify</i> it's convex and <i>automatically transcribe</i> it to a solver — you never hand-derive KKT or pick an algorithm.</p><ul><li><b>Verification grammar:</b> each <i>atom</i> in a library carries a curvature (affine / convex / concave), a monotonicity, and a range (extended-real-valued to encode its domain). Curvature propagates by <i>product-free</i>, <i>sign</i>, and <b>composition</b> rules: $f(g(x))$ is convex if [$f$ convex nondecreasing, $g$ convex] or [$f$ convex nonincreasing, $g$ concave] — and the check can come back <i>inconclusive</i>, which is informative.</li><li><b>Canonicalization:</b> <i>linearization</i> (replace a sub-expression with a fresh variable plus an inequality) and <b>graph expansion</b> (epigraph/hypograph tricks, e.g. $|x|\\to\\min y$ s.t. $y\\ge\\pm x$) reshape the program into a <b>partitioned canonical form</b> with a <b>block-diagonal Hessian</b>, so interior-point steps are cheap (an $\\mathbf{L}\\mathbf{D}\\mathbf{L}^\\top$ on the augmented system).</li></ul>",
       caption: "",
-      example: "In <i>cvxpy</i> or <i>Convex.jl</i> you declare <code>minimize(norm(A*x - b) + lambda*norm(x,1))</code>; DCP checks each atom's curvature composes to convex, expands the norms via their epigraph forms, and ships the canonical problem to a backend like SCS, ECOS, or OSQP."
+      example: "In <i>cvxpy</i> or <i>Convex.jl</i> you declare <code>minimize(norm(A*x - b) + lambda*norm(x,1))</code>; DCP checks each atom's curvature composes to convex, expands the norms via their epigraph forms, and ships the canonical problem to a backend like SCS, ECOS, or OSQP.",
+      takeaway: "DCP lets you state a problem and trust software to prove convexity and pick the solver, so a rejected model flags a real modeling bug before you waste time debugging a non-convex solve."
     }
   ]
 };

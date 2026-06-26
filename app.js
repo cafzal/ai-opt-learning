@@ -196,6 +196,11 @@
           ex.innerHTML = `<span class="c-example-label">Example</span>${c.example}`;
           body.appendChild(ex);
         }
+        if (c.takeaway) {
+          const tk = el("div", "c-takeaway");
+          tk.innerHTML = `<span class="c-takeaway-label">Why it matters</span>${c.takeaway}`;
+          body.appendChild(tk);
+        }
         card.appendChild(body);
         list.appendChild(card);
       });

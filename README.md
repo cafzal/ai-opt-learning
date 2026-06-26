@@ -17,7 +17,7 @@ Just double-click **`index.html`** (or open it in any browser). No build step, n
 If you prefer a local server:
 
 ```bash
-cd ml-quiz
+cd ai-opt-learning
 python3 -m http.server 4178
 # then open http://localhost:4178
 ```

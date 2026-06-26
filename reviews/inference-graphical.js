@@ -6,7 +6,8 @@
       title: "Why approximate inference? The intractable normalizer",
       tag: "core",
       body: "<p>Bayes' rule gives the posterior $p(\\boldsymbol\\theta\\mid\\mathcal{D})=\\dfrac{p(\\mathcal{D}\\mid\\boldsymbol\\theta)\\,p(\\boldsymbol\\theta)}{p(\\mathcal{D})}$, but the denominator — the <b>marginal likelihood</b> / <b>evidence</b> — is an integral over <i>all</i> parameter settings:</p><p style=\"text-align:center\">$p(\\mathcal{D})=\\int p(\\mathcal{D}\\mid\\boldsymbol\\theta)\\,p(\\boldsymbol\\theta)\\,d\\boldsymbol\\theta$</p><p>This is closed-form only under <b>conjugacy</b>. Otherwise the integral is intractable, so we never compute the true posterior — we <i>approximate</i> it. The numerator $\\tilde p(\\boldsymbol\\theta)=p(\\mathcal{D}\\mid\\boldsymbol\\theta)p(\\boldsymbol\\theta)$ (the <b>unnormalized</b> posterior) is cheap; the whole game is dealing with the missing $Z=p(\\mathcal{D})$.</p>",
-      example: "For a Gaussian likelihood with a Gaussian prior on the mean, conjugacy makes the posterior Gaussian and $p(\\mathcal{D})$ analytic. Swap in a logistic likelihood and the integral has no closed form — you must approximate."
+      example: "For a Gaussian likelihood with a Gaussian prior on the mean, conjugacy makes the posterior Gaussian and $p(\\mathcal{D})$ analytic. Swap in a logistic likelihood and the integral has no closed form — you must approximate.",
+      takeaway: "This single integral is why Bayesian ML needs a whole toolbox: the moment you leave conjugate models, you pick an approximation or you get nothing."
     },
     {
       title: "The methods spectrum: exact → Laplace → MC → MCMC → VI",
@@ -30,7 +31,8 @@
         <line x1="300" y1="58" x2="495" y2="58" class="vx-warn" stroke-width="2"/>
       </svg>`,
       caption: "Left = sampling (slow, asymptotically exact); right = optimization (fast, biased by approximation).",
-      example: "Need calibrated uncertainty on a moderate-dimensional model and have compute to spare? Reach for MCMC. Fitting a deep latent model on millions of points? Variational inference is the only thing that scales."
+      example: "Need calibrated uncertainty on a moderate-dimensional model and have compute to spare? Reach for MCMC. Fitting a deep latent model on millions of points? Variational inference is the only thing that scales.",
+      takeaway: "Knowing this spectrum turns method choice into a deliberate accuracy-vs-budget decision instead of defaulting to whatever your library happens to expose."
     },
     {
       title: "Laplace approximation: a Gaussian at the MAP",
@@ -49,13 +51,15 @@
         <text x="350" y="100" font-size="10.5" style="fill:var(--text-faint)">missed 2nd mode →</text>
       </svg>`,
       caption: "Laplace plants a single Gaussian on the dominant peak — it ignores any other mode.",
-      example: "Laplace turns a logistic-regression posterior into $\\mathcal{N}(\\boldsymbol\\theta^*,\\mathbf{H}^{-1})$ cheaply, giving error bars 'for free' from curvature — but if the true posterior has two well-separated modes it captures only one."
+      example: "Laplace turns a logistic-regression posterior into $\\mathcal{N}(\\boldsymbol\\theta^*,\\mathbf{H}^{-1})$ cheaply, giving error bars 'for free' from curvature — but if the true posterior has two well-separated modes it captures only one.",
+      takeaway: "Reach for Laplace when you already have a MAP fit and want quick uncertainty for almost no extra code; distrust it when the posterior is skewed or multimodal."
     },
     {
       title: "Monte Carlo: rejection vs importance sampling",
       tag: "method",
       body: "<p>Monte Carlo estimates expectations by averaging over samples: $\\mathbb{E}[f]\\approx\\frac1S\\sum_s f(\\boldsymbol{x}^{(s)})$. Two ways to generate them from a hard target:</p><ul><li><b>Rejection sampling:</b> draw $\\boldsymbol{x}\\sim q$ under an envelope $Mq\\ge\\tilde p$, accept with probability $\\tilde p(\\boldsymbol{x})/(Mq(\\boldsymbol{x}))$. Acceptance $\\propto M^{-1}$, which <b>collapses exponentially in dimension $D$</b> — almost everything gets rejected.</li><li><b>Importance sampling:</b> keep every sample but reweight $w_s=p/q$ (self-normalized when $p$ is unnormalized). No rejection, but in high $D$ <b>a few weights dominate</b> and the estimate has huge variance. Optimal proposal $q^*\\propto|f|\\,p$.</li></ul>",
-      example: "To estimate $\\mathbb{E}[f]$ under a tricky $p$, you sample from an easy $q$ (say a Gaussian) and reweight by $p/q$. If $q$ is a poor match in high dimension, one lucky sample carries 99% of the weight and your average is effectively a single draw."
+      example: "To estimate $\\mathbb{E}[f]$ under a tricky $p$, you sample from an easy $q$ (say a Gaussian) and reweight by $p/q$. If $q$ is a poor match in high dimension, one lucky sample carries 99% of the weight and your average is effectively a single draw.",
+      takeaway: "These methods are simple and unbiased but quietly fail in high dimensions, which is exactly why MCMC exists — watch the acceptance rate or weight concentration before trusting the estimate."
     },
     {
       title: "MCMC: detailed balance, Gibbs & Metropolis–Hastings",
@@ -76,7 +80,8 @@
         <text x="330" y="150" font-size="11" style="fill:var(--text-faint)">aim ~25–40% accept</text>
       </svg>`,
       caption: "Because only the density ratio enters the accept step, the intractable normalizer Z never has to be computed.",
-      example: "Sampling a Bayesian posterior known only up to $Z$: MH proposes a step, computes $\\tilde p(\\boldsymbol{x}')/\\tilde p(\\boldsymbol{x})$ (the $Z$'s cancel), and accepts or stays. Over many steps the visited points are distributed as the posterior."
+      example: "Sampling a Bayesian posterior known only up to $Z$: MH proposes a step, computes $\\tilde p(\\boldsymbol{x}')/\\tilde p(\\boldsymbol{x})$ (the $Z$'s cancel), and accepts or stays. Over many steps the visited points are distributed as the posterior.",
+      takeaway: "The ratio cancelling $Z$ is the trick that makes Bayesian inference tractable at all; reach for HMC/NUTS over vanilla MH whenever gradients exist, because it mixes far faster."
     },
     {
       title: "MCMC diagnostics: burn-in, ESS, R̂",
@@ -94,13 +99,15 @@
         <text x="300" y="135" font-size="11" style="fill:var(--text-dim)">chains mix → R̂ ≈ 1</text>
       </svg>`,
       caption: "Two chains from different starts: drop the burn-in box; once they overlap and stabilize, R̂ ≈ 1.",
-      example: "PyMC reports $\\hat R$ and ESS per parameter. An $\\hat R$ of 1.4 or an ESS of 30 from 4,000 draws is a red flag — the chain hasn't converged or is too autocorrelated to trust."
+      example: "PyMC reports $\\hat R$ and ESS per parameter. An $\\hat R$ of 1.4 or an ESS of 30 from 4,000 draws is a red flag — the chain hasn't converged or is too autocorrelated to trust.",
+      takeaway: "Without these checks you can ship confident conclusions from an unconverged chain; $\\hat R>1.01$ or tiny ESS means rerun or reparameterize before you report anything."
     },
     {
       title: "Variational inference: maximize the ELBO",
       tag: "method",
       body: "<p>VI recasts inference as <b>optimization</b>: pick a tractable $q$ to maximize the <b>ELBO</b> (evidence lower bound), which equals minimizing the <i>reverse</i> KL to the true posterior:</p><p style=\"text-align:center\">$\\mathcal{L}(q)=\\mathbb{E}_q[\\log p(\\boldsymbol{x},\\mathcal{D})]+\\mathbb{H}[q]=\\log p(\\mathcal{D})-D_{\\text{KL}}(q\\,\\|\\,p^*)\\le\\log p(\\mathcal{D})$</p><p>Since KL $\\ge 0$, the ELBO is a <b>lower bound on the log marginal likelihood</b> — useful for model selection. <b>Mean-field</b> takes $q=\\prod_j q_j$ and updates each factor by <b>CAVI</b>: $\\log q_j\\propto\\mathbb{E}_{q_{-j}}[\\log p(\\boldsymbol{x},\\mathcal{D})]$, monotonically raising the ELBO. Scalable variants: stochastic VI (minibatches), black-box VI (score-function gradients), and the <b>reparameterization trick</b> $\\boldsymbol{z}=\\boldsymbol\\mu_\\phi+\\boldsymbol\\sigma_\\phi\\odot\\boldsymbol\\epsilon$ that powers VAEs.</p>",
-      example: "Variational Bayesian EM generalizes EM: the standard E-step assumes the posterior is exact, while VBEM replaces it with the best $q$ in a family. Maximizing the ELBO drives $q$ toward $p^*$ without ever touching $Z$."
+      example: "Variational Bayesian EM generalizes EM: the standard E-step assumes the posterior is exact, while VBEM replaces it with the best $q$ in a family. Maximizing the ELBO drives $q$ toward $p^*$ without ever touching $Z$.",
+      takeaway: "Turning inference into optimization is what lets you ride GPUs and minibatches, making VI the default when datasets or models are too big for any sampler to finish."
     },
     {
       title: "Reverse KL is mode-seeking; MCMC vs VI",
@@ -128,7 +135,8 @@
         <text x="260" y="205" text-anchor="middle" font-size="10.5" style="fill:var(--text-faint)">grey = true bimodal posterior</text>
       </svg>`,
       caption: "MCMC scatters across the whole posterior; reverse-KL VI collapses onto a single, over-tight mode.",
-      example: "On a bimodal posterior, MCMC eventually visits both peaks and reports honest spread, while mean-field VI converges to one peak with a confidence interval narrower than the truth."
+      example: "On a bimodal posterior, MCMC eventually visits both peaks and reports honest spread, while mean-field VI converges to one peak with a confidence interval narrower than the truth.",
+      takeaway: "If you act on VI's error bars for risk or decisions you will be overconfident; reach for VI when you need speed at scale, MCMC when you need honest uncertainty."
     },
     {
       title: "Directed graphical models & d-separation",
@@ -152,13 +160,15 @@
         <text x="300" y="164" font-size="11" style="fill:var(--warn)">the causes — "explaining away"</text>
       </svg>`,
       caption: "Collider: X and Z are independent until you observe Y, which then makes them dependent.",
-      example: "Sprinkler → WetGrass ← Rain. Sprinkler and Rain are independent a priori. But if you observe wet grass and learn it rained, the sprinkler becomes less likely — the rain has 'explained away' the wetness."
+      example: "Sprinkler → WetGrass ← Rain. Sprinkler and Rain are independent a priori. But if you observe wet grass and learn it rained, the sprinkler becomes less likely — the rain has 'explained away' the wetness.",
+      takeaway: "d-separation tells you which variables you can drop or must condition on, and the explaining-away trap is why conditioning on a collider silently introduces spurious correlation."
     },
     {
       title: "Markov chains: the stationary distribution",
       tag: "graphical",
       body: "<p>A <b>Markov chain</b> obeys $p(X_t\\mid X_{1:t-1})=p(X_t\\mid X_{t-1})$ — the future depends only on the present. Dynamics live in a transition matrix $A_{ij}=p(X_t{=}j\\mid X_{t-1}{=}i)$, estimated by counts $\\hat A_{ij}=N_{ij}/\\sum_{j'}N_{ij'}$.</p><p>The <b>stationary distribution</b> $\\boldsymbol\\pi^*$ is unchanged by one step:</p><p style=\"text-align:center\">$\\boldsymbol\\pi^*=\\boldsymbol\\pi^*\\mathbf{A}$</p><p>i.e. $\\boldsymbol\\pi^*$ is the <b>left eigenvector</b> of $\\mathbf{A}$ with eigenvalue $\\lambda=1$. (Undirected <b>MRFs</b>, by contrast, factorize as $p(\\boldsymbol{x})=\\frac1Z\\prod_c\\psi_c(\\boldsymbol{x}_c)$ over cliques — symmetric, with no direction.)</p>",
-      example: "<b>PageRank</b> is exactly this: model a random web surfer as a Markov chain over pages; the stationary distribution $\\boldsymbol\\pi^*$ — the left eigenvector with $\\lambda=1$ — is each page's long-run visit frequency, i.e. its rank."
+      example: "<b>PageRank</b> is exactly this: model a random web surfer as a Markov chain over pages; the stationary distribution $\\boldsymbol\\pi^*$ — the left eigenvector with $\\lambda=1$ — is each page's long-run visit frequency, i.e. its rank.",
+      takeaway: "Long-run behavior reduces to one eigenvector, so ranking, equilibrium, and steady-state questions become a single linear-algebra solve instead of a long simulation."
     },
     {
       title: "HMMs: filtering, smoothing & Viterbi",
@@ -183,7 +193,8 @@
         <g font-size="11" text-anchor="middle" style="fill:var(--text-dim)"><text x="90" y="190">t=1</text><text x="230" y="190">t=2</text><text x="370" y="190">t=3</text></g>
       </svg>`,
       caption: "Each column is the hidden state at one time; Viterbi traces the single highest-probability path through the trellis.",
-      example: "Part-of-speech tagging: hidden $z_t$ = tag, observed $\\boldsymbol{x}_t$ = word. Filtering tags as words stream in; Viterbi returns the single best tag sequence for the whole sentence."
+      example: "Part-of-speech tagging: hidden $z_t$ = tag, observed $\\boldsymbol{x}_t$ = word. Filtering tags as words stream in; Viterbi returns the single best tag sequence for the whole sentence.",
+      takeaway: "Choose the task to match the need: filtering for real-time streams, smoothing for offline analysis, and Viterbi when you need one coherent path rather than per-step guesses."
     },
     {
       title: "State-space models & the Kalman filter",
@@ -204,13 +215,15 @@
         <text x="260" y="195" text-anchor="middle" font-size="11.5" style="fill:var(--accent)">new mean = prediction + Kₜ × innovation</text>
       </svg>`,
       caption: "The recursive loop: predict pushes the state forward and inflates uncertainty; the measurement update pulls it back and sharpens it.",
-      example: "GPS tracking: predict where the car will be from its motion model (uncertainty grows), then fold in a noisy GPS fix (uncertainty shrinks). The Kalman gain decides how much to trust the new measurement vs the prediction."
+      example: "GPS tracking: predict where the car will be from its motion model (uncertainty grows), then fold in a noisy GPS fix (uncertainty shrinks). The Kalman gain decides how much to trust the new measurement vs the prediction.",
+      takeaway: "The Kalman filter is why your GPS, drone, or sensor-fusion stack stays smooth under noisy measurements; reach for EKF/UKF/particle filters once dynamics turn nonlinear."
     },
     {
       title: "CRFs: discriminative, globally normalized",
       tag: "sequential",
       body: "<p>A <b>conditional random field</b> is the <i>discriminative</i> undirected model of a structured output — an MRF whose normalizer depends on the input $\\boldsymbol{x}$:</p><p style=\"text-align:center\">$p(\\boldsymbol{y}\\mid\\boldsymbol{x},\\boldsymbol{w})=\\dfrac{1}{Z(\\boldsymbol{x},\\boldsymbol{w})}\\prod_c\\exp\\!\\big(\\boldsymbol{w}_c^\\top\\boldsymbol\\phi(\\boldsymbol{x},\\boldsymbol{y}_c)\\big)$</p><p>Unlike a generative <b>HMM</b> (which models $p(\\boldsymbol{x},\\boldsymbol{y})$ with local features), a CRF models $p(\\boldsymbol{y}\\mid\\boldsymbol{x})$ directly, allows <b>arbitrary overlapping global features</b>, and is <b>globally normalized</b>. Global normalization <i>avoids the label-bias problem</i> of locally-normalized MEMMs (so future evidence can revise earlier labels). Trained by gradient ascent (gradient = empirical − model-expected feature counts). The max-margin analog is the <b>structural SVM</b>.</p>",
-      example: "Named-entity recognition: a chain CRF can use features spanning the whole sentence (capitalization, neighboring words, gazetteers) and, being globally normalized, won't get trapped by an early wrong label the way a locally-normalized MEMM can."
+      example: "Named-entity recognition: a chain CRF can use features spanning the whole sentence (capitalization, neighboring words, gazetteers) and, being globally normalized, won't get trapped by an early wrong label the way a locally-normalized MEMM can.",
+      takeaway: "Reach for a CRF over an HMM when you only need $p(\\\\boldsymbol{y}\\\\mid\\\\boldsymbol{x})$ and want rich overlapping features, and global normalization is what spares you the label-bias trap."
     }
   ]
 };

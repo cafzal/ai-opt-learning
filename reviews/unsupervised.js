@@ -22,7 +22,8 @@
         <text x="320" y="186" font-size="10.5" style="fill:var(--text-faint)">grey = components</text>
       </svg>`,
       caption: "Each grey bump is a weighted Gaussian component; their sum (blue) is the mixture density.",
-      example: "On a height histogram with a hidden male/female split, a 2-component GMM learns $\\pi\\approx(0.5,0.5)$ and two means. A person at the overlap gets $r_{i,\\text{male}}\\approx0.6$, $r_{i,\\text{female}}\\approx0.4$ — a soft, not hard, membership."
+      example: "On a height histogram with a hidden male/female split, a 2-component GMM learns $\\pi\\approx(0.5,0.5)$ and two means. A person at the overlap gets $r_{i,\\text{male}}\\approx0.6$, $r_{i,\\text{female}}\\approx0.4$ — a soft, not hard, membership.",
+      takeaway: "Reach for a mixture whenever your data is really several overlapping populations; the soft responsibilities quantify your uncertainty about each point's origin."
     },
     {
       title: "EM for mixtures",
@@ -51,7 +52,8 @@
         <text x="270" y="208" text-anchor="middle" font-size="10.5" style="fill:var(--text-faint)">iteration → (never decreases, plateaus at a local max)</text>
       </svg>`,
       caption: "E and M alternate; the log-likelihood increases every round and converges to a local optimum.",
-      example: "Fit a 3-component GMM on 2-D data: E-step gives every point three responsibilities; M-step recomputes the three means as responsibility-weighted averages. After ~20 rounds the log-likelihood flattens. If one $\\boldsymbol\\Sigma_k$ shrinks toward zero around an outlier, restart with a different seed."
+      example: "Fit a 3-component GMM on 2-D data: E-step gives every point three responsibilities; M-step recomputes the three means as responsibility-weighted averages. After ~20 rounds the log-likelihood flattens. If one $\\boldsymbol\\Sigma_k$ shrinks toward zero around an outlier, restart with a different seed.",
+      takeaway: "EM is the default fitter for any latent-variable model, but it only finds a local optimum — always run several random restarts and keep the best."
     },
     {
       title: "K-means & Lloyd's algorithm",
@@ -81,7 +83,8 @@
         <text x="40" y="192" font-size="11" style="fill:var(--text-dim)">Minimize J = Σ ‖xₙ − μ(zₙ)‖²  (hard, spherical assignments)</text>
       </svg>`,
       caption: "Points snap to the nearest centroid (spokes); each centroid then jumps to its cluster's mean — repeat.",
-      example: "Cluster 1,000 customers into $K=4$ groups by spend and frequency. Plain K-means may converge to a poor local optimum if two seeds land in the same dense blob; K-means++ spreads the initial centers and avoids that, usually needing fewer restarts."
+      example: "Cluster 1,000 customers into $K=4$ groups by spend and frequency. Plain K-means may converge to a poor local optimum if two seeds land in the same dense blob; K-means++ spreads the initial centers and avoids that, usually needing fewer restarts.",
+      takeaway: "K-means is the fast, scalable default for roughly round, well-separated clusters; always use K-means++ seeding to avoid the bad local optima that plague random starts."
     },
     {
       title: "K-means vs GMM",
@@ -117,7 +120,8 @@
         <text x="390" y="200" text-anchor="middle" font-size="10" style="fill:var(--text-faint)">density · BIC · O(NKD²)</text>
       </svg>`,
       caption: "Left: circular hard regions around centroids. Right: tilted Gaussian contours give soft, ellipsoidal clusters.",
-      example: "Two elongated, diagonally-oriented clusters that touch: K-means cuts them with a straight perpendicular bisector and mislabels the overlap, while a GMM with full $\\boldsymbol\\Sigma_k$ aligns ellipses to each cluster's shape and assigns the ambiguous points fractionally."
+      example: "Two elongated, diagonally-oriented clusters that touch: K-means cuts them with a straight perpendicular bisector and mislabels the overlap, while a GMM with full $\\boldsymbol\\Sigma_k$ aligns ellipses to each cluster's shape and assigns the ambiguous points fractionally.",
+      takeaway: "Choose a GMM over K-means when clusters overlap, are stretched or tilted, or you need a density to sample and score; otherwise K-means is cheaper."
     },
     {
       title: "How many clusters? Choosing K",
@@ -143,7 +147,8 @@
         </g>
       </svg>`,
       caption: "J always decreases; the 'elbow' is where the marginal gain drops sharply — here around K = 3.",
-      example: "Distortion drops steeply from $K{=}1$ to $3$ then nearly flattens — the elbow says $K{\\approx}3$. Cross-checking, BIC peaks at $K{=}3$ and mean silhouette is highest there too, so all three heuristics agree."
+      example: "Distortion drops steeply from $K{=}1$ to $3$ then nearly flattens — the elbow says $K{\\approx}3$. Cross-checking, BIC peaks at $K{=}3$ and mean silhouette is highest there too, so all three heuristics agree.",
+      takeaway: "Never trust a single heuristic for $K$ — cross-check the elbow, silhouette, and BIC, and let domain interpretability break ties when they disagree."
     },
     {
       title: "Principal components analysis (PCA)",
@@ -172,7 +177,8 @@
         <text x="40" y="222" font-size="11" style="fill:var(--text-dim)">PC1 = longest axis (most variance); PC2 ⟂ PC1, the next-most.</text>
       </svg>`,
       caption: "PC1 points along the cloud's longest spread (largest λ); PC2 is orthogonal and shorter.",
-      example: "On 64-dim handwritten-digit vectors, the first ~20 PCs capture $F_L\\approx90\\%$ of the variance. Projecting onto them compresses the data 3× while keeping the digits visually reconstructable; the discarded directions are mostly pixel noise."
+      example: "On 64-dim handwritten-digit vectors, the first ~20 PCs capture $F_L\\approx90\\%$ of the variance. Projecting onto them compresses the data 3× while keeping the digits visually reconstructable; the discarded directions are mostly pixel noise.",
+      takeaway: "PCA is the first move when features are correlated and you need to compress, denoise, or visualize; standardize first, since it is driven entirely by variance."
     },
     {
       title: "Probabilistic PCA, factor analysis & the scree plot",
@@ -203,7 +209,8 @@
         <text x="300" y="190" font-size="10" style="fill:var(--text-faint)">tail → σ² noise</text>
       </svg>`,
       caption: "Eigenvalues fall off a cliff after L = 3; the flat tail is the leftover variance PPCA absorbs as σ².",
-      example: "Survey responses to 20 questions are driven by ~3 latent factors. FA's covariance $\\mathbf{W}\\mathbf{W}^\\top+\\boldsymbol\\Psi$ uses $20\\times3 + 20$ parameters instead of a full $20\\times20$ matrix, and the diagonal $\\boldsymbol\\Psi$ soaks up each question's idiosyncratic noise."
+      example: "Survey responses to 20 questions are driven by ~3 latent factors. FA's covariance $\\mathbf{W}\\mathbf{W}^\\top+\\boldsymbol\\Psi$ uses $20\\times3 + 20$ parameters instead of a full $20\\times20$ matrix, and the diagonal $\\boldsymbol\\Psi$ soaks up each question's idiosyncratic noise.",
+      takeaway: "Prefer PPCA or FA over plain PCA when you need a real probability model to impute, sample, or score, and pick FA when per-feature noise levels genuinely differ."
     },
     {
       title: "Independent components analysis (ICA)",
@@ -230,7 +237,8 @@
         <text x="40" y="178" font-size="11" style="fill:var(--text-dim)">Non-Gaussianity ⇒ recover the sources, not just their subspace.</text>
       </svg>`,
       caption: "Two microphones record a mix of voices; ICA rotates the whitened data to separate the non-Gaussian sources.",
-      example: "Two speakers recorded on two microphones produce two mixed waveforms. ICA recovers each voice up to sign and order — you can't tell which is 'source 1' or whether it was flipped, but the speech is cleanly separated."
+      example: "Two speakers recorded on two microphones produce two mixed waveforms. ICA recovers each voice up to sign and order — you can't tell which is 'source 1' or whether it was flipped, but the speech is cleanly separated.",
+      takeaway: "Use ICA, not PCA, when you want the actual independent sources behind a mixture (audio, EEG, fMRI); it only works because the sources are non-Gaussian."
     },
     {
       title: "VAE, autoencoders & t-SNE/UMAP",
@@ -267,7 +275,8 @@
         <text x="40" y="180" font-size="11" style="fill:var(--text-dim)">Reparameterization moves randomness into ε so gradients flow.</text>
       </svg>`,
       caption: "Encoder maps x to a latent distribution; reparameterized sampling yields z; decoder reconstructs x̂ — all trained on the ELBO.",
-      example: "Train a VAE on face images: the encoder maps each face to a point in a smooth latent space; decoding interpolations between two points morphs one face into another. A t-SNE plot of those latent codes then clusters similar faces locally — but the gaps between distant clusters carry no meaning."
+      example: "Train a VAE on face images: the encoder maps each face to a point in a smooth latent space; decoding interpolations between two points morphs one face into another. A t-SNE plot of those latent codes then clusters similar faces locally — but the gaps between distant clusters carry no meaning.",
+      takeaway: "Reach for a VAE when you need a smooth, generative latent space over complex data; use t-SNE/UMAP only to eyeball local structure, never to read distances or cluster sizes off the plot."
     },
     {
       title: "Hierarchical agglomerative clustering (HAC)",
@@ -300,7 +309,8 @@
         <text x="40" y="222" font-size="10.5" style="fill:var(--text-dim)">Lower cut → more, tighter clusters; no K fixed in advance.</text>
       </svg>`,
       caption: "Each ⊓ joins the two closest clusters at its height; a horizontal cut (dashed) selects the number of clusters — here 2.",
-      example: "Cluster 30 animal species from a $30\\times30$ distance matrix of trait differences. HAC with average linkage builds a dendrogram; cutting it low gives many fine groups (e.g. separate big cats), while cutting near the root gives a few broad ones (mammals vs birds). Switching to single linkage instead chains a borderline species onto a neighboring group via one close pair, blurring the split."
+      example: "Cluster 30 animal species from a $30\\times30$ distance matrix of trait differences. HAC with average linkage builds a dendrogram; cutting it low gives many fine groups (e.g. separate big cats), while cutting near the root gives a few broad ones (mammals vs birds). Switching to single linkage instead chains a borderline species onto a neighboring group via one close pair, blurring the split.",
+      takeaway: "Use HAC when you don't know $K$ up front, want a full hierarchy, or need a custom distance — but only at modest $N$, since $O(N^2)$ memory rules out large datasets."
     }
   ]
 };

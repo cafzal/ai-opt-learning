@@ -30,7 +30,8 @@
         <text x="80" y="204" font-size="11" style="fill:var(--accent)">utopia point</text>
       </svg>`,
       caption: "Both objectives minimized: the green frontier is un-dominated; grey points are each dominated by some frontier point. The utopia point (componentwise best) sits off the frontier.",
-      example: "Two cars: A costs more but is faster, B is cheaper but slower — neither dominates, so both are Pareto-optimal. A third car that is more expensive <i>and</i> slower than A is dominated by A and drops off the frontier."
+      example: "Two cars: A costs more but is faster, B is cheaper but slower — neither dominates, so both are Pareto-optimal. A third car that is more expensive <i>and</i> slower than A is dominated by A and drops off the frontier.",
+      takeaway: "Dominance lets you discard provably-worse designs before any preference is stated, shrinking the choice set to the frontier where real tradeoff decisions actually live."
     },
     {
       title: "Scalarization: weighted sum vs constraint & Tchebycheff",
@@ -57,7 +58,8 @@
         <text x="370" y="178" font-size="11" style="fill:var(--good)">nonconvex frontier</text>
       </svg>`,
       caption: "A concave dent in the frontier: the weighted-sum hyperplane (red dashed) is tangent only at the two ends, so it never selects the orange interior points. Constraint and Tchebycheff methods can.",
-      example: "Minimizing cost and weight with a concave tradeoff in the middle: no weights $\\mathbf{w}$ make $\\mathbf{w}^\\top\\mathbf{f}$ pick the balanced middle designs — sweeping the weights jumps from one extreme to the other. Switching to the $\\epsilon$-constraint method ($\\min$ cost s.t. weight $\\le c$) recovers them."
+      example: "Minimizing cost and weight with a concave tradeoff in the middle: no weights $\\mathbf{w}$ make $\\mathbf{w}^\\top\\mathbf{f}$ pick the balanced middle designs — sweeping the weights jumps from one extreme to the other. Switching to the $\\epsilon$-constraint method ($\\min$ cost s.t. weight $\\le c$) recovers them.",
+      takeaway: "Default to $\\epsilon$-constraint or Tchebycheff over weighted sums: if your frontier has any concave region, weighted sums silently hide the balanced compromises you most want to see."
     },
     {
       title: "Sampling plans & low-discrepancy sequences",
@@ -85,7 +87,8 @@
         <text x="395" y="198" text-anchor="middle" font-size="10.5" style="fill:var(--good)">even coverage → O(1/m)</text>
       </svg>`,
       caption: "Pseudo-random points clump and leave gaps; Sobol/Halton sequences spread evenly, giving O(1/m) error versus O(1/√m) for plain Monte Carlo.",
-      example: "Initializing a 5-D surrogate with a budget of 50 expensive runs: a full-factorial grid would need $m^5$ points (even $m=3$ is 243), so a Latin-hypercube or Sobol plan of 50 points is used instead to cover the space without clumping."
+      example: "Initializing a 5-D surrogate with a budget of 50 expensive runs: a full-factorial grid would need $m^5$ points (even $m=3$ is 243), so a Latin-hypercube or Sobol plan of 50 points is used instead to cover the space without clumping.",
+      takeaway: "A Sobol or Latin-hypercube start spends your scarce evaluation budget on coverage, not on accidental clumps and gaps that leave whole regions of the design space unprobed."
     },
     {
       title: "Surrogate models, model selection & Gaussian processes",
@@ -110,7 +113,8 @@
         <text x="408" y="70" font-size="10.5" style="fill:var(--text-dim)">widest far from data</text>
       </svg>`,
       caption: "GP posterior: the mean interpolates the sampled points (dots) while the ±1.96σ band pinches to zero at data and balloons in the gaps — uncertainty depends only on where you sampled.",
-      example: "After 4 expensive evaluations, the GP is confident (narrow band) right at those 4 inputs and most uncertain in the wide gap between them — exactly the region an acquisition function will want to probe next."
+      example: "After 4 expensive evaluations, the GP is confident (narrow band) right at those 4 inputs and most uncertain in the wide gap between them — exactly the region an acquisition function will want to probe next.",
+      takeaway: "A GP's per-point variance is what makes principled active sampling possible; use cross-validation (not training error) to pick the surrogate, or you will overfit and optimize a mirage."
     },
     {
       title: "Surrogate optimization & acquisition functions",
@@ -136,7 +140,8 @@
         <text x="55" y="164" font-size="11" style="fill:var(--text-dim)">expected improvement</text>
       </svg>`,
       caption: "Expected improvement peaks where the predicted mean is low AND uncertainty is high — the dashed line marks the next point to evaluate, balancing exploit vs explore.",
-      example: "Tuning a costly simulator, EI proposes a point in a wide unexplored gap where the mean dips below the current best $y_{\\min}$ — likely to improve, and informative if it doesn't. After evaluating there, the GP and EI are refit and the loop repeats."
+      example: "Tuning a costly simulator, EI proposes a point in a wide unexplored gap where the mean dips below the current best $y_{\\min}$ — likely to improve, and informative if it doesn't. After evaluating there, the GP and EI are refit and the loop repeats.",
+      takeaway: "Bayesian optimization with expected improvement is how you tune expensive black boxes — hyperparameters, simulators, lab experiments — in tens of evaluations instead of thousands."
     },
     {
       title: "Optimization under uncertainty: robustness, VaR & CVaR",
@@ -160,7 +165,8 @@
         <text x="155" y="120" font-size="11" style="fill:var(--text-dim)">loss density</text>
       </svg>`,
       caption: "VaR is just the cutoff quantile (warn line); CVaR averages the entire shaded worst-case tail beyond it — so CVaR sees the extreme losses that VaR's single threshold ignores.",
-      example: "Two portfolios share the same VaR at the 95% level, but one has a fat tail of catastrophic losses beyond that cutoff. VaR rates them equal; CVaR — the average loss in the worst 5% — flags the fat-tailed one as riskier, which is why CVaR is the coherent choice."
+      example: "Two portfolios share the same VaR at the 95% level, but one has a fat tail of catastrophic losses beyond that cutoff. VaR rates them equal; CVaR — the average loss in the worst 5% — flags the fat-tailed one as riskier, which is why CVaR is the coherent choice.",
+      takeaway: "Optimize CVaR, not VaR, when the tail you're ignoring is the one that bankrupts you — and remember the robust optimum is a wide basin, never a deep narrow spike."
     },
     {
       title: "Discrete optimization",
@@ -194,14 +200,16 @@
         <text x="90" y="222" text-anchor="middle" font-size="10" style="fill:var(--good)">incumbent</text>
       </svg>`,
       caption: "Each node is an LP relaxation giving a bound; a subtree whose bound is worse than the best integer solution found (incumbent) is pruned without exploring it.",
-      example: "A 0-1 knapsack: the LP relaxation allows fractional items, giving an optimistic value bound. Branch on a fractional item (take it / leave it); any branch whose LP bound is below the best full integer packing found so far is pruned. Dynamic programming solves the same knapsack via its value-by-capacity recurrence."
+      example: "A 0-1 knapsack: the LP relaxation allows fractional items, giving an optimistic value bound. Branch on a fractional item (take it / leave it); any branch whose LP bound is below the best full integer packing found so far is pruned. Dynamic programming solves the same knapsack via its value-by-capacity recurrence.",
+      takeaway: "Never just round an LP solution for integer decisions — branch-and-bound gives provable optimality, and spotting total unimodularity lets you skip the integer machinery entirely."
     },
     {
       title: "Multidisciplinary optimization (MDO)",
       tag: "algorithm",
       body: "<p>MDO optimizes across coupled disciplines (e.g. aerodynamics ↔ structures, where each consumes the other's outputs). First comes <b>multidisciplinary analysis (MDA)</b>: find responses consistent across all analyses, $F_i(\\mathcal{A})=\\mathcal{A}$. If the coupling graph is acyclic, evaluate in topological (serial) order; if cyclic, iterate with <b>Gauss-Seidel</b> (ordering-sensitive).</p><p>Architectures trade compatibility against cost:</p><ul><li><b>MDF</b> (multidisciplinary feasible) — a full MDA inside every evaluation; always compatible but expensive; the system optimizer holds all variables.</li><li><b>Sequential</b> — optimize each discipline in turn; exploits locality but isn't optimal.</li><li><b>IDF</b> (individual discipline feasible) — coupling-variable aliases tied by equality constraints, letting analyses run in <b>parallel</b>; compatible only at convergence.</li><li><b>Collaborative</b> — distributed subproblems minimizing deviation from shared targets; great when well-segregated, poor under high coupling.</li><li><b>SAND</b> (simultaneous analysis and design) — the optimizer drives the analyses via cheap <b>residuals</b> $r_i=\\|F_i(\\mathcal{A})-\\mathcal{A}[\\mathbf{y}^{(i)}]\\|=0$; can traverse infeasible regions but has a huge variable count.</li></ul>",
       caption: null,
-      example: "Designing a wing, the aero analysis needs the structural deformation and the structural analysis needs the aero loads — a cyclic coupling. MDF runs a Gauss-Seidel MDA to convergence for <i>every</i> candidate design (safe but slow); IDF instead adds aliased coupling variables with equality constraints so the two analyses run in parallel, only becoming consistent once the optimizer converges."
+      example: "Designing a wing, the aero analysis needs the structural deformation and the structural analysis needs the aero loads — a cyclic coupling. MDF runs a Gauss-Seidel MDA to convergence for <i>every</i> candidate design (safe but slow); IDF instead adds aliased coupling variables with equality constraints so the two analyses run in parallel, only becoming consistent once the optimizer converges.",
+      takeaway: "The MDO architecture you pick is a cost-vs-consistency bet: MDF guarantees feasible intermediates but is slow, while IDF buys parallel speed by only reconciling disciplines at convergence."
     },
     {
       title: "Expression optimization (genetic programming)",
@@ -232,7 +240,8 @@
         <text x="408" y="50" font-size="10.5" style="fill:var(--text-dim)">nodes = operators</text>
       </svg>`,
       caption: "An expression is a typed symbol tree: operators at internal nodes, variables and constants at leaves. Crossover swaps subtrees between two such trees; mutation regrows one subtree.",
-      example: "Symbolic regression: evolve a formula fitting data points. A population of trees is scored by fit minus a size penalty; crossover swaps the $x\\times x$ subtree of one parent into another, and over generations the population converges toward, say, $x^2 + 2$ rather than a bloated equivalent like $x\\times x + 1 + 1 + 0$."
+      example: "Symbolic regression: evolve a formula fitting data points. A population of trees is scored by fit minus a size penalty; crossover swaps the $x\\times x$ subtree of one parent into another, and over generations the population converges toward, say, $x^2 + 2$ rather than a bloated equivalent like $x\\times x + 1 + 1 + 0$.",
+      takeaway: "Genetic programming searches the space of formulas themselves, yielding interpretable closed-form models — but without a parsimony penalty, bloat buries the answer in useless subtrees."
     }
   ]
 };

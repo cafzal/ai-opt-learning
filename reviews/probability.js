@@ -6,13 +6,15 @@
       title: "Two interpretations & two kinds of uncertainty",
       tag: "core",
       body: "<p>The <b>frequentist</b> view says probability is the long-run frequency of a repeatable event; the <b>Bayesian</b> view says it is a degree of belief about <i>any</i> uncertain proposition. The axioms are identical — ML leans Bayesian because it must assign probabilities to parameters and one-off events ('is <i>this</i> email spam?'), which have no repeatable frequency.</p><p>Uncertainty splits two ways:</p><ul><li><b>Aleatoric</b> — irreducible randomness in the process (a fair coin). It lives in the <i>likelihood</i> and cannot be reduced with more data.</li><li><b>Epistemic</b> — reducible uncertainty from lack of data/knowledge. It is tracked by the <i>posterior</i> and shrinks as data arrives.</li></ul>",
-      example: "Predicting a coin flip you cannot see has high <b>aleatoric</b> uncertainty even with infinite data — the flip is genuinely random. Not knowing whether a <i>bent</i> coin's bias $\\theta$ is 0.5 or 0.7 is <b>epistemic</b>: collect more flips and the posterior over $\\theta$ sharpens."
+      example: "Predicting a coin flip you cannot see has high <b>aleatoric</b> uncertainty even with infinite data — the flip is genuinely random. Not knowing whether a <i>bent</i> coin's bias $\\theta$ is 0.5 or 0.7 is <b>epistemic</b>: collect more flips and the posterior over $\\theta$ sharpens.",
+      takeaway: "Splitting the two tells you whether to collect more data (epistemic shrinks) or accept the noise floor (aleatoric won't budge)."
     },
     {
       title: "The fundamental rules: sum, product, chain",
       tag: "core",
       body: "<p>Three rules generate everything. The <b>sum rule</b> marginalizes a variable out, $p(A)=\\sum_b p(A,B{=}b)$. The <b>product rule</b> factors a joint, $p(A,B)=p(A\\mid B)\\,p(B)$, which rearranges to the definition of <b>conditional probability</b> $p(A\\mid B)=p(A,B)/p(B)$.</p><p>Applying the product rule repeatedly gives the <b>chain rule</b>, which factors any joint into a product of conditionals:</p><p>$$p(X_{1:D})=p(X_1)\\prod_{d=2}^{D} p(X_d\\mid X_{1:d-1}).$$</p><p>This factorization is exactly what autoregressive models (language models, PixelCNN) exploit.</p>",
-      example: "For three variables: $p(X_1,X_2,X_3)=p(X_1)\\,p(X_2\\mid X_1)\\,p(X_3\\mid X_1,X_2)$. A language model predicts each token from all previous tokens — the chain rule written as a neural net."
+      example: "For three variables: $p(X_1,X_2,X_3)=p(X_1)\\,p(X_2\\mid X_1)\\,p(X_3\\mid X_1,X_2)$. A language model predicts each token from all previous tokens — the chain rule written as a neural net.",
+      takeaway: "These three rules let you turn any messy joint into conditionals you can actually model — the license behind every autoregressive generator."
     },
     {
       title: "Bayes' rule & the base-rate fallacy",
@@ -43,19 +45,22 @@
         <text x="10" y="226" style="fill:var(--text-faint)" font-size="10.5">red = cancer, amber = false positives among the healthy</text>
       </svg>`,
       caption: "False positives from 996 healthy women swamp the 3 true positives, so the posterior is only ~3%.",
-      example: "Mammogram with sensitivity $p(+\\mid\\text{cancer})=0.8$, false-positive rate $p(+\\mid\\text{no})=0.1$, prevalence $p(\\text{cancer})=0.004$: $$p(\\text{cancer}\\mid +)=\\frac{0.8\\cdot 0.004}{0.8\\cdot 0.004 + 0.1\\cdot 0.996}\\approx 0.031.$$ An 80%-sensitive test yields only ~3% posterior — the key calibration intuition: <b>a high-accuracy classifier on a rare class produces mostly false positives.</b>"
+      example: "Mammogram with sensitivity $p(+\\mid\\text{cancer})=0.8$, false-positive rate $p(+\\mid\\text{no})=0.1$, prevalence $p(\\text{cancer})=0.004$: $$p(\\text{cancer}\\mid +)=\\frac{0.8\\cdot 0.004}{0.8\\cdot 0.004 + 0.1\\cdot 0.996}\\approx 0.031.$$ An 80%-sensitive test yields only ~3% posterior — the key calibration intuition: <b>a high-accuracy classifier on a rare class produces mostly false positives.</b>",
+      takeaway: "This is why a 99%-accurate fraud or disease detector can still be wrong most times it fires — always weight predictions by the base rate."
     },
     {
       title: "Independence & conditional independence",
       tag: "core",
       body: "<p>Two variables are <b>independent</b> when their joint factorizes:</p><p>$$X\\perp Y \\iff p(X,Y)=p(X)\\,p(Y).$$</p><p>They are <b>conditionally independent</b> given $Z$ when they factorize once $Z$ is known:</p><p>$$X\\perp Y\\mid Z \\iff p(X,Y\\mid Z)=p(X\\mid Z)\\,p(Y\\mid Z).$$</p><p>Conditional independence (CI) is the engine behind graphical models, naive Bayes, and Markov models: it factors an otherwise $O(K^D)$ joint into tractable pieces.</p>",
-      example: "Shoe size and reading ability are correlated in children — but <b>conditionally independent given age</b>. Naive Bayes assumes features are CI given the class, turning $p(x_1,\\dots,x_D\\mid c)$ into $\\prod_d p(x_d\\mid c)$ so it needs only $O(D)$ parameters per class instead of $O(K^D)$."
+      example: "Shoe size and reading ability are correlated in children — but <b>conditionally independent given age</b>. Naive Bayes assumes features are CI given the class, turning $p(x_1,\\dots,x_D\\mid c)$ into $\\prod_d p(x_d\\mid c)$ so it needs only $O(D)$ parameters per class instead of $O(K^D)$.",
+      takeaway: "Conditional independence is the assumption that makes an exponential joint estimable from finite data — without it, models like naive Bayes are computationally hopeless."
     },
     {
       title: "Moments & three traps they hide",
       tag: "pitfall",
       body: "<p>The <b>expectation</b> $\\mathbb{E}[X]=\\sum_x x\\,p(x)$ is the mean and <b>variance</b> $\\mathbb{V}[X]=\\mathbb{E}[X^2]-\\mathbb{E}[X]^2$ the spread. For pairs, <b>covariance</b> $\\text{Cov}[X,Y]=\\mathbb{E}[XY]-\\mathbb{E}[X]\\mathbb{E}[Y]$ and <b>correlation</b> $\\text{corr}[X,Y]=\\frac{\\text{Cov}[X,Y]}{\\sqrt{\\mathbb{V}[X]\\,\\mathbb{V}[Y]}}\\in[-1,1]$ normalizes it; the vector version is the symmetric PSD matrix $\\boldsymbol\\Sigma=\\mathbb{E}[(\\boldsymbol{x}-\\boldsymbol\\mu)(\\boldsymbol{x}-\\boldsymbol\\mu)^\\top]$. Three traps follow:</p><ul><li><b>Uncorrelated ≠ independent.</b> Correlation sees only <i>linear</i> dependence. $X\\sim U(-1,1)$, $Y=X^2$ are dependent yet $\\text{corr}=0$. (Mutual information catches any dependence — §4.)</li><li><b>Correlation ≠ causation.</b> A hidden common cause fakes correlation: ice-cream sales and drowning both rise with hot weather.</li><li><b>Simpson's paradox.</b> A trend can reverse in every subgroup — COVID case-fatality was lower overall for Italy than China yet higher in <i>every</i> age band (Italy's older population). Condition on confounders before inferring causation.</li></ul>",
-      example: "$X\\sim U(-1,1)$, $Y=X^2$: by symmetry $\\mathbb{E}[XY]=\\mathbb{E}[X^3]=0$ and $\\mathbb{E}[X]=0$, so $\\text{Cov}=0$ and correlation is exactly 0 — yet knowing $X$ pins down $Y$ completely. Zero correlation, total dependence."
+      example: "$X\\sim U(-1,1)$, $Y=X^2$: by symmetry $\\mathbb{E}[XY]=\\mathbb{E}[X^3]=0$ and $\\mathbb{E}[X]=0$, so $\\text{Cov}=0$ and correlation is exactly 0 — yet knowing $X$ pins down $Y$ completely. Zero correlation, total dependence.",
+      takeaway: "A zero correlation never licenses dropping a feature, and a raw correlation never proves a cause — condition on confounders before you act on either."
     },
     {
       title: "The distribution zoo: what each one models",
@@ -78,13 +83,15 @@
         <text x="10" y="214" style="fill:var(--text-dim)" font-size="11">Heavy tails put more mass on outliers, so they down-weight extreme points instead of chasing them.</text>
       </svg>`,
       caption: "Student-t spreads mass into the tails (robust); Laplace adds a sharp peak at 0 (sparsity); Gaussian sits in between.",
-      example: "Counting customer arrivals per minute? Use <b>Poisson</b> (mean = variance = $\\lambda$). Modeling a probability you'll later update with Bernoulli data? Use a <b>Beta</b> prior — its $a,b$ act like prior success/failure pseudo-counts that conjugately combine with observed counts."
+      example: "Counting customer arrivals per minute? Use <b>Poisson</b> (mean = variance = $\\lambda$). Modeling a probability you'll later update with Bernoulli data? Use a <b>Beta</b> prior — its $a,b$ act like prior success/failure pseudo-counts that conjugately combine with observed counts.",
+      takeaway: "Matching the distribution to your data type bakes in the right assumptions for free; a conjugate prior turns Bayesian updating into closed-form counting instead of a sampler."
     },
     {
       title: "The multivariate Gaussian: Mahalanobis, marginals & conditionals",
       tag: "geometry",
       body: "<p>The MVN $\\mathcal{N}(\\boldsymbol{y}\\mid\\boldsymbol\\mu,\\boldsymbol\\Sigma)$ is everywhere because it is closed under linear maps, marginalization, and conditioning. The exponent is the <b>Mahalanobis distance</b> $\\Delta^2=(\\boldsymbol{y}-\\boldsymbol\\mu)^\\top\\boldsymbol\\Sigma^{-1}(\\boldsymbol{y}-\\boldsymbol\\mu)$: constant-probability contours are ellipsoids along the eigenvectors of $\\boldsymbol\\Sigma$, and $\\Delta$ becomes plain Euclidean distance after you rotate-and-scale by $\\boldsymbol\\Sigma^{-1/2}$.</p><p>Partition $\\boldsymbol{y}=(\\boldsymbol{y}_1,\\boldsymbol{y}_2)$. The <b>marginal</b> just reads off its block, $p(\\boldsymbol{y}_1)=\\mathcal{N}(\\boldsymbol\\mu_1,\\boldsymbol\\Sigma_{11})$. The <b>conditional</b> is also Gaussian:</p><p>$$\\boldsymbol\\mu_{1\\mid 2}=\\boldsymbol\\mu_1+\\boldsymbol\\Sigma_{12}\\boldsymbol\\Sigma_{22}^{-1}(\\boldsymbol{y}_2-\\boldsymbol\\mu_2),\\qquad \\boldsymbol\\Sigma_{1\\mid 2}=\\boldsymbol\\Sigma_{11}-\\boldsymbol\\Sigma_{12}\\boldsymbol\\Sigma_{22}^{-1}\\boldsymbol\\Sigma_{21}.$$</p><p>The conditional mean is <b>linear</b> in $\\boldsymbol{y}_2$ and the conditional covariance is <b>constant</b> (the Schur complement) — the backbone of GP regression, Kalman filtering, and missing-value imputation.</p>",
-      example: "With $\\mu_1=\\mu_2=0$, unit variances, and correlation $\\rho$, observing $y_2=2$ gives conditional mean $\\mu_{1\\mid 2}=\\rho\\cdot 2$ and variance $1-\\rho^2$. Higher $\\rho$ pulls the prediction harder toward $y_2$ <i>and</i> shrinks the leftover uncertainty — observing a correlated variable both informs and sharpens."
+      example: "With $\\mu_1=\\mu_2=0$, unit variances, and correlation $\\rho$, observing $y_2=2$ gives conditional mean $\\mu_{1\\mid 2}=\\rho\\cdot 2$ and variance $1-\\rho^2$. Higher $\\rho$ pulls the prediction harder toward $y_2$ <i>and</i> shrinks the leftover uncertainty — observing a correlated variable both informs and sharpens.",
+      takeaway: "Because the conditional stays Gaussian with a linear mean, you get closed-form prediction-plus-uncertainty — the exact step that makes Gaussian processes, Kalman filters, and imputation tractable."
     },
     {
       title: "Quantiles, the 95% band, CLT & Monte Carlo",
@@ -110,13 +117,15 @@
         <text x="10" y="222" style="fill:var(--text-dim)" font-size="11">2.5% sits in each tail; the shaded centre holds 95% of the mass.</text>
       </svg>`,
       caption: "The ±1.96σ band captures 95% of a Gaussian, leaving 2.5% in each tail.",
-      example: "To halve a Monte Carlo estimate's standard error you need $4\\times$ the samples (error $\\propto 1/\\sqrt{S}$). The same $1/\\sqrt{S}$ rate holds whether $X$ is 1-dimensional or 1-million-dimensional — the basis for estimating gradients from minibatches."
+      example: "To halve a Monte Carlo estimate's standard error you need $4\\times$ the samples (error $\\propto 1/\\sqrt{S}$). The same $1/\\sqrt{S}$ rate holds whether $X$ is 1-dimensional or 1-million-dimensional — the basis for estimating gradients from minibatches.",
+      takeaway: "Dimension-free $1/\\\\sqrt{S}$ error is why sampling a few examples can estimate quantities in billion-parameter models — but expect diminishing returns, since cutting error in half costs four times the compute."
     },
     {
       title: "Change of variables & the Jacobian",
       tag: "transforms",
       body: "<p>Push a density through an <b>invertible</b> transform $\\boldsymbol{y}=f(\\boldsymbol{x})$ and it does <i>not</i> just relabel — it rescales. With $\\boldsymbol{g}=f^{-1}$, the new density is:</p><p>$$p_y(\\boldsymbol{y})=p_x(\\boldsymbol{g}(\\boldsymbol{y}))\\,|\\det\\mathbf{J}_g|,\\qquad (\\mathbf{J}_g)_{ij}=\\frac{\\partial g_i}{\\partial y_j}.$$</p><p>The <b>Jacobian determinant</b> $|\\det\\mathbf{J}|$ is the local volume factor: where $f$ stretches space the density thins out, where it compresses the density piles up, so total mass stays 1. Chaining many simple invertible maps and tracking each $\\log|\\det\\mathbf{J}|$ is exactly how <b>normalizing flows</b> turn a plain Gaussian into a rich learned density.</p><p>The <b>linear</b> special case $\\boldsymbol{y}=\\mathbf{A}\\boldsymbol{x}+\\boldsymbol{b}$ needs no densities to move the moments: $\\mathbb{E}[\\boldsymbol{y}]=\\mathbf{A}\\boldsymbol\\mu+\\boldsymbol{b}$ and $\\text{Cov}[\\boldsymbol{y}]=\\mathbf{A}\\boldsymbol\\Sigma\\mathbf{A}^\\top$ — the rule behind whitening, PCA, and the closure of Gaussians under linear maps (here $|\\det\\mathbf{J}|=|\\det\\mathbf{A}|$).</p>",
-      example: "A 1-D scale change $y=ax$ has $g(y)=y/a$ and $|\\mathbf{J}_g|=1/|a|$, so $p_y(y)=\\frac{1}{|a|}p_x(y/a)$: stretch the axis by $a$ and the curve must shrink by $1/|a|$ to still integrate to 1. Matching moments, $\\mathbb{V}[y]=a^2\\,\\mathbb{V}[x]$ — the scalar form of $\\mathbf{A}\\boldsymbol\\Sigma\\mathbf{A}^\\top$."
+      example: "A 1-D scale change $y=ax$ has $g(y)=y/a$ and $|\\mathbf{J}_g|=1/|a|$, so $p_y(y)=\\frac{1}{|a|}p_x(y/a)$: stretch the axis by $a$ and the curve must shrink by $1/|a|$ to still integrate to 1. Matching moments, $\\mathbb{V}[y]=a^2\\,\\mathbb{V}[x]$ — the scalar form of $\\mathbf{A}\\boldsymbol\\Sigma\\mathbf{A}^\\top$.",
+      takeaway: "Forget the Jacobian factor and your transformed density no longer integrates to 1 — it is the bookkeeping that lets normalizing flows learn exact likelihoods from stacked simple maps."
     }
   ]
 };

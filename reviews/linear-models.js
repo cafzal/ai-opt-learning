@@ -20,7 +20,8 @@
         <text x="20" y="218" font-size="10.5" style="fill:var(--text-faint)">ŷ is the closest point in the subspace; r = y − ŷ is orthogonal to it.</text>
       </svg>`,
       caption: "OLS drops a perpendicular from y onto the span of the features; the residual is what's left over, at a right angle.",
-      example: "Polynomial regression $y=w_0+w_1x+w_2x^2+\\dots$ is nonlinear in $x$ but linear in $\\boldsymbol{w}$, so the same closed-form $(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\mathbf{X}^\\top\\boldsymbol{y}$ solves it; an $R^2=0.85$ means the fit explains 85% of the variance in $\\boldsymbol{y}$."
+      example: "Polynomial regression $y=w_0+w_1x+w_2x^2+\\dots$ is nonlinear in $x$ but linear in $\\boldsymbol{w}$, so the same closed-form $(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\mathbf{X}^\\top\\boldsymbol{y}$ solves it; an $R^2=0.85$ means the fit explains 85% of the variance in $\\boldsymbol{y}$.",
+      takeaway: "The closed form gives an exact fit in one step, but if features are collinear $\\mathbf{X}^\\top\\mathbf{X}$ is near-singular and you must regularize or use the pseudo-inverse."
     },
     {
       title: "Robust regression: Laplace, Student-t, Huber",
@@ -48,7 +49,8 @@
         </g>
       </svg>`,
       caption: "Squared loss explodes on big residuals; absolute and Huber grow only linearly in the tails — so outliers pull the fit far less.",
-      example: "With one wildly mislabeled point, an $\\ell_2$ fit tilts the whole line toward it, while a Huber fit with small $\\delta$ treats that point like any other large residual and barely moves."
+      example: "With one wildly mislabeled point, an $\\ell_2$ fit tilts the whole line toward it, while a Huber fit with small $\\delta$ treats that point like any other large residual and barely moves.",
+      takeaway: "Reach for Huber or $\\ell_1$ loss whenever your data has outliers or fat-tailed noise you cannot clean — it keeps a few bad points from hijacking the whole fit."
     },
     {
       title: "Ridge vs lasso (vs elastic net)",
@@ -83,7 +85,8 @@
         </g>
       </svg>`,
       caption: "Same RSS contours, two constraint shapes: the diamond's corner lands on an axis (a zeroed weight); the circle is touched off-axis, so both weights stay nonzero.",
-      example: "Among three near-duplicate sensors, lasso may keep one and zero the other two (and which one can flip with a tiny data change); ridge keeps all three with similar small weights; elastic net keeps the correlated group together while still zeroing truly irrelevant inputs."
+      example: "Among three near-duplicate sensors, lasso may keep one and zero the other two (and which one can flip with a tiny data change); ridge keeps all three with similar small weights; elastic net keeps the correlated group together while still zeroing truly irrelevant inputs.",
+      takeaway: "Reach for lasso when you need automatic feature selection and a sparse, interpretable model; ridge when correlated predictors should shrink together; elastic net when you want both."
     },
     {
       title: "Logistic & softmax regression",
@@ -107,7 +110,8 @@
         <text x="70" y="210" font-size="10.5" style="fill:var(--text-faint)">squashes the real line into a probability in (0, 1)</text>
       </svg>`,
       caption: "The sigmoid maps any real score z to a probability in (0,1), crossing 0.5 at z = 0 — the decision boundary.",
-      example: "Predicting click/no-click: $\\boldsymbol{w}^\\top\\boldsymbol{x}$ becomes a probability via $\\sigma$. If the classes are perfectly separable, unpenalized training keeps inflating $\\|\\boldsymbol{w}\\|$ to steepen $\\sigma$, so a small L2 penalty is needed to keep the fit finite."
+      example: "Predicting click/no-click: $\\boldsymbol{w}^\\top\\boldsymbol{x}$ becomes a probability via $\\sigma$. If the classes are perfectly separable, unpenalized training keeps inflating $\\|\\boldsymbol{w}\\|$ to steepen $\\sigma$, so a small L2 penalty is needed to keep the fit finite.",
+      takeaway: "Always add L2 regularization in production logistic regression: it stops weights diverging on (near-)separable data and keeps the probabilities calibrated rather than saturating at 0 or 1."
     },
     {
       title: "Generative classifiers: GDA, naive Bayes, vs discriminative",
@@ -136,7 +140,8 @@
         </g>
       </svg>`,
       caption: "A shared covariance (LDA) yields a straight separating boundary; per-class covariances (QDA) bend it into a curve.",
-      example: "With only a handful of labeled emails, naive Bayes (generative) often classifies better; with hundreds of thousands, logistic regression (discriminative) overtakes it — and the generative model copes when a feature is missing by integrating it out, where the discriminative one cannot."
+      example: "With only a handful of labeled emails, naive Bayes (generative) often classifies better; with hundreds of thousands, logistic regression (discriminative) overtakes it — and the generative model copes when a feature is missing by integrating it out, where the discriminative one cannot.",
+      takeaway: "Pick a generative model when labels are scarce, features go missing, or you must train fast; switch to discriminative once you have ample data and want top accuracy."
     },
     {
       title: "Generalized linear models (GLMs)",
@@ -164,19 +169,22 @@
         <text x="20" y="218" font-size="10.5" style="fill:var(--text-faint)">— so one IRLS / Fisher-scoring routine fits them all.</text>
       </svg>`,
       caption: "Pick a response distribution; its canonical link sets the mean function — but the gradient (error × input) and the fitting algorithm stay identical.",
-      example: "Modeling website visit <i>counts</i>: choose Poisson with a log link, $\\mu=e^{\\boldsymbol{w}^\\top\\boldsymbol{x}}$. The fitting code is the same IRLS loop as logistic regression — only the mean $\\mu_i$ inside $\\sum_i(y_i-\\mu_i)\\boldsymbol{x}_i$ changes."
+      example: "Modeling website visit <i>counts</i>: choose Poisson with a log link, $\\mu=e^{\\boldsymbol{w}^\\top\\boldsymbol{x}}$. The fitting code is the same IRLS loop as logistic regression — only the mean $\\mu_i$ inside $\\sum_i(y_i-\\mu_i)\\boldsymbol{x}_i$ changes.",
+      takeaway: "Match the link and distribution to your target's type — counts, rates, binary, positive-only — instead of forcing linear regression on data it cannot represent and getting nonsensical predictions."
     },
     {
       title: "The perceptron",
       tag: "classifier",
       body: "<p>The ancestor of logistic regression: drop the sigmoid and just take the <b>hard threshold</b> of the linear score, $\\hat y=\\mathbb{I}(\\boldsymbol{w}^\\top\\boldsymbol{x}>0)$. There is no probability, no likelihood — only a $\\{0,1\\}$ (or $\\pm1$) decision.</p><p>Training is <b>mistake-driven</b>: cycle through points and update $\\boldsymbol{w}$ <i>only on errors</i>, $\\boldsymbol{w}\\leftarrow\\boldsymbol{w}+(2y_i-1)\\boldsymbol{x}_i$ (the factor $2y_i-1\\in\\{-1,+1\\}$ nudges the boundary toward the misclassified point). The <b>perceptron convergence theorem</b> guarantees this halts after finitely many updates <b>iff the data is linearly separable</b>; on non-separable data it never settles.</p><p>Logistic regression is <b>strictly more general</b>: it is probabilistic and <b>calibrated</b> (outputs usable confidences), extends to <b>multiclass</b> via softmax, optimizes a smooth convex loss by gradient methods, and — unlike the perceptron — still produces a sensible maximum-margin-ish fit when classes overlap. The perceptron is essentially logistic regression's degenerate, zero-temperature limit.</p>",
-      example: "Separable case: two clouds of points with a gap — the perceptron sweeps through, correcting each misclassified point, and stops the instant it finds <i>any</i> separating line (not necessarily the best one). Non-separable case: a single overlapping point keeps flipping sign, so $\\boldsymbol{w}$ oscillates forever; logistic regression instead converges to a stable boundary that trades off the conflicting points probabilistically."
+      example: "Separable case: two clouds of points with a gap — the perceptron sweeps through, correcting each misclassified point, and stops the instant it finds <i>any</i> separating line (not necessarily the best one). Non-separable case: a single overlapping point keeps flipping sign, so $\\boldsymbol{w}$ oscillates forever; logistic regression instead converges to a stable boundary that trades off the conflicting points probabilistically.",
+      takeaway: "Default to logistic regression over the raw perceptron in practice: you get calibrated probabilities, convergence on overlapping classes, and a clean path to multiclass."
     },
     {
       title: "Sparse models beyond lasso",
       tag: "extensions",
       body: "<p>Plain lasso zeros <i>individual</i> coefficients. A family of richer sparsity priors targets structure, probabilities, or extreme compression:</p><ul><li><b>Group lasso</b> — penalize $\\sum_g\\|\\boldsymbol{w}_g\\|_2$ (the group $\\ell_2$ norm, <i>not</i> squared) so whole predefined groups switch on/off together; ideal for one-hot levels of a categorical or shared weights across multi-task models.</li><li><b>ARD / sparse Bayesian learning</b> — give each weight its own prior precision $\\alpha_j$ and maximize the marginal likelihood (empirical Bayes); irrelevant features get $\\alpha_j\\to\\infty$ and are <b>pruned</b> automatically (Bayesian Occam). With a kernel basis this is the <b>Relevance Vector Machine</b> — typically <i>sparser</i> than the SVM and <b>probabilistic</b>.</li><li><b>Spike-and-slab</b> — the gold-standard <i>discrete</i> prior $p(w_j\\mid\\gamma_j)=\\gamma_j\\mathcal{N}(0,\\sigma_w^2)+(1-\\gamma_j)\\delta_0$ (a point mass at zero plus a slab); the posterior yields honest <b>marginal inclusion probabilities</b> $p(\\gamma_j{=}1\\mid\\mathcal{D})$. Lasso is its tractable <i>continuous relaxation</i>; exact inference over $2^D$ models needs MCMC/VI.</li><li><b>Fused lasso</b> — also penalize $\\sum_j|w_{j+1}-w_j|$ so neighboring coefficients stay equal, giving <b>piecewise-constant</b> solutions (genomics, change-point detection).</li><li><b>Compressed sensing</b> — recover a $K$-sparse signal from only $M=O(K\\log\\tfrac{D}{K})\\ll D$ random linear measurements $\\boldsymbol{y}=\\mathbf{R}\\boldsymbol{x}$ by solving a lasso / basis-pursuit problem.</li></ul>",
-      example: "Selecting from a categorical feature with 5 one-hot columns: lasso might keep 2 of the dummies and drop 3 — incoherent — whereas <b>group lasso</b> keeps or kills all 5 as a unit. For an MRI, <b>compressed sensing</b> exploits the image's sparsity in a wavelet basis to reconstruct it from far fewer measurements than pixels, cutting scan time; an <b>RVM</b> on the same regression task often matches an SVM with a fraction of the retained basis vectors and returns predictive error bars the SVM cannot."
+      example: "Selecting from a categorical feature with 5 one-hot columns: lasso might keep 2 of the dummies and drop 3 — incoherent — whereas <b>group lasso</b> keeps or kills all 5 as a unit. For an MRI, <b>compressed sensing</b> exploits the image's sparsity in a wavelet basis to reconstruct it from far fewer measurements than pixels, cutting scan time; an <b>RVM</b> on the same regression task often matches an SVM with a fraction of the retained basis vectors and returns predictive error bars the SVM cannot.",
+      takeaway: "Choose the sparsity prior that matches your structure — group lasso for one-hot or multi-task blocks, fused lasso for ordered signals, spike-and-slab when you need honest inclusion probabilities."
     }
   ]
 };

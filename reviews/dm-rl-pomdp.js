@@ -23,7 +23,8 @@
         <text x="120" y="110" font-size="10.5" style="fill:var(--text-dim)">rises with the ratio…</text>
       </svg>`,
       caption: "With a positive advantage the objective grows as the new policy favors the action, but the clip flattens it past 1+ε so the step can't run away.",
-      example: "PPO is the workhorse of modern deep RL precisely because of this clip: it gets most of TRPO's stability (no catastrophic policy jumps) with the simplicity of first-order gradient ascent on minibatches of reused trajectories."
+      example: "PPO is the workhorse of modern deep RL precisely because of this clip: it gets most of TRPO's stability (no catastrophic policy jumps) with the simplicity of first-order gradient ascent on minibatches of reused trajectories.",
+      takeaway: "Reach for PPO as your default policy-gradient algorithm — it is stable, sample-reusing, and needs little tuning, which is why it underpins RLHF."
     },
     {
       title: "Actor-critic: a critic supplies the advantage",
@@ -54,7 +55,8 @@
         </defs>
       </svg>`,
       caption: "The actor acts; the critic watches the reward and next state, then hands back an advantage that steers the actor's gradient.",
-      example: "AlphaZero's actor proposes move probabilities and its critic predicts who wins; MCTS uses both to search, and the sharpened search statistics become the next training targets — an actor-critic loop wrapped around a tree search."
+      example: "AlphaZero's actor proposes move probabilities and its critic predicts who wins; MCTS uses both to search, and the sharpened search statistics become the next training targets — an actor-critic loop wrapped around a tree search.",
+      takeaway: "Add a critic when high-variance returns stall learning; tune GAE's $\\lambda$ to dial the bias-variance tradeoff for your reward sparsity and horizon."
     },
     {
       title: "Exploration vs exploitation: bandits & UCB",
@@ -89,13 +91,15 @@
         <text x="250" y="167" text-anchor="middle" font-size="9.5" style="fill:var(--text-faint)">uncertain</text>
       </svg>`,
       caption: "B's mean is below A's, but its wide confidence interval gives it the highest upper bound — so optimism explores it next.",
-      example: "Among three arms, A is well-sampled with a tight interval and B is barely tried with a wide one. Even though A's <i>mean</i> is higher, UCB1 picks B because its optimistic upper bound is highest — exploring the uncertain option rather than settling."
+      example: "Among three arms, A is well-sampled with a tight interval and B is barely tried with a wide one. Even though A's <i>mean</i> is higher, UCB1 picks B because its optimistic upper bound is highest — exploring the uncertain option rather than settling.",
+      takeaway: "Without principled exploration you converge prematurely on a falsely-best option; UCB or Thompson sampling beats $\\epsilon$-greedy and needs no schedule tuning."
     },
     {
       title: "Model-based RL: learn T and R, then plan",
       tag: "core",
       body: "<p>Learn a model from interaction, then plan with it. <b>Maximum-likelihood models</b> estimate $T(s'\\mid s,a)\\approx N(s,a,s')/N(s,a)$ and $R\\approx\\rho/N$ from visit counts.</p><p><b>Update schemes</b> trade cost against freshness: a full re-solve is expensive; <b>Dyna</b> backs up at visited plus random states; <b>prioritized sweeping</b> keeps a priority queue ordered by predecessor impact ($T\\cdot|\\Delta U|$) so the most consequential updates happen first.</p><p><b>Exploration</b> can be ε-greedy, or <b>R-MAX</b> optimism: assign the maximal value $r_{\\max}/(1-\\gamma)$ to any under-explored $(s,a)$ with count below $m$, so a greedy planner is <i>driven</i> to explore them (PAC-style guarantees).</p><p><b>Bayesian RL</b> keeps a posterior (a Dirichlet per $(s,a)$). The <b>Bayes-adaptive MDP</b> lifts the state to $(s,b)$ where the model is known, with a generalized Bellman equation $U^*(s,b)=\\max_a\\big(R+\\gamma\\sum_{s'}P(s'\\mid s,b,a)\\,U^*(s',\\tau(s,b,a,s'))\\big)$; the continuous belief forces approximation. <b>Posterior sampling</b> instead draws one model, solves it, acts, and updates — no exploration parameters.</p>",
-      example: "Prioritized sweeping shines in a sparse-reward maze: when the goal's value finally changes, the update propagates first to the states most likely to be affected (high $T\\cdot|\\Delta U|$ predecessors) rather than sweeping the whole grid uniformly, so credit reaches the start far faster."
+      example: "Prioritized sweeping shines in a sparse-reward maze: when the goal's value finally changes, the update propagates first to the states most likely to be affected (high $T\\cdot|\\Delta U|$ predecessors) rather than sweeping the whole grid uniformly, so credit reaches the start far faster.",
+      takeaway: "Choose model-based RL when real interactions are scarce or costly — a learned model lets you plan on simulated experience and slash sample complexity."
     },
     {
       title: "Model-free RL: Q-learning, Sarsa & friends",
@@ -128,13 +132,15 @@
         <text x="420" y="160" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">target r + γ·Q(s′,a′)</text>
       </svg>`,
       caption: "Q-learning bootstraps off the best next action (the max → optimism bias); Sarsa bootstraps off the action its policy actually takes.",
-      example: "On a cliff-walking grid, Q-learning learns the optimal but risky edge path (it assumes greedy follow-through), while Sarsa — accounting for its own ε-random steps — learns a safer path away from the cliff. Same environment, different targets, different policies."
+      example: "On a cliff-walking grid, Q-learning learns the optimal but risky edge path (it assumes greedy follow-through), while Sarsa — accounting for its own ε-random steps — learns a safer path away from the cliff. Same environment, different targets, different policies.",
+      takeaway: "Pick Sarsa when exploration mistakes are costly during learning (robots, live systems) and Q-learning when you only care about the final greedy policy."
     },
     {
       title: "Imitation learning: clone, then fix the drift",
       tag: "core",
       body: "<p>When the reward is unknown but an <b>expert's demonstrations</b> are available, learn from them.</p><p><b>Behavioral cloning</b> is plain supervised learning of the expert's action given the state — simple, but it suffers <b>cascading errors</b>: a small mistake moves the agent to states the expert never visited, where its behavior is undefined, compounding the drift. <b>DAgger</b> fixes this by rolling out the <i>current</i> policy, querying the expert on the states actually visited, aggregating those labels, and retraining — so training data covers the agent's own state distribution. <b>SMILe</b> mixes newly trained component policies, decaying the expert's weight as $(1-\\beta)^k$.</p><p><b>Inverse RL</b> instead recovers a reward $R_\\phi=\\phi^\\top\\beta$:</p><ul><li><b>Maximum margin:</b> find a reward under which the expert beats alternatives by matching feature expectations via a QP (underspecified — many rewards fit).</li><li><b>Maximum entropy:</b> prefer the max-entropy trajectory distribution $P_\\phi(\\tau)\\propto\\exp R_\\phi(\\tau)$; do ML on $\\phi$ by gradient ascent with forward DP for visitation frequencies.</li><li><b>GAIL:</b> an adversarial discriminator $C_\\phi$ tries to tell agent from expert while the policy (trained by TRPO) fools it, using surrogate reward $-\\log C_\\phi$.</li></ul>",
-      example: "A self-driving policy cloned from human demos drives fine until it drifts slightly toward the shoulder — a state no human demo covers — and has no idea how to recover, so the error snowballs. DAgger asks the expert 'what would you do <i>here</i>?' on exactly those drifted states and folds the answers back into training."
+      example: "A self-driving policy cloned from human demos drives fine until it drifts slightly toward the shoulder — a state no human demo covers — and has no idea how to recover, so the error snowballs. DAgger asks the expert 'what would you do <i>here</i>?' on exactly those drifted states and folds the answers back into training.",
+      takeaway: "Plain behavioral cloning silently fails at deployment via compounding drift; if you can query the expert online, DAgger fixes the distribution mismatch that breaks it."
     },
     {
       title: "POMDPs: maintain a belief, then plan over it",
@@ -163,13 +169,15 @@
         <text x="64" y="190" font-size="9.5" style="fill:var(--text-faint)">thin grey = α-vector per plan; bold = their max</text>
       </svg>`,
       caption: "Each conditional plan is a line over the belief simplex; the optimal value is their upper envelope (bold), and which line dominates names the action to take.",
-      example: "In the crying-baby POMDP, one alpha vector encodes 'feed', another 'ignore'. When the belief that the baby is hungry is high enough, the feed plan's hyperplane dominates; below that crossover, ignore dominates — the dominating alpha vector tells you both the value and the action."
+      example: "In the crying-baby POMDP, one alpha vector encodes 'feed', another 'ignore'. When the belief that the baby is hungry is high enough, the feed plan's hyperplane dominates; below that crossover, ignore dominates — the dominating alpha vector tells you both the value and the action.",
+      takeaway: "POMDPs are the right model whenever your agent can't directly observe true state (sensors, hidden intent), and they correctly value actions taken purely to gather information."
     },
     {
       title: "Multiagent: games, Nash & equilibria",
       tag: "multiagent",
       body: "<p>Add <i>other</i> agents. A <b>simple (normal-form) game</b> has agents $\\mathcal{I}$, action sets $\\mathcal{A}^i$, and a joint reward $\\mathbf{R}(\\mathbf{a})$, with utility $U^i(\\boldsymbol\\pi)=\\sum_\\mathbf{a}R^i\\prod_j\\pi^j(a^j)$ over pure or mixed strategies.</p><p>Solution concepts: a <b>dominant strategy</b> is a best response against <i>all</i> opponents (rare). A <b>Nash equilibrium</b> has every agent best-responding (no unilateral incentive to deviate) — it <b>always exists</b> for finite action spaces, may require <b>mixed</b> strategies, and computing it is <b>PPAD-complete</b>. A <b>correlated equilibrium</b> uses a single coordinating signal; every Nash is correlated but not conversely, and it is computable by a <b>linear program</b> (the objective — utilitarian / egalitarian / etc. — selects among equilibria).</p><p>Sequential extensions reduce to repeated game-solving. <b>Markov games</b> = MDPs with multiple agents (best response to fixed opponents is itself an MDP; Nash exists; Nash Q-learning bootstraps per-transition equilibria). <b>POMGs</b> add partial observability — <i>no</i> belief updates are possible (recursive reasoning about others), so agents use conditional plans / controllers. A <b>Dec-POMDP</b> is a POMG with one <i>shared</i> reward (fully cooperative); it is <b>NEXP-complete</b>, though factored independence (transition / observation / reward) can drop it to NP- or even P-complete.</p>",
-      example: "In the prisoner's dilemma, mutual defection is the unique Nash (each player's best response to the other), even though mutual cooperation pays both more — illustrating why 'no incentive to deviate' is not the same as 'collectively best'. A correlated equilibrium with a trusted signal can do better when one exists."
+      example: "In the prisoner's dilemma, mutual defection is the unique Nash (each player's best response to the other), even though mutual cooperation pays both more — illustrating why 'no incentive to deviate' is not the same as 'collectively best'. A correlated equilibrium with a trusted signal can do better when one exists.",
+      takeaway: "Once other strategic agents share your environment, single-agent optimality is the wrong target — solve for equilibria, since a Nash-stable plan is what no rival will unilaterally undercut."
     },
     {
       title: "Finite-state controllers: a policy with its own memory",
@@ -196,7 +204,8 @@
         </defs>
       </svg>`,
       caption: "Two nodes and looping transitions encode an unbounded-horizon policy: stay in 'listen' while observations are ambiguous, jump to 'act' once confident, then reset — no belief vector required at runtime.",
-      example: "For the tiger problem, a compact FSC stays in a 'listen' node while the growls remain ambiguous (a self-loop), and only transitions to an 'open-door' node after enough consistent observations build confidence — capturing an infinite-horizon strategy in two nodes, with runtime memory being just 'which node am I in?' rather than a full belief over {tiger-left, tiger-right}."
+      example: "For the tiger problem, a compact FSC stays in a 'listen' node while the growls remain ambiguous (a self-loop), and only transitions to an 'open-door' node after enough consistent observations build confidence — capturing an infinite-horizon strategy in two nodes, with runtime memory being just 'which node am I in?' rather than a full belief over {tiger-left, tiger-right}.",
+      takeaway: "Use an FSC to deploy a POMDP policy on memory-constrained hardware — you track one node instead of a full belief vector, with no Bayesian update at runtime."
     }
   ]
 };

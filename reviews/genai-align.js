@@ -42,20 +42,23 @@
         <text x="10" y="170" style="fill:var(--text-faint)" font-size="10.5">Curriculum sharpens left→right: web-scale → curated → human-ranked.</text>
       </svg>`,
       caption: "The data gets more curated left to right; the next-token objective never changes.",
-      example: "Ask a freshly-pretrained model \"What's the capital of France?\" and it might continue with more <i>questions</i> (that's what web text near a question looks like). After SFT on demonstrations it answers \"Paris.\" After preference tuning it answers helpfully and declines unsafe requests — same weights-shaped object, three curricula."
+      example: "Ask a freshly-pretrained model \"What's the capital of France?\" and it might continue with more <i>questions</i> (that's what web text near a question looks like). After SFT on demonstrations it answers \"Paris.\" After preference tuning it answers helpfully and declines unsafe requests — same weights-shaped object, three curricula.",
+      takeaway: "Knowing which stage owns a behavior tells you where to fix it: bad facts mean pretraining, wrong format means SFT, bad judgment means preference tuning."
     },
     {
       title: "Pretraining: self-supervised next-token prediction",
       tag: "core",
       body: "<p>Pretraining is <b>self-supervised</b>: the label is just the next token in the text, so any corpus is its own supervision — no human annotation needed. The model factorizes the sequence probability autoregressively, $p_\\theta(x_{1:T})=\\prod_t p_\\theta(x_t\\mid x_{<t})$, and minimizes the average <b>cross-entropy</b> (negative log-likelihood) of the true next token:</p><p style=\"text-align:center\">$\\mathcal{L}(\\theta)=-\\frac1T\\sum_{t=1}^{T}\\log p_\\theta(x_t\\mid x_{<t}).$</p><p>This is exactly maximum likelihood. The exponentiated loss is <b>perplexity</b>, $\\mathrm{PPL}=e^{\\mathcal{L}}$ — the \"effective branching factor,\" or how many tokens the model is effectively choosing between. Lower is better. Capability emerges smoothly with scale (the compute-optimal frontier balances model size against tokens), which is why pretraining is the expensive, commoditized base everything else builds on.</p>",
-      example: "On the prefix \"The cat sat on the\", the target is \"mat\". If the model puts probability $0.25$ on \"mat\", that token contributes $-\\log 0.25\\approx 1.39$ nats to the loss. Average this over trillions of tokens and gradient-descend: the model is forced to internalize grammar, facts, and world structure just to predict well."
+      example: "On the prefix \"The cat sat on the\", the target is \"mat\". If the model puts probability $0.25$ on \"mat\", that token contributes $-\\log 0.25\\approx 1.39$ nats to the loss. Average this over trillions of tokens and gradient-descend: the model is forced to internalize grammar, facts, and world structure just to predict well.",
+      takeaway: "Perplexity is your cheapest progress metric during pretraining, and the compute-optimal frontier is what decides how to split a fixed budget between model size and tokens."
     },
     {
       title: "Supervised fine-tuning (SFT): demonstrations → instruction following",
       tag: "core",
       body: "<p>A pretrained model knows language but not the <i>job</i> of being an assistant — it will happily continue your prompt rather than answer it. <b>SFT</b> fixes the format. You collect a curated set of high-quality <b>(instruction, ideal response)</b> demonstrations and run the <i>same</i> next-token loss, but only on the response tokens (the prompt is context, not a target).</p><p>This is sometimes called <b>behavioral cloning</b>: the model imitates expert demonstrations. It's cheap and stable relative to what follows, and it teaches structure, tone, and instruction-following. Its ceiling is the demonstrators — SFT can only imitate, never <i>discover</i> that one answer is better than another. That gap is what the preference-tuning stage closes.</p>",
       caption: undefined,
-      example: "A demonstration pair: prompt \"Summarize this email in one line: …\" paired with a crisp one-line summary written by a skilled human. Train on a few tens of thousands of such pairs and the model generalizes the <i>behavior</i> \"when asked to summarize, produce a concise summary\" — even on emails it never saw."
+      example: "A demonstration pair: prompt \"Summarize this email in one line: …\" paired with a crisp one-line summary written by a skilled human. Train on a few tens of thousands of such pairs and the model generalizes the <i>behavior</i> \"when asked to summarize, produce a concise summary\" — even on emails it never saw.",
+      takeaway: "SFT is the cheap, stable first move to make a base model usable, but demonstration quality caps the ceiling — your model only gets as good as your best annotators."
     },
     {
       title: "RLHF: preferences → reward model → policy under a KL leash",
@@ -101,14 +104,16 @@
         <text x="390" y="226" text-anchor="middle" style="fill:var(--text-dim)" font-size="10">reward model cancels → direct</text>
       </svg>`,
       caption: "RLHF routes preferences through a reward model and a PPO loop; DPO crosses the reward model out and trains the policy directly.",
-      example: "Without the KL penalty, a policy chasing a reward model that slightly over-rewards the word \"certainly\" learns to spam \"Certainly! Certainly!\" — high modeled reward, useless text. The $\\beta\\,D_{\\text{KL}}$ leash to $\\pi_{\\text{ref}}$ keeps it close to the sensible SFT model and prevents that drift."
+      example: "Without the KL penalty, a policy chasing a reward model that slightly over-rewards the word \"certainly\" learns to spam \"Certainly! Certainly!\" — high modeled reward, useless text. The $\\beta\\,D_{\\text{KL}}$ leash to $\\pi_{\\text{ref}}$ keeps it close to the sensible SFT model and prevents that drift.",
+      takeaway: "RLHF can push past imitation toward genuine preference, but the three-model PPO loop is the costly, unstable part — tune $\\\\beta$ carefully or you get reward hacking or no movement."
     },
     {
       title: "DPO: the reward model cancels out",
       tag: "key insight",
       body: "<p><b>Direct Preference Optimization</b> asks: do we even need the reward model and the RL loop? The KL-constrained objective in the previous toggle has a known <b>closed-form optimum</b>, $\\pi^\\star(y\\mid x)\\propto\\pi_{\\text{ref}}(y\\mid x)\\,\\exp\\!\\big(\\tfrac1\\beta r(x,y)\\big)$. Invert it to express the reward in terms of the policy:</p><p style=\"text-align:center\">$r(x,y)=\\beta\\log\\dfrac{\\pi_\\theta(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}+\\beta\\log Z(x).$</p><p>Now substitute into Bradley-Terry, which depends only on the <b>difference</b> $r(x,y_w)-r(x,y_l)$ — so the intractable normalizer $\\log Z(x)$ <b>cancels</b>. What's left is a one-line classification-style loss on preference pairs:</p><p style=\"text-align:center\">$\\mathcal{L}_{\\text{DPO}}=-\\mathbb{E}\\Big[\\log\\sigma\\Big(\\beta\\log\\tfrac{\\pi_\\theta(y_w|x)}{\\pi_{\\text{ref}}(y_w|x)}-\\beta\\log\\tfrac{\\pi_\\theta(y_l|x)}{\\pi_{\\text{ref}}(y_l|x)}\\Big)\\Big].$</p><p>The policy is <b>its own implicit reward model</b>. No separate reward network, no RL, no in-loop sampling — fewer moving parts and more stable, while still respecting the same $\\beta$-weighted KL leash to $\\pi_{\\text{ref}}$ baked into the formula. (One subtlety: the gradient carries a built-in weight that upweights pairs the model currently ranks <i>wrong</i> — drop it and training degenerates.)</p>",
       caption: undefined,
-      example: "Given a pair where $y_w$ is the preferred answer, DPO simply pushes up $\\log\\pi_\\theta(y_w\\mid x)$ and pushes down $\\log\\pi_\\theta(y_l\\mid x)$, each measured <i>relative to</i> the frozen reference — a contrastive nudge. It's a supervised loss you can run like SFT, yet it provably optimizes the same preference objective RLHF targets with a full PPO pipeline."
+      example: "Given a pair where $y_w$ is the preferred answer, DPO simply pushes up $\\log\\pi_\\theta(y_w\\mid x)$ and pushes down $\\log\\pi_\\theta(y_l\\mid x)$, each measured <i>relative to</i> the frozen reference — a contrastive nudge. It's a supervised loss you can run like SFT, yet it provably optimizes the same preference objective RLHF targets with a full PPO pipeline.",
+      takeaway: "DPO gets you most of RLHF's alignment with far less machinery and far more stability — the default first move for preference tuning now."
     },
     {
       title: "Decoding strategies: the quality–diversity knob",
@@ -143,7 +148,8 @@
         <text x="275" y="218" text-anchor="middle" style="fill:var(--text-dim)" font-size="10.5">Top-p keeps the smallest set summing to ≥ p; the cutoff widens as the bars flatten.</text>
       </svg>`,
       caption: "Temperature reshapes the probabilities: low T concentrates mass on the top token; high T spreads it, so sampling explores more.",
-      example: "Code generation usually wants low temperature or greedy (one right syntax). Creative brainstorming wants $T\\approx 0.9$ with top-$p=0.95$ — diverse phrasings while the nucleus still clips absurd tail tokens. Crank $T$ far above 1 with no truncation and the output dissolves into gibberish."
+      example: "Code generation usually wants low temperature or greedy (one right syntax). Creative brainstorming wants $T\\approx 0.9$ with top-$p=0.95$ — diverse phrasings while the nucleus still clips absurd tail tokens. Crank $T$ far above 1 with no truncation and the output dissolves into gibberish.",
+      takeaway: "Temperature and top-$p$ are the knobs you actually turn at inference to trade determinism for creativity — no retraining, just match them to the task."
     },
     {
       title: "Inference efficiency: KV cache, quantization, speculative decoding",
@@ -173,7 +179,8 @@
         <text x="10" y="214" style="fill:var(--text-faint)" font-size="10.5">Output distribution is identical to running the target alone.</text>
       </svg>`,
       caption: "The draft model gambles k tokens; the target checks them in a single pass and keeps the correct prefix — net win when the draft is usually right.",
-      example: "With a draft that the target agrees with ~70% of the time and $k=4$, you might accept 3 tokens per expensive target pass — roughly a 3× decode speedup with <i>no</i> change to the output distribution, since any wrong guess is simply rejected and resampled from the target."
+      example: "With a draft that the target agrees with ~70% of the time and $k=4$, you might accept 3 tokens per expensive target pass — roughly a 3× decode speedup with <i>no</i> change to the output distribution, since any wrong guess is simply rejected and resampled from the target.",
+      takeaway: "These three levers decide your serving cost and latency: KV cache and quantization free up the memory bandwidth that bottlenecks decode, while speculative decoding cuts latency for free."
     }
   ]
 };

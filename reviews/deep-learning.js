@@ -34,19 +34,22 @@
         </g>
       </svg>`,
       caption: "Each edge is a weight; remove σ at the hidden nodes and the two matrix multiplies fuse into one.",
-      example: "Two stacked linear layers $\\mathbf{W}_2(\\mathbf{W}_1\\boldsymbol{x})=(\\mathbf{W}_2\\mathbf{W}_1)\\boldsymbol{x}$ — exactly a single linear layer. Insert a ReLU between them and the network can suddenly carve nonlinear decision regions (e.g. learn XOR)."
+      example: "Two stacked linear layers $\\mathbf{W}_2(\\mathbf{W}_1\\boldsymbol{x})=(\\mathbf{W}_2\\mathbf{W}_1)\\boldsymbol{x}$ — exactly a single linear layer. Insert a ReLU between them and the network can suddenly carve nonlinear decision regions (e.g. learn XOR).",
+      takeaway: "If your deep model underperforms a linear baseline, check the activation — a missing or misplaced $\\sigma$ silently collapses the whole stack to one linear map."
     },
     {
       title: "Training: SGD & backpropagation",
       tag: "core",
       body: "<p><b>SGD with minibatches</b> updates $\\boldsymbol\\theta_{t+1}=\\boldsymbol\\theta_t-\\eta\\,\\tfrac1B\\sum_{n\\in\\mathcal{B}}\\nabla\\ell_n$. The <b>minibatch noise is implicit regularization</b> — the gradient estimate jitters around the true gradient, discouraging sharp overfit minima.</p><p><b>Backpropagation = reverse-mode autodiff</b>: a <b>forward pass</b> caches activations, a <b>backward pass</b> propagates error signals $\\boldsymbol\\delta^{(\\ell)}=\\partial\\mathcal{L}/\\partial\\boldsymbol{h}^{(\\ell)}$ via the chain rule. For a linear layer $\\partial\\mathcal{L}/\\partial\\mathbf{W}=\\boldsymbol\\delta\\boldsymbol{x}^\\top$. RNNs use <b>backprop through time</b> (truncated for tractability).</p>",
-      example: "Train on the full dataset each step (batch GD) and the path to the minimum is smooth but you can settle into a brittle minimum; use minibatches of, say, 32 and the noisy steps act like a regularizer that biases toward flatter, better-generalizing minima."
+      example: "Train on the full dataset each step (batch GD) and the path to the minimum is smooth but you can settle into a brittle minimum; use minibatches of, say, 32 and the noisy steps act like a regularizer that biases toward flatter, better-generalizing minima.",
+      takeaway: "Batch size is a regularization knob, not just a speed knob — shrinking it can improve generalization, while huge batches often need a tuned learning-rate warmup to match it."
     },
     {
       title: "Vanishing / exploding gradients & fixes",
       tag: "core",
       body: "<p>Gradients in a deep net are <b>products of many Jacobians</b>. If their magnitudes are consistently $<1$ the signal <b>vanishes</b> toward early layers; if $>1$ it <b>explodes</b>. The standard mitigations:</p><ul><li><b>ReLU</b> — flat-region derivative of exactly 1, so it doesn't shrink the signal like saturating sigmoid/tanh.</li><li><b>Residual connections</b> — an identity term keeps gradients flowing (next toggle).</li><li><b>Normalization</b> — keeps activations well-scaled layer to layer.</li><li><b>Careful init</b> (Xavier/Glorot for tanh, He/Kaiming for ReLU) and <b>gradient clipping</b>.</li><li><b>Gating</b> (LSTM/GRU) — additive cell updates preserve long-range gradients; the forget gate is a learned gradient highway.</li></ul>",
-      example: "A 50-layer plain network barely trains — gradients vanish before reaching layer 1. Swapping in ResNet's residual blocks (plus BatchNorm and ReLU) lets the same depth train cleanly, which is exactly how 50–152+ layer ResNets became feasible."
+      example: "A 50-layer plain network barely trains — gradients vanish before reaching layer 1. Swapping in ResNet's residual blocks (plus BatchNorm and ReLU) lets the same depth train cleanly, which is exactly how 50–152+ layer ResNets became feasible.",
+      takeaway: "When a deep net's loss stalls early or NaNs out, this checklist (ReLU, residuals, normalization, He init, clipping) is your first diagnostic pass before touching architecture."
     },
     {
       title: "Normalization & residual connections",
@@ -76,7 +79,8 @@
         <text x="265" y="185" text-anchor="middle" font-size="11.5" style="fill:var(--text-dim)">∂L/∂x = ∂L/∂y · (∂F/∂x + I)  — the I term never vanishes</text>
       </svg>`,
       caption: "The skip path adds x straight back, so even if ∂F/∂x → 0 the identity keeps a gradient route open.",
-      example: "In a ResNet block the conv layers learn a <i>residual</i> $F(\\boldsymbol{x})$ on top of the input; if the optimal map is near-identity, the block can simply push $F\\to 0$ and pass $\\boldsymbol{x}$ through — far easier than learning identity from scratch."
+      example: "In a ResNet block the conv layers learn a <i>residual</i> $F(\\boldsymbol{x})$ on top of the input; if the optimal map is near-identity, the block can simply push $F\\to 0$ and pass $\\boldsymbol{x}$ through — far easier than learning identity from scratch.",
+      takeaway: "Residual connections are what let you train 100+ layers at all, and choosing LayerNorm over BatchNorm is what makes a transformer trainable without batch-size coupling."
     },
     {
       title: "Convolution: local filters & weight sharing",
@@ -109,7 +113,8 @@
         <text x="330" y="188" font-size="11" style="fill:var(--text-dim)">layer 2 — receptive field = 1 + 2(3−1) = 5</text>
       </svg>`,
       caption: "Stacking two K=3 layers gives an output unit a receptive field of 5 inputs: 1 + L(K−1) with L=2.",
-      example: "A 3×3 conv over a 256×256 RGB image uses just $3{\\times}3{\\times}3$ weights per output channel — reused at every position — versus the hundreds of thousands a fully-connected layer would need for the same input."
+      example: "A 3×3 conv over a 256×256 RGB image uses just $3{\\times}3{\\times}3$ weights per output channel — reused at every position — versus the hundreds of thousands a fully-connected layer would need for the same input.",
+      takeaway: "Weight sharing is why CNNs learn from limited data and generalize across position; if your task lacks translation structure, that built-in bias may instead hurt you."
     },
     {
       title: "Attention: scaled dot-product",
@@ -145,19 +150,22 @@
         <text x="265" y="197" text-anchor="middle" font-size="11" style="fill:var(--text-faint)">attention weights re-mix the value vectors</text>
       </svg>`,
       caption: "Q·Kᵀ scores every pair, √d rescales, softmax turns scores into weights, then those weights average the V vectors.",
-      example: "In the sentence \"the animal didn't cross the street because <b>it</b> was tired,\" self-attention lets the token <i>it</i> attend strongly to <i>animal</i> in a single hop — an $O(1)$ path an RNN would have to traverse step by step."
+      example: "In the sentence \"the animal didn't cross the street because <b>it</b> was tired,\" self-attention lets the token <i>it</i> attend strongly to <i>animal</i> in a single hop — an $O(1)$ path an RNN would have to traverse step by step.",
+      takeaway: "Attention's $O(1)$ path length is why it replaced RNNs for long context, but the $O(n^2)$ cost is a real memory budget you must plan around when picking context length."
     },
     {
       title: "Architectures: CNN vs RNN vs Transformer",
       tag: "compare",
       body: "<p>Three backbones with different inductive biases:</p><ul><li><b>ConvNets</b> — alternating conv/activation/pool, then global pool + FC. Bias toward <b>locality</b>; e.g. <b>LeNet</b> (early digits), <b>ResNet</b> (residual blocks, 50–152+ layers).</li><li><b>RNNs</b> — hidden state $\\boldsymbol{h}_t=\\varphi(\\mathbf{W}_{xh}\\boldsymbol{x}_t+\\mathbf{W}_{hh}\\boldsymbol{h}_{t-1})$; bias toward <b>order</b>; $O(n)$ sequential ops and path length make long-range dependencies weak. LSTM/GRU gates help.</li><li><b>Transformer</b> — \"attention is all you need\"; <b>no built-in locality bias</b> (needs positional encoding) but $O(1)$ path length and <b>excellent long-range</b>. Most params live in the position-wise <b>FFN</b> (conjectured knowledge store). <b>GPT</b> = decoder-only causal self-attention, trained autoregressively, few-shot in-context learning at scale; <b>ViT</b> = image as a sequence of patch embeddings + [CLS] through a transformer encoder (data-hungry, but scales better than CNNs).</li></ul>",
-      example: "For a long document, an RNN must pass information through $n$ sequential steps (gradients weaken); a transformer connects the first and last token in one attention hop — but pays $O(n^2)$ compute, which is why context length is bounded."
+      example: "For a long document, an RNN must pass information through $n$ sequential steps (gradients weaken); a transformer connects the first and last token in one attention hop — but pays $O(n^2)$ compute, which is why context length is bounded.",
+      takeaway: "Match the backbone to the data's inductive bias: CNNs when locality holds and data is scarce, transformers when long-range dependencies and abundant data dominate."
     },
     {
       title: "Generative & practical: LLM decoding, RLHF, diffusion, LoRA",
       tag: "applied",
       body: "<p><b>Autoregressive LLMs</b> sample $x_t\\sim p(x_t\\mid x_{<t})$. <b>Decoding</b>: greedy / beam search, or sampling with <b>temperature</b> (sharpen/flatten the distribution), <b>top-$k$</b> (restrict to the $k$ likeliest), or <b>nucleus / top-$p$</b> (smallest set with cumulative mass $p$). <b>RLHF</b>: train a reward model on human preferences, then fine-tune with <b>PPO</b> (InstructGPT/ChatGPT).</p><p><b>Diffusion models</b>: a fixed <b>forward process</b> adds Gaussian noise over $T$ steps until $x_T\\sim\\mathcal{N}(0,\\mathbf{I})$; a network learns to <b>denoise</b> the reverse process, maximizing a variational bound, sampling coarse→fine from noise.</p><p>Efficiency: <b>LoRA</b> freezes $\\mathbf{W}$ and adds a low-rank update $\\mathbf{B}\\mathbf{A}$ ($R\\ll\\min(C,D)$, init $\\mathbf{B}=0$) — trains a few percent of params, merges at inference for zero latency, usually on $\\mathbf{W}_Q,\\mathbf{W}_V$. <b>Quantization</b> lowers weight precision (FP16→INT4) to cut memory/bandwidth, speeding bandwidth-bound inference with little accuracy loss.</p>",
-      example: "With <b>temperature</b> $\\to 0$ decoding becomes greedy (deterministic, repetitive); raising it diversifies output. <b>Nucleus</b> $p=0.9$ samples only from the smallest set of tokens whose probabilities sum to 0.9, cutting off the unlikely tail while staying adaptive. <b>QLoRA</b> combines a 4-bit quantized base model with trainable LoRA adapters to fine-tune large models on modest hardware."
+      example: "With <b>temperature</b> $\\to 0$ decoding becomes greedy (deterministic, repetitive); raising it diversifies output. <b>Nucleus</b> $p=0.9$ samples only from the smallest set of tokens whose probabilities sum to 0.9, cutting off the unlikely tail while staying adaptive. <b>QLoRA</b> combines a 4-bit quantized base model with trainable LoRA adapters to fine-tune large models on modest hardware.",
+      takeaway: "These are your day-to-day control knobs: lower temperature for factual tasks, and reach for LoRA/quantization when you need to adapt or serve a big model on a tight hardware budget."
     },
     {
       title: "Scaling laws & emergent abilities",
@@ -178,13 +186,15 @@
         <text x="150" y="62" font-size="10.5" style="fill:var(--text-dim)">slope = −α</text>
       </svg>`,
       caption: "Plot loss vs compute on log–log axes and it's a line of slope −α, falling toward the irreducible floor ℒ∞.",
-      example: "<b>Chinchilla</b> (70B params, trained on ~1.4T tokens) <i>outperformed</i> the 4× larger Gopher (280B) by spending the same compute on far more data — concrete proof that the bigger model was under-trained. Separately, chain-of-thought prompting barely helps small models but sharply boosts accuracy once a model crosses a scale threshold: an emergent ability."
+      example: "<b>Chinchilla</b> (70B params, trained on ~1.4T tokens) <i>outperformed</i> the 4× larger Gopher (280B) by spending the same compute on far more data — concrete proof that the bigger model was under-trained. Separately, chain-of-thought prompting barely helps small models but sharply boosts accuracy once a model crosses a scale threshold: an emergent ability.",
+      takeaway: "Scaling laws let you forecast the payoff of more compute before spending it, and Chinchilla tells you to budget parameters and tokens together rather than just buying a bigger model."
     },
     {
       title: "Efficient computation: hardware, tensors, precision",
       tag: "systems",
       body: "<p><b>Why DL is feasible.</b> <b>GPUs</b> pack thousands of parallel cores; <b>TPUs</b> use systolic matrix-multiply arrays purpose-built for the dense linear algebra of neural nets. The practical bottleneck is usually <b>memory bandwidth</b> — moving weights and activations to and from the compute units — rather than raw FLOPs.</p><p><b>Tensors.</b> Inputs are batched into multi-dimensional <b>tensors</b> — images as $(N,C,H,W)$, sequences as $(N,T,D)$ — so a whole batch passes through a layer as <b>one big matrix multiply</b>, exactly the operation the hardware accelerates.</p><p><b>Mixed precision.</b> Compute in <b>FP16/BF16</b> while accumulating in <b>FP32</b> for numerical stability: roughly <b>halves memory and doubles throughput</b> with negligible accuracy loss (BF16's wider exponent range avoids FP16 overflow).</p>",
-      example: "A batch of 64 RGB images at 224×224 is the tensor $(64,3,224,224)$; flattened per layer, the forward pass is a single large matmul a GPU/TPU chews through in parallel. Switching that training run from FP32 to BF16 mixed precision typically about halves memory use and nearly doubles step throughput — often the cheapest speedup available."
+      example: "A batch of 64 RGB images at 224×224 is the tensor $(64,3,224,224)$; flattened per layer, the forward pass is a single large matmul a GPU/TPU chews through in parallel. Switching that training run from FP32 to BF16 mixed precision typically about halves memory use and nearly doubles step throughput — often the cheapest speedup available.",
+      takeaway: "Because inference is usually bandwidth-bound, mixed precision and quantization buy more real speedup than chasing FLOPs — switch to BF16 before you reach for a bigger GPU."
     }
   ]
 };

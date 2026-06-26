@@ -29,25 +29,29 @@
         </g>
       </svg>`,
       caption: "Wide bars (transfer, self-supervised) tap huge unlabeled pools; narrow ones add targeted or imperfect signal.",
-      example: "To classify medical images with only 200 labels: <b>augment</b> with rotations/flips, <b>transfer</b> from an ImageNet backbone, pretrain <b>self-supervised</b> on unlabeled scans, then use <b>active learning</b> to spend the radiologist's limited time on the most uncertain cases."
+      example: "To classify medical images with only 200 labels: <b>augment</b> with rotations/flips, <b>transfer</b> from an ImageNet backbone, pretrain <b>self-supervised</b> on unlabeled scans, then use <b>active learning</b> to spend the radiologist's limited time on the most uncertain cases.",
+      takeaway: "Matching the method to the signal you actually have — invariances, a big backbone, unlabeled data, or a budget — is what turns a few hundred labels into a usable model."
     },
     {
       title: "Contrastive self-supervision & few-shot meta-learning",
       tag: "model",
       body: "<p><b>Contrastive learning</b> needs no labels — it learns a representation by deciding what belongs together. <b>SimCLR</b> pulls together two augmented views of the same image and pushes apart all other images in a shared embedding space; <b>CLIP</b> does the same across modalities, pulling matching image–caption pairs together. The payoff is <b>zero-shot transfer</b>: classify by prompting with text (\"a photo of a cat\") and picking the nearest caption embedding.</p><p><b>Meta-learning</b> is <i>learning to learn</i> across a distribution of tasks. <b>MAML</b> learns an initialization from which a few gradient steps adapt to a new task. The <b>few-shot</b> protocol is $C$-way $N$-shot: $C$ new classes, $N$ labeled examples each.</p>",
-      example: "CLIP, trained on 400M image–caption pairs, classifies photos into ImageNet categories it never explicitly trained on. MAML enables 5-way 1-shot learning: shown 5 never-seen classes with one image each, a couple gradient steps suffice to classify new queries."
+      example: "CLIP, trained on 400M image–caption pairs, classifies photos into ImageNet categories it never explicitly trained on. MAML enables 5-way 1-shot learning: shown 5 never-seen classes with one image each, a couple gradient steps suffice to classify new queries.",
+      takeaway: "A good pretrained representation lets you ship a classifier for new categories with zero or a handful of labels, instead of collecting and annotating a fresh dataset per task."
     },
     {
       title: "Semi-supervised assumptions & confirmation bias",
       tag: "pitfall",
       body: "<p>Why can unlabeled data help at all? Two <b>assumptions</b> must hold: the <b>cluster assumption</b> — decision boundaries lie in low-density regions (between clusters, not through them) — and the <b>manifold assumption</b> — labels vary smoothly along the data manifold.</p><p>Self-training (label unlabeled points with your own model, then retrain) is seductive but risks <b>confirmation bias</b>: the model reinforces its own confident mistakes in a feedback loop. Two guards: <b>threshold</b> pseudo-labels (keep only high-confidence ones), and <b>consistency / VAT</b> losses that penalize the prediction changing under (worst-case) perturbations.</p>",
-      example: "Pseudo-labeling a tweet sentiment model: if you accept every self-prediction, early errors compound (confirmation bias). Keeping only predictions with $p>0.95$ and adding a consistency loss (label shouldn't flip under small word swaps) keeps self-training honest."
+      example: "Pseudo-labeling a tweet sentiment model: if you accept every self-prediction, early errors compound (confirmation bias). Keeping only predictions with $p>0.95$ and adding a consistency loss (label shouldn't flip under small word swaps) keeps self-training honest.",
+      takeaway: "Before reaching for semi-supervised methods, check the cluster/manifold assumptions hold and gate pseudo-labels by confidence — otherwise self-training silently amplifies your model's own mistakes."
     },
     {
       title: "Preprocessing & missing data",
       tag: "practice",
       body: "<p>Preprocessing must be fit on the <b>training set only</b> (or you leak). The standard moves: <b>scale numeric</b> with z-score $\\frac{x-\\mu}{\\sigma}$ (scale-sensitive models) or min-max (bounded) — <b>trees are scale-invariant</b>; <b>encode categorical</b> via one-hot (nominal), ordinal (ordered), or embedding (high-cardinality); <b>vectorize text</b> with <b>TF-IDF</b> $\\log(\\text{TF}+1)\\cdot\\log\\frac{N}{1+\\text{DF}}$; <b>impute missing</b> by mean/median or model, <i>plus a \"was-missing\" indicator</i>.</p><p>Missingness mechanism matters: <b>MCAR</b> (random — ignorable), <b>MAR</b> (depends on observed features — ignorable for estimation), <b>MNAR</b> (depends on the unobserved value — informative, must be modeled). <b>Discriminative models can't take missing inputs</b>, so you must impute first.</p>",
-      example: "A scale that fails on very high weights gives <b>MNAR</b> data — imputing the mean systematically underestimates. Adding 'income_was_missing' alongside a median fill preserves the signal that missingness itself can carry."
+      example: "A scale that fails on very high weights gives <b>MNAR</b> data — imputing the mean systematically underestimates. Adding 'income_was_missing' alongside a median fill preserves the signal that missingness itself can carry.",
+      takeaway: "Fitting transforms on train-only and adding was-missing indicators prevents leakage and salvages signal; getting the missingness mechanism wrong quietly biases every downstream estimate."
     },
     {
       title: "Class imbalance & threshold tuning",
@@ -68,7 +72,8 @@
         <text x="275" y="200" text-anchor="middle" font-size="10.5" style="fill:var(--text-faint)">use PR / F1 and class weights ∝ 1/f, not raw accuracy</text>
       </svg>`,
       caption: "A tiny positive bar dwarfed by negatives; moving the decision threshold trades precision against recall.",
-      example: "Fraud detection with 0.5% fraud: a 99.5%-accurate model can be the one that flags nothing. Weighting fraud ~200× in the loss, generating synthetic frauds with SMOTE, and lowering the threshold until recall is acceptable actually catches fraud."
+      example: "Fraud detection with 0.5% fraud: a 99.5%-accurate model can be the one that flags nothing. Weighting fraud ~200× in the loss, generating synthetic frauds with SMOTE, and lowering the threshold until recall is acceptable actually catches fraud.",
+      takeaway: "On rare-event problems, reporting accuracy hides a useless model — track PR/F1 and tune the threshold to the precision/recall tradeoff your application actually cares about."
     },
     {
       title: "Data leakage — the cardinal sin",
@@ -93,7 +98,8 @@
         <text x="85" y="210" font-size="10.5" style="fill:var(--text-faint)">grey = train (fit transform here), accent = held-out fold (transform only)</text>
       </svg>`,
       caption: "Refit the scaler/imputer on the training part of every fold; the held-out fold is only transformed, never fit.",
-      example: "Standardizing features once on the full dataset before 5-fold CV leaks the validation rows' mean/variance into every fold — scores look great, then drop in production. Wrapping the scaler and model in a single pipeline that refits per fold fixes it."
+      example: "Standardizing features once on the full dataset before 5-fold CV leaks the validation rows' mean/variance into every fold — scores look great, then drop in production. Wrapping the scaler and model in a single pipeline that refits per fold fixes it.",
+      takeaway: "Leakage is the #1 way a model looks great offline and collapses in production; treating the whole pipeline as the model and fitting inside each fold is the cheapest insurance you can buy."
     },
     {
       title: "Honest evaluation & deployment drift",
@@ -114,7 +120,8 @@
         <text x="95" y="100" font-size="10.5" style="fill:var(--text-dim)">large persistent gap = high variance</text>
       </svg>`,
       caption: "More data: train error rises, validation falls. A wide stubborn gap = variance; both high and converged = bias.",
-      example: "Train error 2%, validation 18%, gap barely shrinking with more data → a <b>variance</b> problem (gather data / regularize). Both at 20% → <b>bias</b> (richer model). In production, a spam filter sees <b>data drift</b> when new users arrive but <b>concept drift</b> when spammers change tactics."
+      example: "Train error 2%, validation 18%, gap barely shrinking with more data → a <b>variance</b> problem (gather data / regularize). Both at 20% → <b>bias</b> (richer model). In production, a spam filter sees <b>data drift</b> when new users arrive but <b>concept drift</b> when spammers change tactics.",
+      takeaway: "Learning curves tell you whether to spend on more data or a bigger model, and naming the drift type tells you whether to retrain or rebuild — so you fix the right problem instead of guessing."
     },
     {
       title: "Recommenders, factorization & graph networks",
@@ -145,7 +152,8 @@
         <text x="260" y="205" text-anchor="middle" font-size="10.5" style="fill:var(--text-faint)">"·" = unobserved entry to predict; rating ≈ user vec · item vec + biases</text>
       </svg>`,
       caption: "A mostly-empty ratings matrix factors into thin user and item embedding matrices that reconstruct the blanks.",
-      example: "Netflix-style: user $u$'s 50-dim taste vector dotted with movie $i$'s vector (plus popularity bias $c_i$) predicts a rating for an unseen film; a brand-new movie has no $\\boldsymbol{v}_i$ — the cold-start problem. On a citation graph, a 2-layer GCN classifies a paper's topic from the papers it cites and the papers those cite (2 hops)."
+      example: "Netflix-style: user $u$'s 50-dim taste vector dotted with movie $i$'s vector (plus popularity bias $c_i$) predicts a rating for an unseen film; a brand-new movie has no $\\boldsymbol{v}_i$ — the cold-start problem. On a citation graph, a 2-layer GCN classifies a paper's topic from the papers it cites and the papers those cite (2 hops).",
+      takeaway: "When your data is a sparse interaction matrix or a graph, these embedding methods fit where a generic classifier can't — but anticipate cold-start and pick the GNN variant by how big your graph is."
     }
   ]
 };

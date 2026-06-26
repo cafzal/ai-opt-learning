@@ -6,7 +6,8 @@
       title: "Instance-based learning & KNN",
       tag: "lazy",
       body: "<p><b>Lazy learning</b>: store the data, defer all work to query time. <b>KNN</b> classifies by majority vote of the $K$ nearest points and regresses by their average. Distance is Euclidean or <b>Mahalanobis</b> $d_{\\mathbf{M}}=\\sqrt{(\\boldsymbol{x}-\\boldsymbol{x}')^\\top\\mathbf{M}(\\boldsymbol{x}-\\boldsymbol{x}')}$; <b>deep metric learning</b> learns $\\mathbf{M}$ or an embedding via contrastive / triplet losses.</p><p>$K{=}1$ overfits — the prediction is a patchwork of <b>Voronoi cells</b>, one per training point. Tune $K$ by cross-validation. Cost is $O(N)$ per query (use kd-trees / LSH / FAISS), and it <b>fails in high dimensions</b> (curse of dimensionality: neighbors stop being near).</p>",
-      example: "On a 2-D scatter, $K{=}1$ draws a jagged boundary that perfectly fences off every single training point (high variance); raising $K$ to 15 smooths the boundary and tolerates label noise (more bias). No model is fit until you ask for a prediction."
+      example: "On a 2-D scatter, $K{=}1$ draws a jagged boundary that perfectly fences off every single training point (high variance); raising $K$ to 15 smooths the boundary and tolerates label noise (more bias). No model is fit until you ask for a prediction.",
+      takeaway: "KNN is a zero-training baseline that works on low-dimensional data, but $O(N)$ query cost and the curse of dimensionality push you to approximate search or learned embeddings at scale."
     },
     {
       title: "Mercer kernels & the kernel trick",
@@ -47,13 +48,15 @@
         <text x="432" y="60" text-anchor="middle" font-size="10.5" style="fill:var(--good)">linearly separable now</text>
       </svg>`,
       caption: "Points unseparable on the line become separable once mapped to (x, x²) — the kernel computes that separation's inner products implicitly.",
-      example: "RBF corresponds to an infinite-dimensional $\\boldsymbol\\phi$, so you could never store it — yet $\\kappa(\\boldsymbol{x},\\boldsymbol{x}')=\\exp(-\\|\\boldsymbol{x}-\\boldsymbol{x}'\\|^2/2\\ell^2)$ is a one-line computation. That is the whole point of the trick."
+      example: "RBF corresponds to an infinite-dimensional $\\boldsymbol\\phi$, so you could never store it — yet $\\kappa(\\boldsymbol{x},\\boldsymbol{x}')=\\exp(-\\|\\boldsymbol{x}-\\boldsymbol{x}'\\|^2/2\\ell^2)$ is a one-line computation. That is the whole point of the trick.",
+      takeaway: "The kernel trick lets one linear algorithm model arbitrarily nonlinear boundaries just by swapping the kernel, so you tune $\\kappa$ and its length scale instead of hand-engineering features."
     },
     {
       title: "Kernel ridge regression & the representer theorem",
       tag: "kernels",
       body: "<p>The <b>representer theorem</b> says the solution to a kernelized ridge problem is a weighted sum of kernels centered on the training points: $\\hat f(\\boldsymbol{x})=\\sum_i\\alpha_i\\,\\kappa(\\boldsymbol{x}_i,\\boldsymbol{x})$, with the dual weights $\\boldsymbol\\alpha=(\\mathbf{K}+\\lambda\\mathbf{I})^{-1}\\boldsymbol{y}$.</p><p>Two routes to the same fit: the <b>primal</b> costs $O(D^3)$ (in the feature dimension), the <b>dual</b> costs $O(N^3)$ (in the sample count). Use the dual when $D>N$ or when $D=\\infty$ (e.g. RBF). Unlike the SVM, the solution is <b>dense</b> — every $\\alpha_i$ is generally nonzero. <b>Kernel PCA</b> reuses the same machinery for nonlinear dimensionality reduction, via eigenvectors of the centered Gram matrix.</p>",
-      example: "Fitting a wiggly 1-D curve with an RBF kernel: every training point contributes a bump $\\alpha_i\\kappa(\\boldsymbol{x}_i,\\cdot)$, and their sum interpolates the data. With $D=\\infty$ the primal is impossible, so the $O(N^3)$ dual is the only way."
+      example: "Fitting a wiggly 1-D curve with an RBF kernel: every training point contributes a bump $\\alpha_i\\kappa(\\boldsymbol{x}_i,\\cdot)$, and their sum interpolates the data. With $D=\\infty$ the primal is impossible, so the $O(N^3)$ dual is the only way.",
+      takeaway: "The representer theorem is what makes kernel methods tractable at all — it collapses an infinite-dimensional fit to solving an $N\\times N$ system, so cost scales with sample count, not feature dimension."
     },
     {
       title: "Support vector machines (SVMs)",
@@ -88,7 +91,8 @@
         <text x="350" y="250" font-size="10.5" style="fill:var(--warn)">circled = support vectors (define the margin)</text>
       </svg>`,
       caption: "Solid line is the decision boundary; the two dashed lines are the ±margin. Only the circled support vectors touch the margin and determine the fit.",
-      example: "Increase $C$ and the optimizer tolerates fewer margin violations, so the boundary contorts to fit outliers and the margin narrows; small $C$ allows more slack and a wider, smoother margin. Because only support vectors matter, deleting any interior point changes nothing."
+      example: "Increase $C$ and the optimizer tolerates fewer margin violations, so the boundary contorts to fit outliers and the margin narrows; small $C$ allows more slack and a wider, smoother margin. Because only support vectors matter, deleting any interior point changes nothing.",
+      takeaway: "SVMs give a sparse, memory-light model that stores only the support vectors, making them a strong choice for medium-sized data — but reach for something else when you need calibrated probabilities."
     },
     {
       title: "Gaussian processes (GPs)",
@@ -116,7 +120,8 @@
         <text x="470" y="78" text-anchor="middle" font-size="10.5" style="fill:var(--text-dim)">(no data)</text>
       </svg>`,
       caption: "The shaded ±1.96σ band pinches tight at observed points and flares where there is no data — the GP's calibrated 'I don't know.'",
-      example: "Take three noisy observations of an unknown curve. Between and around them the posterior mean tracks the data confidently (thin band); extrapolate past the last point and the band balloons, telling you the prediction is now a guess. The mean alone is identical to kernel ridge with $\\lambda=\\sigma_y^2$."
+      example: "Take three noisy observations of an unknown curve. Between and around them the posterior mean tracks the data confidently (thin band); extrapolate past the last point and the band balloons, telling you the prediction is now a guess. The mean alone is identical to kernel ridge with $\\lambda=\\sigma_y^2$.",
+      takeaway: "Reach for a GP when calibrated uncertainty drives a decision — active learning, Bayesian optimization, safety-critical extrapolation — accepting the $O(N^3)$ cost that caps it at a few thousand points without approximations."
     },
     {
       title: "Decision trees (CART)",
@@ -156,19 +161,22 @@
         </g>
       </svg>`,
       caption: "Each split is a single-feature threshold, carving the plane into axis-aligned boxes — equivalently, a path down the tree to a constant-valued leaf.",
-      example: "A tree on (age, income) might split 'age ≤ 30', then within each branch split on income — producing rectangular regions. It cannot draw a diagonal boundary, and shifting a few training points can rebuild the whole tree (high variance)."
+      example: "A tree on (age, income) might split 'age ≤ 30', then within each branch split on income — producing rectangular regions. It cannot draw a diagonal boundary, and shifting a few training points can rebuild the whole tree (high variance).",
+      takeaway: "A single tree is the model you reach for when a stakeholder must read the decision rules; its instability is exactly why production accuracy comes from wrapping it in an ensemble."
     },
     {
       title: "Ensembles: bagging, random forests & boosting",
       tag: "ensembles",
       body: "<p><b>Bagging</b> trains $M$ models on bootstrap resamples and averages them. It <b>cuts variance</b> (bias unchanged) for <i>unstable</i> learners like trees; the ~37% of points left out of each bootstrap give a free <b>out-of-bag</b> error estimate. Ensemble variance $\\to\\rho\\sigma^2$ as $M{\\to}\\infty$, so <b>decorrelation</b> is what helps. <b>Random forests</b> add a random feature subset ($\\sim\\!\\sqrt{D}$) at each split to decorrelate further — a gold-standard tabular baseline.</p><p><b>Boosting</b> is sequential: an additive model $f=\\sum_m\\beta_m F_m$ where each weak learner targets the <i>current errors</i>, so it <b>cuts bias</b>. <b>AdaBoost</b> (exponential loss) up-weights misclassified points with $\\beta_m=\\tfrac12\\log\\tfrac{1-\\text{err}_m}{\\text{err}_m}$; <b>gradient boosting / MART</b> does functional gradient descent, fitting each tree to the negative-gradient <b>pseudo-residuals</b> (squared loss → residuals; log loss → calibrated LogitBoost). XGBoost / LightGBM / CatBoost add second-order info, tree regularization, and subsampling.</p>",
-      example: "A single deep tree overfits. Bag 500 of them with $\\sqrt{D}$-feature splits → a random forest that is far steadier. Or gradient-boost shallow trees with shrinkage $\\nu\\approx0.05$, each fitting the running pseudo-residuals → usually the most accurate model on tabular data, at the cost of being sequential and tunable-into-overfitting."
+      example: "A single deep tree overfits. Bag 500 of them with $\\sqrt{D}$-feature splits → a random forest that is far steadier. Or gradient-boost shallow trees with shrinkage $\\nu\\approx0.05$, each fitting the running pseudo-residuals → usually the most accurate model on tabular data, at the cost of being sequential and tunable-into-overfitting.",
+      takeaway: "Ensembles are why trees dominate tabular ML — random forests give a robust parallel baseline almost for free, while boosting trades tuning effort for the top-of-leaderboard accuracy."
     },
     {
       title: "Bagging vs boosting — when to reach for which",
       tag: "compare",
       body: "<p>Same building block (trees), opposite philosophies:</p><ul><li><b>Goal:</b> bagging lowers <b>variance</b>; boosting lowers <b>bias</b> (and some variance).</li><li><b>Training:</b> bagging is <b>parallel and independent</b>; boosting is <b>sequential and dependent</b>.</li><li><b>Combine:</b> bagging <b>averages / votes</b>; boosting takes a <b>weighted sum</b>.</li><li><b>Overfitting:</b> bagging rarely overfits; boosting <b>can</b>, especially with noisy labels.</li><li><b>Outliers:</b> bagging is robust; boosting (AdaBoost) is <b>sensitive</b>.</li><li><b>State of the art:</b> random forests (bagging) vs XGBoost / LightGBM (boosting).</li></ul><p>Practical defaults: RF — many trees, $\\sqrt{D}$ features, lean on OOB. Gradient boosting — small shrinkage $\\nu\\approx0.05$–$0.1$, shallow trees (depth 1–5), subsample; usually the most accurate on tabular data but less parallelizable.</p>",
-      example: "Noisy labels and you want something that just works out of the box → random forest (robust, parallel, OOB diagnostics). Clean-ish data and you can afford to tune for maximum accuracy → gradient boosting with shrinkage and shallow trees."
+      example: "Noisy labels and you want something that just works out of the box → random forest (robust, parallel, OOB diagnostics). Clean-ish data and you can afford to tune for maximum accuracy → gradient boosting with shrinkage and shallow trees.",
+      takeaway: "This is the everyday tabular-modeling fork: default to random forest for a fast robust baseline, then switch to gradient boosting only when squeezing out the last accuracy points justifies the tuning budget."
     },
     {
       title: "Kernel density estimation & kernel regression",
@@ -199,7 +207,8 @@
         <text x="200" y="240" text-anchor="middle" font-size="10" style="fill:var(--text-faint)">ticks = data; dashed = per-point kernels; solid = their sum</text>
       </svg>`,
       caption: "Each data tick contributes one bandwidth-$h$ bump (dashed); their normalized sum is the smooth density estimate (solid). Smaller $h$ → spikier; larger $h$ → flatter.",
-      example: "Estimating the distribution of adult heights from 200 samples: a Gaussian KDE with Silverman's $h$ gives a smooth bimodal curve; halve $h$ and it fragments into 200 little spikes, double it and the two modes merge into one bump. For regression, Nadaraya–Watson predicts a new point's value as the kernel-weighted average of nearby observed outputs — nearer points count more."
+      example: "Estimating the distribution of adult heights from 200 samples: a Gaussian KDE with Silverman's $h$ gives a smooth bimodal curve; halve $h$ and it fragments into 200 little spikes, double it and the two modes merge into one bump. For regression, Nadaraya–Watson predicts a new point's value as the kernel-weighted average of nearby observed outputs — nearer points count more.",
+      takeaway: "KDE beats a histogram for visualizing a distribution's true shape without arbitrary bin edges, but everything rides on the bandwidth $h$ — so cross-validate it rather than eyeballing."
     }
   ]
 };

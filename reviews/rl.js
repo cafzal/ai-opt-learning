@@ -24,7 +24,8 @@
         <text x="260" y="22" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--text)">The interaction loop</text>
       </svg>`,
       caption: "Action flows out; reward and next state flow back — a closed loop, not a fixed labeled dataset.",
-      example: "An agent learning a game sees only win/lose (or score deltas), never the textbook move for each position. A losing move ten turns ago must be blamed from a single late reward — that is the credit-assignment problem evaluative feedback creates."
+      example: "An agent learning a game sees only win/lose (or score deltas), never the textbook move for each position. A losing move ten turns ago must be blamed from a single late reward — that is the credit-assignment problem evaluative feedback creates.",
+      takeaway: "If your problem gives you correct labels per step, use supervised learning — reach for RL only when feedback is evaluative and consequences are delayed."
     },
     {
       title: "MDPs, the return & value functions",
@@ -46,7 +47,8 @@
         <text x="490" y="145" text-anchor="end" font-size="10.5" style="fill:var(--text-dim)">γ = 0.8</text>
       </svg>`,
       caption: "Each step further out is discounted by another factor of γ — distant rewards count for less and the sum stays finite.",
-      example: "With $\\gamma=0.9$ and a single reward of $+10$ received four steps from now, its contribution to the return today is $0.9^3\\times10\\approx7.3$. Lower $\\gamma$ makes the agent grab nearer rewards even if larger ones lie further ahead."
+      example: "With $\\gamma=0.9$ and a single reward of $+10$ received four steps from now, its contribution to the return today is $0.9^3\\times10\\approx7.3$. Lower $\\gamma$ makes the agent grab nearer rewards even if larger ones lie further ahead.",
+      takeaway: "$\\gamma$ is a planning-horizon knob you tune, not a given: set it too low and the agent gets myopic, too close to 1 and learning slows and credit smears across time."
     },
     {
       title: "Bellman expectation vs Bellman optimality",
@@ -71,7 +73,8 @@
         <text x="390" y="178" text-anchor="middle" font-size="10.5" style="fill:var(--accent)">action arc</text>
       </svg>`,
       caption: "Same backup tree; expectation averages the action branches by π, optimality keeps only the best (arg max).",
-      example: "In a gridworld, $v_\\pi$ under a random walk averages the value of every direction. $v_*$ instead commits to the single direction with highest backed-up value — the $\\max$ is what turns evaluation into optimization."
+      example: "In a gridworld, $v_\\pi$ under a random walk averages the value of every direction. $v_*$ instead commits to the single direction with highest backed-up value — the $\\max$ is what turns evaluation into optimization.",
+      takeaway: "Learn $q_*$ and you can act optimally by a cheap $\\arg\\max$ with no model of $p$ at decision time — that model-free greediness is why action-values dominate practical control."
     },
     {
       title: "Generalized policy iteration (GPI)",
@@ -93,7 +96,8 @@
         <text x="118" y="184" text-anchor="end" font-size="10.5" style="fill:var(--accent)">start</text>
       </svg>`,
       caption: "Evaluation pulls toward the v = vπ line, improvement toward the greedy line; the staircase meets at v*, π*.",
-      example: "Policy iteration takes big steps (evaluate $\\pi$ to convergence, then improve); value iteration takes one sweep of each before switching. Both are GPI — only the granularity of the alternation differs."
+      example: "Policy iteration takes big steps (evaluate $\\pi$ to convergence, then improve); value iteration takes one sweep of each before switching. Both are GPI — only the granularity of the alternation differs.",
+      takeaway: "GPI is the mental template for debugging any RL algorithm: ask whether evaluation and improvement are each making progress, since stalling one stalls convergence."
     },
     {
       title: "The DP / Monte Carlo / TD spectrum & the TD error",
@@ -118,7 +122,8 @@
         <circle cx="420" cy="180" r="5" class="vx-grid" fill="none" stroke-width="1.5"/>
       </svg>`,
       caption: "Two axes: TD samples and bootstraps one step; MC samples a full episode; DP does full-width one-step backups.",
-      example: "After a transition $s\\to s'$ with reward $1$, $\\gamma=0.9$, $V(s)=5$, $V(s')=6$: $\\delta=1+0.9\\cdot6-5=1.4$. With $\\alpha=0.1$, $V(s)$ rises to $5.14$ — learned from one step, no episode end required."
+      example: "After a transition $s\\to s'$ with reward $1$, $\\gamma=0.9$, $V(s)=5$, $V(s')=6$: $\\delta=1+0.9\\cdot6-5=1.4$. With $\\alpha=0.1$, $V(s)$ rises to $5.14$ — learned from one step, no episode end required.",
+      takeaway: "TD lets you learn online from incomplete, non-terminating episodes — essential whenever waiting for an episode's end (or having a model) is impractical."
     },
     {
       title: "Sarsa vs Q-learning vs Double Q-learning",
@@ -143,7 +148,8 @@
         <text x="390" y="172" text-anchor="middle" font-size="10.5" style="fill:var(--text-dim)">target r + γ maxₐ' Q(s', a')</text>
       </svg>`,
       caption: "Sarsa backs up the action its policy will really take; Q-learning backs up the greedy action regardless of behavior.",
-      example: "On the cliff-walking task, Q-learning learns the optimal path right along the cliff edge but, while still exploring $\\varepsilon$-greedily, occasionally falls in. Sarsa learns a safer path a row back — it bakes the exploration risk into its values."
+      example: "On the cliff-walking task, Q-learning learns the optimal path right along the cliff edge but, while still exploring $\\varepsilon$-greedily, occasionally falls in. Sarsa learns a safer path a row back — it bakes the exploration risk into its values.",
+      takeaway: "Choose Sarsa when exploration mistakes are costly during learning (real robots, live systems) and Q-learning when you only care about the final greedy policy; reach for Double-Q whenever overestimation stalls progress."
     },
     {
       title: "n-step returns & eligibility traces / TD(λ)",
@@ -169,7 +175,8 @@
         <text x="450" y="116" font-size="10.5" style="fill:var(--text-faint)">geometric decay</text>
       </svg>`,
       caption: "TD(λ) is a geometric (1−λ)λⁿ⁻¹ blend of every n-step return — one cheap trace, the whole depth spectrum.",
-      example: "TD-Gammon learned world-class backgammon with TD(λ) and a neural net from self-play. With $\\lambda=0$ it is plain TD(0); $\\lambda=1$ recovers Monte&nbsp;Carlo; intermediate $\\lambda$ propagates credit several moves back per step."
+      example: "TD-Gammon learned world-class backgammon with TD(λ) and a neural net from self-play. With $\\lambda=0$ it is plain TD(0); $\\lambda=1$ recovers Monte&nbsp;Carlo; intermediate $\\lambda$ propagates credit several moves back per step.",
+      takeaway: "Tuning $\\lambda$ (or $n$) buys faster credit propagation than one-step TD without Monte&nbsp;Carlo's variance — often the cheapest single lever for speeding up learning."
     },
     {
       title: "Function approximation & the deadly triad",
@@ -191,7 +198,8 @@
         <text x="260" y="200" text-anchor="middle" font-size="9.5" style="fill:var(--good)">drop one → safe</text>
       </svg>`,
       caption: "The deadly triad: each edge (only two ingredients) is safe; the interior of all three risks divergence.",
-      example: "Tabular Q-learning is off-policy and bootstraps but has <i>no</i> function approximation — perfectly stable. Add a function approximator and keep training off-policy and you enter the triad; DQN tames it pragmatically with a slow-moving target network and replay."
+      example: "Tabular Q-learning is off-policy and bootstraps but has <i>no</i> function approximation — perfectly stable. Add a function approximator and keep training off-policy and you enter the triad; DQN tames it pragmatically with a slow-moving target network and replay.",
+      takeaway: "When deep RL training diverges, the triad tells you where to look: drop or stabilize one leg — target networks, on-policy data, or gradient-TD — before blaming hyperparameters."
     },
     {
       title: "Policy-gradient methods & the bias–variance ladder",
@@ -215,7 +223,8 @@
         <text x="440" y="143" text-anchor="end" font-size="9.5" style="fill:var(--text-faint)">δₜ bootstrap · biased, low var</text>
       </svg>`,
       caption: "Down the ladder: variance falls as you bootstrap more, at the cost of introducing bias (REINFORCE → baseline → actor–critic).",
-      example: "REINFORCE's gradient estimate swings wildly because a whole episode's noisy return scales every step's update. Subtracting a learned baseline $\\hat v(s)$ centers the signal (only <i>better-than-expected</i> actions get reinforced) without changing the expected gradient — pure variance reduction."
+      example: "REINFORCE's gradient estimate swings wildly because a whole episode's noisy return scales every step's update. Subtracting a learned baseline $\\hat v(s)$ centers the signal (only <i>better-than-expected</i> actions get reinforced) without changing the expected gradient — pure variance reduction.",
+      takeaway: "Reach for policy gradients when actions are continuous or the optimal policy is stochastic; add a baseline and bootstrap up the ladder to tame the variance that otherwise makes them painfully sample-hungry."
     },
     {
       title: "RL & the brain: dopamine as the TD error",
@@ -248,7 +257,8 @@
         <text x="260" y="205" text-anchor="middle" font-size="10" style="fill:var(--text-faint)">basal ganglia ≈ actor (dorsal striatum) + critic (ventral striatum), dopamine = δ broadcast</text>
       </svg>`,
       caption: "The three classic Schultz patterns are exactly what a TD learner's δₜ predicts — the cleanest bridge from RL to neuroscience.",
-      example: "A cue reliably preceding juice: once learned, the dopamine burst appears at the <i>cue</i>, not the juice. Omit the juice and dopamine pauses at the expected reward time — a textbook negative prediction error $\\delta_t<0$."
+      example: "A cue reliably preceding juice: once learned, the dopamine burst appears at the <i>cue</i>, not the juice. Omit the juice and dopamine pauses at the expected reward time — a textbook negative prediction error $\\delta_t<0$.",
+      takeaway: "This bridge gives RL real explanatory power over behavior and addiction, and it cuts both ways — neuroscience evidence is why TD-error learning is taken seriously as more than an engineering trick."
     },
     {
       title: "Exploration, planning & MCTS",
@@ -283,14 +293,16 @@
         <text x="455" y="205" text-anchor="middle" font-size="9.5" style="fill:var(--text-faint)">propagate return up</text>
       </svg>`,
       caption: "MCTS grows an asymmetric tree from the current state: select by UCB, expand a leaf, roll out to an outcome, then back the result up the path.",
-      example: "From the current Go position, AlphaGo runs thousands of MCTS iterations: each descends the tree by a UCB-style rule, adds a new node, plays a fast simulated game to a win/loss, and pushes that result back up so visited moves' statistics improve. The move actually played is the one with the most visits — search effort concentrated where it matters."
+      example: "From the current Go position, AlphaGo runs thousands of MCTS iterations: each descends the tree by a UCB-style rule, adds a new node, plays a fast simulated game to a win/loss, and pushes that result back up so visited moves' statistics improve. The move actually played is the one with the most visits — search effort concentrated where it matters.",
+      takeaway: "If you have a model (or can learn one), planning and MCTS turn compute into decision quality at the current state — far more sample-efficient than learning a global policy from scratch."
     },
     {
       title: "Average reward & continuing tasks",
       tag: "core",
       body: "<p>For <b>continuing</b> (non-episodic) tasks that never terminate, returns can be infinite, so the natural objective is the <b>average reward</b> per step:</p><p>$$r(\\pi)=\\lim_{h\\to\\infty}\\frac1h\\sum_{t=1}^{h}\\mathbb{E}_\\pi[R_t]$$</p><p>Value is then measured <i>relative</i> to that average — the <b>differential</b> value function sums how much each future reward beats the long-run rate:</p><p>$$v_\\pi(s)=\\sum_{k}\\mathbb{E}_\\pi[\\,R_{t+k}-r(\\pi)\\mid s\\,]$$</p><p>and the <b>differential TD error</b> replaces discounting with the estimated average $\\bar R$:</p><p>$$\\delta_t=r_{t+1}-\\bar R+\\hat v(s')-\\hat v(s)$$</p><p>Sutton &amp; Barto argue for <b>deprecating discounting</b> in this setting: under function approximation the discounted objective turns out merely <i>proportional</i> to $r(\\pi)$ (so $\\gamma$ does not change the ranking of policies), and the usual policy-improvement guarantee is lost. Average reward is the principled objective for never-ending tasks.</p>",
       caption: null,
-      example: "A server-scheduling agent that runs forever cares about <i>throughput per second</i>, not a discounted sum that would arbitrarily privilege the near term. It tracks a running $\\bar R$ and updates values by $\\delta_t=r_{t+1}-\\bar R+\\hat v(s')-\\hat v(s)$ — a state is \"good\" exactly when it leads to better-than-average reward, with no $\\gamma$ to tune."
+      example: "A server-scheduling agent that runs forever cares about <i>throughput per second</i>, not a discounted sum that would arbitrarily privilege the near term. It tracks a running $\\bar R$ and updates values by $\\delta_t=r_{t+1}-\\bar R+\\hat v(s')-\\hat v(s)$ — a state is \"good\" exactly when it leads to better-than-average reward, with no $\\gamma$ to tune.",
+      takeaway: "For never-ending tasks optimize average reward, not a discounted sum — under function approximation $\\gamma$ stops meaningfully ranking policies, so discounting is the wrong objective there."
     }
   ]
 };

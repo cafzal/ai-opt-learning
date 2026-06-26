@@ -24,7 +24,8 @@
         <text x="10" y="150" style="fill:var(--text-dim)" font-size="11">"Cake" = unsupervised (the bulk), "icing" = supervised, "cherry" = RL.</text>
       </svg>`,
       caption: "More signal per sample on the left; RL gets the least, only occasionally.",
-      example: "A spam filter trained on emails labeled spam/not-spam is <b>supervised</b>; grouping customers into segments with no labels is <b>unsupervised</b>; an agent learning to play a game from win/lose rewards is <b>reinforcement</b> learning."
+      example: "A spam filter trained on emails labeled spam/not-spam is <b>supervised</b>; grouping customers into segments with no labels is <b>unsupervised</b>; an agent learning to play a game from win/lose rewards is <b>reinforcement</b> learning.",
+      takeaway: "Decides your whole project shape: if labels are scarce or pricey, lean on unsupervised pretraining and treat scarce labels as the costly icing."
     },
     {
       title: "Generalization & the bias–variance tradeoff",
@@ -45,19 +46,22 @@
         <g font-size="11"><rect x="330" y="205" width="12" height="3" style="fill:var(--good)"/><text x="348" y="212">train</text><rect x="400" y="205" width="12" height="3" style="fill:var(--bad)"/><text x="418" y="212">test</text></g>
       </svg>`,
       caption: "Training error falls forever; test error is U-shaped — the empirical signature of the tradeoff.",
-      example: "Fitting polynomials to data: degree 1 underfits (high bias); degree 15 hits every training point but oscillates wildly on new points (high variance). A moderate degree minimizes test error."
+      example: "Fitting polynomials to data: degree 1 underfits (high bias); degree 15 hits every training point but oscillates wildly on new points (high variance). A moderate degree minimizes test error.",
+      takeaway: "This is the diagnosis you run first: a big train-test gap means add data or regularize, while both errors high means grow capacity instead."
     },
     {
       title: "Parametric vs non-parametric models",
       tag: "core",
       body: "<p><b>Parametric</b> models have a fixed parameter count independent of $N$ and a strong inductive bias (e.g. linear/logistic regression) — fast at test time, good against the curse of dimensionality. <b>Non-parametric</b> models effectively <i>are</i> the training set: complexity grows with $N$, weaker bias, slow for large $N$ (e.g. KNN, kernel density estimation).</p>",
-      example: "K-nearest-neighbors stores all data and predicts from the $K$ closest points: $K=1$ gives a jagged Voronoi boundary (high variance); larger $K$ smooths it (more bias). It needs no training but is $O(N)$ per query."
+      example: "K-nearest-neighbors stores all data and predicts from the $K$ closest points: $K=1$ gives a jagged Voronoi boundary (high variance); larger $K$ smooths it (more bias). It needs no training but is $O(N)$ per query.",
+      takeaway: "Reach for non-parametric when you have lots of data and no model in mind, but its $O(N)$ queries can sink you at serving time."
     },
     {
       title: "Loss, empirical risk & maximum likelihood",
       tag: "core",
       body: "<p>A <b>loss</b> $\\ell(y,\\hat y)$ scores predictions (0–1, squared, cross-entropy, hinge). <b>Empirical-risk minimization</b> picks $\\hat{\\boldsymbol\\theta}=\\arg\\min\\frac1N\\sum_n\\ell(y_n,f(\\boldsymbol{x}_n;\\boldsymbol\\theta))$. <b>MLE</b> is just ERM with the negative-log-likelihood loss.</p><p>Key identity: under Gaussian noise, $\\text{NLL}=\\frac{1}{2\\sigma^2}\\text{MSE}+\\text{const}$, so <b>MLE = least squares</b>.</p>",
-      example: "For $p(y\\mid \\boldsymbol{x})=\\mathcal{N}(f(\\boldsymbol{x}),\\sigma^2)$, maximizing likelihood is identical to minimizing mean-squared error — the probabilistic justification for ordinary least squares."
+      example: "For $p(y\\mid \\boldsymbol{x})=\\mathcal{N}(f(\\boldsymbol{x}),\\sigma^2)$, maximizing likelihood is identical to minimizing mean-squared error — the probabilistic justification for ordinary least squares.",
+      takeaway: "Choosing a loss is really choosing a noise model: pick MSE and you have silently assumed Gaussian errors, which outliers will wreck."
     },
     {
       title: "The curse of dimensionality",
@@ -77,7 +81,8 @@
         <text x="70" y="190" font-size="10" style="fill:var(--text-faint)">D=1</text>
       </svg>`,
       caption: "Capturing 10% of the data (f = 0.1): the cube edge needed climbs toward the full range as D grows.",
-      example: "For $D=10$, $f=0.10$: $e=0.1^{1/10}\\approx 0.80$ — you must span 80% of <i>every</i> axis to enclose just 10% of the points, so 'nearby' is no longer near."
+      example: "For $D=10$, $f=0.10$: $e=0.1^{1/10}\\approx 0.80$ — you must span 80% of <i>every</i> axis to enclose just 10% of the points, so 'nearby' is no longer near.",
+      takeaway: "Why you reduce dimensions or add strong priors before modeling: in high-$D$ raw distance stops meaning similarity, quietly breaking KNN and clustering."
     },
     {
       title: "Information theory: entropy, cross-entropy, KL",
@@ -99,7 +104,8 @@
         <text x="260" y="218" text-anchor="middle" font-size="10.5" style="fill:var(--text-faint)">grey = true bimodal p, blue = fitted q</text>
       </svg>`,
       caption: "Same target p, two divergences: forward KL averages over modes; reverse KL picks one and ignores the rest.",
-      example: "Perplexity $=2^{\\mathbb{H}}$ is the 'effective number of outcomes': a uniform model over a 4-token vocabulary has $\\mathbb{H}=2$ bits and perplexity $4$."
+      example: "Perplexity $=2^{\\mathbb{H}}$ is the 'effective number of outcomes': a uniform model over a 4-token vocabulary has $\\mathbb{H}=2$ bits and perplexity $4$.",
+      takeaway: "The forward-vs-reverse KL choice sets behavior: train with reverse KL and your generative model will confidently ignore whole modes of the data."
     },
     {
       title: "Model selection: train / validation / test & CV",
@@ -131,7 +137,8 @@
         <g font-size="10.5"><rect x="60" y="190" width="12" height="12" rx="2" style="fill:var(--accent)"/><text x="78" y="200">validation</text><rect x="160" y="190" width="12" height="12" rx="2" style="fill:var(--bg-elev2)"/><text x="178" y="200">train</text></g>
       </svg>`,
       caption: "Each fold takes a turn as validation; the error is averaged over all five.",
-      example: "With 1,000 points and limited data, 5-fold CV trains on 800 and validates on 200, five times, averaging the validation error to choose, say, the ridge penalty $\\lambda$."
+      example: "With 1,000 points and limited data, 5-fold CV trains on 800 and validates on 200, five times, averaging the validation error to choose, say, the ridge penalty $\\lambda$.",
+      takeaway: "Touch the test set more than once and your reported accuracy is fiction; this discipline is what keeps the final number honest."
     }
   ]
 };

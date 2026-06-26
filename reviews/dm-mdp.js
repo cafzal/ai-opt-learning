@@ -21,7 +21,8 @@
         <text x="10" y="198" font-size="11" style="fill:var(--text-faint)">joint  =  P(B) &middot; P(E) &middot; P(A | B,E)</text>
       </svg>`,
       caption: "Each node stores only its own conditional table; a sparse DAG shrinks the joint from exponential to a handful of parameters.",
-      example: "A burglary/earthquake alarm: B and E are root causes (1 parameter each), and the alarm A depends on both, $P(A\\mid B,E)$ (4 rows). Six numbers describe what the full joint would need 15 for."
+      example: "A burglary/earthquake alarm: B and E are root causes (1 parameter each), and the alarm A depends on both, $P(A\\mid B,E)$ (4 rows). Six numbers describe what the full joint would need 15 for.",
+      takeaway: "The factorization is what makes probabilistic modeling tractable at all: without it you'd need exponentially many parameters and exponentially more data to estimate them."
     },
     {
       title: "Conditional independence & d-separation",
@@ -41,13 +42,15 @@
         <text x="10" y="225" font-size="10.5" style="fill:var(--text-faint)">unobserved Y: X &#8869; Z  &middot;  observed Y: path opens (explaining away)</text>
       </svg>`,
       caption: "At a collider the rule flips: an unobserved Y keeps the two causes independent; observing Y (or its descendant) makes them compete to explain it.",
-      example: "Burglary and earthquake both trip the alarm but are independent &mdash; until the alarm sounds. Learning the alarm went off, then hearing an earthquake on the radio, <i>lowers</i> your belief in a burglary: the quake has <b>explained away</b> the alarm."
+      example: "Burglary and earthquake both trip the alarm but are independent &mdash; until the alarm sounds. Learning the alarm went off, then hearing an earthquake on the radio, <i>lowers</i> your belief in a burglary: the quake has <b>explained away</b> the alarm.",
+      takeaway: "Knowing which variables are independent lets you drop irrelevant evidence and shrink inference; the Markov blanket tells you exactly the minimal set you must condition on."
     },
     {
       title: "Inference: exact vs approximate",
       tag: "bayes-net",
       body: "<p>Inference computes a posterior over query variables given evidence. <b>Exact</b> methods manipulate factors:</p><ul><li><b>Variable elimination</b> (sum-product): marginalize variables out early to keep intermediate factors small &mdash; linear for many nets, exponential worst case; the optimal elimination order is itself NP-hard.</li><li><b>Belief propagation</b>: exact on trees; junction-tree or loopy BP otherwise.</li></ul><p>General BN inference is <b>NP-hard</b> (reduction from 3SAT), so we fall back on <b>sampling</b>: <i>direct</i> (sample in topological order &mdash; wasteful when evidence is rare), <i>likelihood-weighted</i> (clamp the evidence and weight each sample by the observed nodes' probabilities), and <b>Gibbs sampling</b> (MCMC: resample each variable from its Markov-blanket conditional; samples are correlated but converge, with burn-in and thinning).</p>",
-      example: "To get $P(\\text{Burglary}\\mid \\text{JohnCalls}=\\text{true})$ in a small alarm net, variable elimination sums out the unqueried nodes exactly. In a large, densely connected net you instead run likelihood-weighted or Gibbs sampling and read the posterior off the (weighted) sample frequencies."
+      example: "To get $P(\\text{Burglary}\\mid \\text{JohnCalls}=\\text{true})$ in a small alarm net, variable elimination sums out the unqueried nodes exactly. In a large, densely connected net you instead run likelihood-weighted or Gibbs sampling and read the posterior off the (weighted) sample frequencies.",
+      takeaway: "Because exact inference is NP-hard, knowing when to switch to sampling is the difference between an answer in seconds and a query that never returns on a big network."
     },
     {
       title: "Parameter learning: counts, priors & EM",
@@ -71,13 +74,15 @@
         <text x="440" y="165" font-size="10.5" style="fill:var(--text-faint)">0.67</text>
       </svg>`,
       caption: "Raw counts of (0,0,3) make two outcomes impossible; adding one pseudocount each yields well-defined, nonzero probabilities that wash out as data grows.",
-      example: "If a die never landed on 1 or 2 in 3 rolls, MLE assigns them probability 0. A $\\text{Dir}(1,1,1,1,1,1)$ prior turns counts $(0,0,3,0,0,0)$ into a sane posterior; the prior's influence fades as more rolls arrive."
+      example: "If a die never landed on 1 or 2 in 3 rolls, MLE assigns them probability 0. A $\\text{Dir}(1,1,1,1,1,1)$ prior turns counts $(0,0,3,0,0,0)$ into a sane posterior; the prior's influence fades as more rolls arrive.",
+      takeaway: "Pseudocounts are the cheap insurance that keeps an unseen event from being declared impossible &mdash; a single zero can otherwise zero out an entire downstream probability."
     },
     {
       title: "Structure learning: score, fit vs complexity",
       tag: "bayes-net",
       body: "<p>When the graph itself is unknown, <b>structure learning</b> searches for the DAG maximizing a <b>Bayesian score</b>. Integrating out the parameters $\\theta$ yields a sum of log-Gamma terms that <i>automatically</i> trades data fit against model complexity &mdash; simpler graphs win when data is scarce, so no separate regularizer is needed.</p><p>The catch: structure learning is <b>NP-hard</b> and the space of DAGs is super-exponential. So we use heuristic search &mdash; <b>K2</b> (given a variable ordering, greedily add the best-scoring parent for each node; polynomial), or <b>local / hill-climbing</b> search over add/remove/reverse-edge moves, escaping local optima with simulated annealing, restarts, GA, or tabu. Graphs with the same skeleton and same v-structures are <b>Markov-equivalent</b> (edge directions often unidentifiable).</p>",
-      example: "K2 with the ordering [Cause, Effect] checks whether adding Cause as a parent of Effect raises the Bayesian score; if the data supports the dependency it keeps the edge, otherwise it leaves Effect parentless. It will never reverse to [Effect, Cause] within that fixed ordering."
+      example: "K2 with the ordering [Cause, Effect] checks whether adding Cause as a parent of Effect raises the Bayesian score; if the data supports the dependency it keeps the edge, otherwise it leaves Effect parentless. It will never reverse to [Effect, Cause] within that fixed ordering.",
+      takeaway: "The Bayesian score auto-penalizes complexity, so structure learning won't overfit spurious edges on small data &mdash; but Markov equivalence means you can't read causal direction off the learned graph alone."
     },
     {
       title: "Simple decisions: utility & MEU",
@@ -96,13 +101,15 @@
         <text x="120" y="150" font-size="11" style="fill:var(--bad)">convex: risk-seeking</text>
       </svg>`,
       caption: "Three risk attitudes are three curvatures of utility-of-money: concave prefers a sure thing, convex chases the gamble, linear is indifferent at equal expectation.",
-      example: "A concave utility makes a guaranteed \\$50 preferable to a 50/50 shot at \\$0 or \\$100 even though both have expected value \\$50 &mdash; the textbook signature of risk aversion."
+      example: "A concave utility makes a guaranteed \\$50 preferable to a 50/50 shot at \\$0 or \\$100 even though both have expected value \\$50 &mdash; the textbook signature of risk aversion.",
+      takeaway: "Optimizing expected value instead of expected utility quietly assumes risk-neutrality; encoding a concave utility is how you make an agent prefer safe outcomes when the stakes are real."
     },
     {
       title: "Value of information",
       tag: "decision",
       body: "<p>Before deciding, is it worth gathering more evidence? The <b>value of information</b> of observing $O'$ is the expected improvement in best-achievable utility:</p><p style=\"text-align:center\">$VOI(O'\\mid o)=\\Big(\\sum_{o'}P(o'\\mid o)\\,EU^*(o,o')\\Big)-EU^*(o)$</p><p>Two properties make it intuitive: <b>$VOI\\ge 0$ always</b> (information never hurts in expectation), and <b>$VOI=0$ exactly when the observation could never change the optimal action</b> &mdash; if you'd pick the same action regardless of what you'd learn, don't bother measuring. VOI <i>ignores the cost</i> of the observation (subtract it separately), and greedy one-at-a-time selection is only a heuristic.</p>",
-      example: "A diagnostic test that would change your treatment for some results has positive VOI &mdash; run it (if cheap enough). A test whose every possible result still leaves the same best treatment has $VOI=0$: it's pure waste, no matter how accurate."
+      example: "A diagnostic test that would change your treatment for some results has positive VOI &mdash; run it (if cheap enough). A test whose every possible result still leaves the same best treatment has $VOI=0$: it's pure waste, no matter how accurate.",
+      takeaway: "VOI tells you whether a test, sensor, or survey is worth its cost before you pay for it &mdash; and flags the data you're collecting that could never change your decision."
     },
     {
       title: "MDPs & the Bellman equations",
@@ -129,7 +136,8 @@
         <text x="10" y="235" font-size="11" style="fill:var(--text-faint)">U(s) = max&#8336; [ R(s,a) + &gamma; &Sigma;&#8347;' T(s' | s,a) U(s') ]</text>
       </svg>`,
       caption: "One backup: pick the action that maximizes immediate reward plus the discounted, transition-weighted value of where you might land.",
-      example: "In a grid world, the value of a cell is the best over moves of (reward + $\\gamma$ times the expected value of the next cell). A stochastic 'move north' that lands you north 80% of the time and sideways 20% averages those next-state values inside the backup."
+      example: "In a grid world, the value of a cell is the best over moves of (reward + $\\gamma$ times the expected value of the next cell). A stochastic 'move north' that lands you north 80% of the time and sideways 20% averages those next-state values inside the backup.",
+      takeaway: "Modeling a problem as an MDP is what lets you plan for delayed, stochastic consequences instead of greedily optimizing the next step; $\\gamma$ is the dial trading short- against long-term reward."
     },
     {
       title: "Value & policy iteration; contraction",
@@ -149,13 +157,15 @@
         <text x="10" y="205" font-size="10.5" style="fill:var(--text-faint)">stop when residual &le; &delta;  &rArr;  &#8214;U* &minus; U&#8342;&#8214;&#8734; &le; &delta;&gamma; / (1 &minus; &gamma;)</text>
       </svg>`,
       caption: "Each backup multiplies the error by at most γ, so the Bellman residual decays geometrically toward zero — the contraction guarantee behind value iteration.",
-      example: "With $\\gamma=0.9$ and a residual of $\\delta=0.01$, the value estimate is within $0.01\\cdot 0.9/0.1=0.09$ of optimal. Bumping $\\gamma$ to $0.99$ blows that bound up to $0.99$ for the same residual &mdash; far more iterations needed."
+      example: "With $\\gamma=0.9$ and a residual of $\\delta=0.01$, the value estimate is within $0.01\\cdot 0.9/0.1=0.09$ of optimal. Bumping $\\gamma$ to $0.99$ blows that bound up to $0.99$ for the same residual &mdash; far more iterations needed.",
+      takeaway: "The contraction bound lets you stop iterating with a provable error guarantee instead of guessing; it also warns that a $\\gamma$ near 1 will cost you far more iterations to converge."
     },
     {
       title: "Exact LQR: the Riccati equation",
       tag: "mdp",
       body: "<p>One MDP family has a closed-form optimal policy: the <b>linear quadratic regulator</b>. With linear dynamics $\\mathbf{s}'=\\mathbf{T}_s\\mathbf{s}+\\mathbf{T}_a\\mathbf{a}+\\mathbf{w}$ and a quadratic reward, the value function stays quadratic and the optimal control is linear in the state:</p><p style=\"text-align:center\">$\\pi_h(\\mathbf{s})=-(\\mathbf{T}_a^\\top\\mathbf{V}_{h-1}\\mathbf{T}_a+\\mathbf{R}_a)^{-1}\\mathbf{T}_a^\\top\\mathbf{V}_{h-1}\\mathbf{T}_s\\,\\mathbf{s}$</p><p>The matrix $\\mathbf{V}$ is propagated backward by the <b>discrete-time Riccati equation</b>. Strikingly, the optimal gain is <b>independent of the disturbance</b> $\\mathbf{w}$: you can plan as if the system were deterministic and act optimally anyway &mdash; <b>certainty equivalence</b>.</p>",
-      example: "A cruise controller modeled as LQR computes its feedback gains offline from the Riccati recursion. Because of certainty equivalence, the gains it would use on a perfectly smooth road are exactly the gains it uses on a bumpy one &mdash; the noise statistics don't enter the policy."
+      example: "A cruise controller modeled as LQR computes its feedback gains offline from the Riccati recursion. Because of certainty equivalence, the gains it would use on a perfectly smooth road are exactly the gains it uses on a bumpy one &mdash; the noise statistics don't enter the policy.",
+      takeaway: "When your system is roughly linear-quadratic, LQR hands you the exact optimal controller in closed form &mdash; no iteration, no discretization &mdash; so it's the first thing to reach for in continuous control."
     },
     {
       title: "Online planning: receding-horizon search",
@@ -179,13 +189,15 @@
         <text x="10" y="234" font-size="10.5" style="fill:var(--text-faint)">UCB: argmax&#8336; Q(a) + c &radic;(log N / N(a))   &mdash;   infinite bonus when N(a)=0</text>
       </svg>`,
       caption: "Each simulation descends by UCB to a leaf, expands one new node, rolls out to estimate its value, and backs the result up the visited path — repeated m times, then act.",
-      example: "A game-playing agent runs thousands of MCTS simulations from the current board: UCB steers them toward promising-but-undertried moves (the $\\sqrt{\\log N/N(a)}$ bonus is infinite for any unvisited move), and after the budget it plays the most-visited child, then repeats next turn."
+      example: "A game-playing agent runs thousands of MCTS simulations from the current board: UCB steers them toward promising-but-undertried moves (the $\\sqrt{\\log N/N(a)}$ bonus is infinite for any unvisited move), and after the budget it plays the most-visited child, then repeats next turn.",
+      takeaway: "Online planning lets you act in MDPs far too large to solve offline by reasoning only about states reachable from where you are now; replanning each step covers for the shallow search depth."
     },
     {
       title: "Approximate value functions",
       tag: "mdp",
       body: "<p>When the state space is too large for exact DP, replace the tabular $U$ with a parametric <b>$U_\\theta(s)$</b> and run <b>approximate value iteration</b>: apply Bellman backups at a finite set of states $S$, then <code>fit!</code> $U_\\theta$ to those backed-up values and repeat.</p><p><b>Local</b> approximation sets $\\theta$ to stored state values and predicts as a weighted average of neighbors (<i>weights sum to 1</i>): <b>nearest-neighbor</b> (piecewise constant, via kd-trees), <b>kernel smoothing</b> (Gaussian / inverse-distance), <b>linear/multilinear interpolation</b> ($2^d$ surrounding vertices &mdash; blows up with dimension), and <b>simplex interpolation</b> (Freudenthal&ndash;Kuhn: only $d+1$ points, so it scales to high $d$). <b>Global</b> approximation fits one model over all of $S$: <b>linear regression over basis functions</b> (cheap closed-form fit, but fixed bases struggle with complex value geometries), or a <b>neural network</b> (no closed form &mdash; train by gradient descent).</p>",
-      example: "For a continuous-state cart-pole, you can't tabulate every state. Lay down a grid of representative states $S$, do a Bellman backup at each, and refit: with multilinear interpolation each query blends its $2^d$ grid corners, but in a 10-D problem $2^{10}=1024$ corners per lookup forces a switch to simplex interpolation (11 points) or a neural-net $U_\\theta$ trained by gradient descent."
+      example: "For a continuous-state cart-pole, you can't tabulate every state. Lay down a grid of representative states $S$, do a Bellman backup at each, and refit: with multilinear interpolation each query blends its $2^d$ grid corners, but in a 10-D problem $2^{10}=1024$ corners per lookup forces a switch to simplex interpolation (11 points) or a neural-net $U_\\theta$ trained by gradient descent.",
+      takeaway: "Function approximation is what scales value iteration past toy problems to continuous, high-dimensional states; the catch is that the curse of dimensionality dictates which approximator stays affordable."
     }
   ]
 };

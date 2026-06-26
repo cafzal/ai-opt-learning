@@ -6,7 +6,8 @@
       title: "Tokenization & Byte-Pair Encoding",
       tag: "core",
       body: "<p>A model never sees characters or words — it sees integer <b>token IDs</b> drawn from a fixed <b>vocabulary</b> (commonly on the order of $10^4$–$10^5$ entries). The mapping from raw text to those IDs is the <b>tokenizer</b>, and the dominant recipe is <b>Byte-Pair Encoding (BPE)</b>.</p><p>BPE learns <b>subword</b> units. It starts from raw bytes and repeatedly merges the most frequent adjacent pair into a new symbol, growing common chunks (whole words, frequent stems, suffixes) while rare strings stay split into smaller pieces:</p><ul><li><b>Frequent words</b> become a single token — cheap to represent.</li><li><b>Rare or novel words</b> decompose into known subwords, so there is <b>no out-of-vocabulary (OOV) problem</b> — falling back to bytes, any string is representable.</li><li>Vocabulary size is a <i>tradeoff</i>: bigger vocab = fewer tokens per sentence (shorter sequences) but a larger embedding table and softmax.</li></ul>",
-      example: "The string <i>\"tokenization\"</i> might split into <code>token</code> + <code>ization</code> — two reusable pieces — while a typo like <i>\"tokenizaton\"</i> still encodes fine as <code>token</code> + <code>iza</code> + <code>ton</code>. A model with a 50,000-token vocabulary maps every possible input to IDs in $\\{0,\\dots,49999\\}$, and never hits an unknown word."
+      example: "The string <i>\"tokenization\"</i> might split into <code>token</code> + <code>ization</code> — two reusable pieces — while a typo like <i>\"tokenizaton\"</i> still encodes fine as <code>token</code> + <code>iza</code> + <code>ton</code>. A model with a 50,000-token vocabulary maps every possible input to IDs in $\\{0,\\dots,49999\\}$, and never hits an unknown word.",
+      takeaway: "Token count, not word count, is what you pay for and what fills the context window — so prompt budgeting and per-token pricing hinge on how the tokenizer splits your text."
     },
     {
       title: "The transformer stack & the block recipe",
@@ -57,13 +58,15 @@
         </g>
       </svg>`,
       caption: "Two sub-layers — attention then FFN — each preceded by a norm and closed by a residual add (dashed). The same block repeats N times.",
-      example: "A canonical small configuration: 12 blocks, 12 attention heads, width 768, context length 1024 — about 124 million parameters. The frontier uses the <i>same recipe</i> at much larger depth and width; with width $\\approx 768$ and head dimension $64$, you get $768/64 = 12$ heads."
+      example: "A canonical small configuration: 12 blocks, 12 attention heads, width 768, context length 1024 — about 124 million parameters. The frontier uses the <i>same recipe</i> at much larger depth and width; with width $\\approx 768$ and head dimension $64$, you get $768/64 = 12$ heads.",
+      takeaway: "Because every model is the same block stacked, knowing one block lets you reason about any model's size, cost, and memory just from depth and width — no new architecture to learn per release."
     },
     {
       title: "Why attention is quadratic: O(n²)",
       tag: "core",
       body: "<p>Inside each block, attention lets every token weigh every other token. Each token emits three vectors:</p><ul><li><b>Query (Q)</b> — what I am looking for.</li><li><b>Key (K)</b> — what I offer.</li><li><b>Value (V)</b> — what I contribute.</li></ul><p>For sequence length $n$ and head dimension $d$, the computation is three steps:</p><p style=\"text-align:center\">$S = QK^{\\top} \\;\\to\\; P = \\mathrm{softmax}(S) \\;\\to\\; O = PV$</p><p>The load-bearing fact: the score matrix $S$ and the attention weights $P$ are $n\\times n$ — one entry for every <i>pair</i> of tokens. So both compute and memory for attention scale as $O(n^2)$ in context length. <b>Double the context, quadruple the attention cost.</b> The rest of the network (embeddings, the per-token FFN) grows only <i>linearly</i> in $n$, so at long context attention dominates — this quadratic wall is the central efficiency problem of long-context transformers, and the target of FlashAttention.</p>",
-      example: "Going from a 1,000-token prompt to a 4,000-token prompt is a $4\\times$ longer sequence but about $4^2 = 16\\times$ more attention work, because the score matrix grows from $1000^2$ to $4000^2$ entries."
+      example: "Going from a 1,000-token prompt to a 4,000-token prompt is a $4\\times$ longer sequence but about $4^2 = 16\\times$ more attention work, because the score matrix grows from $1000^2$ to $4000^2$ entries.",
+      takeaway: "This quadratic wall is why long context is expensive and why doubling your prompt can quadruple latency and cost — it's the constraint every long-context trick exists to dodge."
     },
     {
       title: "The KV cache",
@@ -107,13 +110,15 @@
         <text x="70" y="222" font-size="10" style="fill:var(--text-faint)">Caveat: the serial chain remains — token t still waits for token t−1.</text>
       </svg>`,
       caption: "At each decoding step only the new token's K,V are computed; all earlier K,V are read from the cache. Memory, not compute, becomes the limit.",
-      example: "Generating the 1,001st token of a response: instead of recomputing Keys and Values for the previous 1,000 tokens, the model computes them for just the new token and attends against 1,000 cached $K,V$ pairs. The win in compute is offset by a cache that keeps growing one slot per token, per layer."
+      example: "Generating the 1,001st token of a response: instead of recomputing Keys and Values for the previous 1,000 tokens, the model computes them for just the new token and attends against 1,000 cached $K,V$ pairs. The win in compute is offset by a cache that keeps growing one slot per token, per layer.",
+      takeaway: "The KV cache is why token 1,000 isn't 1,000$\\times$ slower than token 1 — and why long context plus many concurrent users is what actually exhausts your serving GPU's memory."
     },
     {
       title: "FlashAttention: IO-aware exact attention",
       tag: "efficiency",
       body: "<p>Standard attention is slow not because of arithmetic but because of <b>memory traffic</b>. It materializes the full $n\\times n$ score matrix in slow high-bandwidth memory, writes it, reads it back for the softmax, writes again, reads again for the $PV$ multiply. On modern accelerators that shuttling — not the FLOPs — dominates wall-clock time.</p><p><b>FlashAttention</b> is an <b>IO-aware</b> reformulation that computes the <i>exact</i> same result while <b>never materializing the $n\\times n$ matrix</b>. The tricks:</p><ul><li><b>Tiling</b> — load small blocks of Q, K, V into fast on-chip memory and compute attention block by block.</li><li><b>Online softmax</b> — accumulate the softmax-weighted output incrementally across blocks using running max/sum statistics, so the full row of scores never has to exist at once.</li><li><b>Recomputation</b> — in the backward pass, recompute attention blocks on the fly rather than storing the big matrix, trading cheap FLOPs for scarce memory.</li></ul><p>Net effect: same numbers, far less memory traffic and a much smaller memory footprint — and it helps <i>any</i> transformer, autoregressive or otherwise, since it just optimizes the shared attention primitive.</p>",
-      example: "For an $n = 8{,}000$ sequence, the naive score matrix has $8000^2 = 64$ million entries per head to write to and read from slow memory. FlashAttention streams Q/K/V in tiles through fast on-chip memory and produces the identical output without ever storing those 64 million numbers — the speedup comes from <i>moving less data</i>, not from any approximation."
+      example: "For an $n = 8{,}000$ sequence, the naive score matrix has $8000^2 = 64$ million entries per head to write to and read from slow memory. FlashAttention streams Q/K/V in tiles through fast on-chip memory and produces the identical output without ever storing those 64 million numbers — the speedup comes from <i>moving less data</i>, not from any approximation.",
+      takeaway: "It's a free speedup with identical outputs, so just use a FlashAttention kernel — it's the difference between fitting a long-context model on your GPU or hitting out-of-memory."
     },
     {
       title: "Head-sharing (MHA / MQA / GQA) & positional schemes",
@@ -175,13 +180,15 @@
         <text x="260" y="216" text-anchor="middle" font-size="10.5" style="fill:var(--text-dim)">Fewer KV heads → smaller KV cache, lower quality. GQA tunes the dial.</text>
       </svg>`,
       caption: "Same four query heads; the number of shared K/V heads shrinks left to right, trading cache size against quality.",
-      example: "With 32 query heads, MHA keeps 32 K/V heads, MQA keeps 1, and GQA might keep 8 — one per group of 4 query heads. GQA cuts the KV cache by $32/8 = 4\\times$ versus MHA while staying far closer to its quality than MQA does."
+      example: "With 32 query heads, MHA keeps 32 K/V heads, MQA keeps 1, and GQA might keep 8 — one per group of 4 query heads. GQA cuts the KV cache by $32/8 = 4\\times$ versus MHA while staying far closer to its quality than MQA does.",
+      takeaway: "GQA is the cheap trick that shrinks the KV cache so you can serve longer contexts or more users per GPU, which is why nearly every recent open model ships with it."
     },
     {
       title: "Normalization & activations: RMSNorm, pre-norm, SwiGLU",
       tag: "core",
       body: "<p>The norms and activations inside a block look like details but strongly affect trainability and speed.</p><p><b>LayerNorm vs RMSNorm.</b> LayerNorm re-centers (subtract the mean) and re-scales (divide by standard deviation) each activation vector. <b>RMSNorm</b> drops the mean-subtraction and just divides by the root-mean-square: $\\bar{x} = \\dfrac{x}{\\sqrt{\\frac{1}{d}\\sum_i x_i^2}}\\,\\gamma$. It is cheaper and, in practice, works about as well — so modern stacks favor it.</p><p><b>Pre-norm vs post-norm.</b> Putting the norm <i>before</i> each sub-layer (<b>pre-norm</b>, as in the block recipe $x \\to \\text{LN} \\to \\dots$) keeps a clean residual path from input to output, which makes deep stacks far more stable to train than the original post-norm placement.</p><p><b>Gated FFNs (SwiGLU).</b> Instead of a plain expand-activate-contract FFN, a <b>gated</b> variant computes two projections and multiplies one by an activation of the other: $\\text{SwiGLU}(x) = \\big(\\text{Swish}(xW_1)\\big) \\odot (xW_2)$, then projects back down. The multiplicative <i>gate</i> gives the network a cheap, expressive nonlinearity and tends to improve quality at equal parameter budget.</p>",
-      example: "Swapping LayerNorm for RMSNorm removes the mean-centering step from every norm in the network — with tens of norms across the stack, that is a real throughput win for no measurable quality loss. Pairing pre-norm placement with a SwiGLU FFN is a common modern default: $\\sqrt{\\frac{1}{d}\\sum_i x_i^2}$ is all RMSNorm needs to compute per vector."
+      example: "Swapping LayerNorm for RMSNorm removes the mean-centering step from every norm in the network — with tens of norms across the stack, that is a real throughput win for no measurable quality loss. Pairing pre-norm placement with a SwiGLU FFN is a common modern default: $\\sqrt{\\frac{1}{d}\\sum_i x_i^2}$ is all RMSNorm needs to compute per vector.",
+      takeaway: "Pre-norm is what lets you train a very deep stack without the loss diverging; RMSNorm and SwiGLU are the free defaults that buy throughput and quality at no real cost."
     },
     {
       title: "Mixture-of-Experts & scaling laws",
@@ -227,7 +234,8 @@
         </g>
       </svg>`,
       caption: "Each token is routed to a small top-k subset of experts; the rest stay idle, so capacity grows without growing per-token compute.",
-      example: "An MoE layer with $N = 8$ experts and top-$k = 2$ holds roughly $8\\times$ the FFN parameters of a dense layer but each token only runs $2$ experts — about $2/8 = 1/4$ of the would-be FLOPs. On the data side, Chinchilla's lesson is concrete: if you double a model's parameters, you should also roughly double its training tokens to stay compute-optimal."
+      example: "An MoE layer with $N = 8$ experts and top-$k = 2$ holds roughly $8\\times$ the FFN parameters of a dense layer but each token only runs $2$ experts — about $2/8 = 1/4$ of the would-be FLOPs. On the data side, Chinchilla's lesson is concrete: if you double a model's parameters, you should also roughly double its training tokens to stay compute-optimal.",
+      takeaway: "MoE buys you a smarter model at fixed inference cost but demands far more memory to hold every expert; Chinchilla tells you to spend a fixed training budget on data, not just size."
     }
   ]
 };

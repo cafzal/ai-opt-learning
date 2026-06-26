@@ -32,6 +32,8 @@
       </svg>`,
       caption: "The diamond's corners sit on the axes, so the optimum lands where a coordinate is exactly zero — the geometric reason ℓ1 (Lasso) gives sparse solutions.",
       example: "Lasso adds an $\\ell_1$ penalty and drives many coefficients to exactly $0$ (built-in feature selection); ridge adds $\\ell_2$ and merely shrinks them. The nuclear norm does the same trick for matrices — minimizing $\\sum_i\\sigma_i$ favors <i>low-rank</i> solutions, as in matrix completion."
+,
+      takeaway: "Reach for $\\ell_1$ when you want a sparse, interpretable model that drops irrelevant features automatically; use $\\ell_2$ when you just need to tame large weights without zeroing them."
     },
     {
       title: "Eigendecomposition, SVD & low-rank approximation",
@@ -58,6 +60,8 @@
       </svg>`,
       caption: "Singular values fall fast; truncating to the top K captures most of the matrix, and the dropped tail (Σ σ² for k>K) is exactly the approximation error.",
       example: "PCA <i>is</i> the SVD of centered data: the top-$K$ right singular vectors are the principal directions. A $1000\\times1000$ image kept at rank $K=50$ stores $\\approx 10\\%$ of the numbers yet looks nearly identical — the small singular values held little signal."
+,
+      takeaway: "The singular-value spectrum tells you the intrinsic dimensionality of your data, so you can compress, denoise, or pick a PCA component count by reading where the values fall off."
     },
     {
       title: "Condition number κ and why it slows gradient descent",
@@ -84,6 +88,8 @@
       </svg>`,
       caption: "On stretched contours the negative gradient is nearly perpendicular to the valley floor, so descent oscillates side to side and creeps toward the minimum.",
       example: "If features live on wildly different scales (one in $[0,1]$, another in $[0,10^6]$), the loss is ill-conditioned and plain GD crawls. Standardizing features, or whitening, lowers $\\kappa$ toward $1$ and straightens the path."
+,
+      takeaway: "When training loss crawls despite a reasonable learning rate, suspect a high $\\kappa$ and fix it by standardizing inputs or preconditioning before reaching for fancier optimizers."
     },
     {
       title: "Convexity, the Hessian & Jensen's inequality",
@@ -112,6 +118,8 @@
       </svg>`,
       caption: "The curve always dips below its own chords; reading the gap at the midpoint is Jensen's inequality, f(E[x]) ≤ E[f(x)].",
       example: "$f(x)=x^2$ is convex: $\\mathbb{E}[x^2]\\ge(\\mathbb{E}[x])^2$, which is just $\\text{Var}(x)\\ge0$. The same inequality applied to $-\\log$ turns into $D_{\\text{KL}}(p\\|q)\\ge0$, with equality only when $p=q$."
+,
+      takeaway: "If you can prove your objective is convex, any solver that converges has found the global optimum — so you can stop tuning random restarts and trust the result."
     },
     {
       title: "Gradient descent: step size, momentum, Nesterov",
@@ -141,6 +149,8 @@
       </svg>`,
       caption: "Below 2/L the iterates settle into the bowl; above it they overshoot and climb the far wall, spiraling outward.",
       example: "With momentum $\\beta=0.9$, steady-direction gradients are effectively scaled by $1/(1-0.9)=10\\times$, so the optimizer builds speed down a long ravine while the side-to-side bounces cancel out."
+,
+      takeaway: "Momentum is the cheapest fix for slow, oscillating descent on ravine-shaped losses, which is why nearly every practical optimizer adds it on top of plain gradient steps."
     },
     {
       title: "Second-order methods: Newton, BFGS, trust region",
@@ -177,6 +187,8 @@
       </svg>`,
       caption: "H⁻¹ reshapes the elongated bowl into a round one, so Newton aims directly at the minimum where the gradient merely bounces across.",
       example: "For ordinary least squares the Hessian is $\\mathbf{A}^\\top\\mathbf{A}$ (constant), so a single Newton step $-\\mathbf{H}^{-1}\\boldsymbol{g}$ lands exactly on the normal-equations solution $\\hat{\\boldsymbol{x}}=(\\mathbf{A}^\\top\\mathbf{A})^{-1}\\mathbf{A}^\\top\\boldsymbol{b}$ — no iteration needed."
+,
+      takeaway: "Use L-BFGS for medium-dimensional convex problems like logistic regression where it converges in far fewer steps than SGD; skip true Newton once $D$ is large because the $O(D^3)$ inverse is unaffordable."
     },
     {
       title: "SGD: Robbins–Monro, schedules, Polyak averaging",
@@ -201,6 +213,8 @@
       </svg>`,
       caption: "All three decay so the noise term vanishes, but their early shape differs — warmup ramps up first, then cosine anneals down.",
       example: "A constant learning rate violates $\\sum\\eta_t^2<\\infty$, so SGD never settles — it bounces around the optimum forever. Decaying as $\\eta_0/\\sqrt{t}$ satisfies both Robbins–Monro conditions, and Polyak-averaging the late iterates further smooths the estimate."
+,
+      takeaway: "If your loss plateaus while still noisy, decay the learning rate (or average late weights) instead of just training longer — a flat schedule keeps SGD rattling around the optimum forever."
     },
     {
       title: "Adaptive optimizers: AdaGrad, RMSProp, Adam",
@@ -232,6 +246,8 @@
       </svg>`,
       caption: "Each method adds one idea to the last; Adam is RMSProp's recency-weighted scaling plus a momentum numerator, both bias-corrected.",
       example: "AdaGrad shines on a bag-of-words model where rare words get few updates but large effective steps; on a deep net its denominator grows without bound and training stalls, so RMSProp's EMA — and ultimately Adam with $\\beta_2=0.999$ — is preferred."
+,
+      takeaway: "Reach for Adam as the no-tuning default to get deep nets training fast, but try well-tuned SGD-with-momentum when you need the last bit of generalization, since Adam can settle into sharper minima."
     },
     {
       title: "Constrained optimization: Lagrangian, KKT, proximal",
@@ -257,6 +273,8 @@
       </svg>`,
       caption: "Soft-thresholding zeros out any input within ±λ (the dead zone) and shrinks the rest toward zero by λ — exactly how proximal Lasso creates sparsity each step.",
       example: "An equality-constrained least squares fit is solved by KKT stationarity + feasibility (a linear system in $\\boldsymbol\\theta$ and $\\boldsymbol\\lambda$). Complementary slackness explains SVM support vectors: only points <i>on</i> the margin ($g_i=0$) get nonzero multipliers $\\mu_i$; all others have $\\mu_i=0$ and do not affect the solution."
+,
+      takeaway: "KKT is your checklist for verifying a constrained optimum by hand, and complementary slackness tells you which constraints are actually binding — the ones worth relaxing if you want a better objective."
     },
     {
       title: "EM as bound optimization (the ELBO)",
@@ -286,6 +304,8 @@
       </svg>`,
       caption: "The E-step builds a lower bound (green) that kisses the true likelihood (blue) at θᵗ; the M-step jumps to that bound's peak θᵗ⁺¹, which can only sit higher on the curve — hence monotone progress.",
       example: "Fitting a Gaussian mixture: the E-step computes soft cluster responsibilities $q_n=p(z_n\\mid y_n,\\boldsymbol\\theta)$, and the M-step re-estimates each component's mean, covariance, and weight from those responsibilities. Likelihood rises every iteration until it plateaus at a local optimum."
+,
+      takeaway: "EM's monotone-improvement guarantee makes it a safe, debuggable default for latent-variable models, but its local-optimum trap means you should still run several random initializations and keep the best."
     }
   ]
 };
