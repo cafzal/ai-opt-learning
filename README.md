@@ -4,9 +4,9 @@
 
 A self-contained web app to learn and self-test across **machine learning**,
 **optimization & decision-making**, and **LLM / generative-AI** fundamentals. Each of
-**20 batches** opens to a **review section** (collapsible key-concept toggles with worked
+**22 batches** opens to a **review section** (collapsible key-concept toggles with worked
 examples, diagrams, and a practical "why it matters" takeaway), followed by **10 quiz
-questions** (200 total) that ramp from recall to synthesis in a GRE-style mix of formats.
+questions** (220 total) that ramp from recall to synthesis in a GRE-style mix of formats.
 
 ## Open it
 
@@ -23,7 +23,7 @@ python3 -m http.server 4178
 
 ## What's inside
 
-- **2 tracks** → 20 batches: **AI & ML Fundamentals** (classic ML through deep learning, RL, and the
+- **2 tracks** → 22 batches: **AI & ML Fundamentals** (classic ML through deep learning, RL, and the
   GenAI/LLM frontier) and **Optimization & Decision-Making**. Open a batch to **review first, then test**.
 - **Review:** ~6–13 collapsible concept toggles per batch, each with a worked **example**, a practical
   **"why it matters"** takeaway, and — where it helps — an **SVG diagram** (100+ in all: bias–variance

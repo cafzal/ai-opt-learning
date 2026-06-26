@@ -1,7 +1,14 @@
-/* Review: Decision Making — Policy Search, RL, POMDPs & Multiagent */
-(window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["dm-rl-pomdp"] = {
-  intro: "From optimizing a policy's parameters directly, through model-based and model-free reinforcement learning, to acting under <i>state</i> uncertainty (POMDPs) and alongside <i>other</i> agents. The thread: when you can't enumerate or fully observe the world, estimate a gradient, a value, a belief, or an equilibrium instead. Skim the toggles, then test yourself below.",
+/* Review: Reinforcement Learning & Policy Optimization */
+(window.QUIZ_REVIEWS = window.QUIZ_REVIEWS || {})["dm-rl"] = {
+  intro: "When the model is unknown, you learn to act from interaction. This batch runs the full arc: optimize a policy's parameters directly (gradient-free search, then the log-derivative policy gradient), step safely with natural-gradient/TRPO/PPO, lower the variance with a critic, balance exploration against exploitation, learn a model and plan or skip the model and learn $Q$ — and, when only an expert is available, imitate. Skim the toggles, then test yourself below.",
   concepts: [
+    {
+      title: "Policy search: optimize the policy's parameters directly",
+      tag: "core",
+      body: "<p>The most direct idea in RL: parameterize a policy $\\pi_\\theta$ and optimize its parameters against the expected return $U(\\theta)=\\mathbb{E}_\\tau[R(\\tau)]$, estimated from rollouts as $U(\\theta)\\approx\\frac1m\\sum_i R(\\tau^{(i)})$ (Monte-Carlo policy evaluation).</p><p><b>Gradient-free policy search</b> needs no derivative of the (often black-box) return — just the ability to roll out and score: <b>local search / genetic algorithms</b>, the <b>cross-entropy method</b> (fit a search distribution to the elite samples), and <b>evolution strategies / CMA-ES</b> (perturb $\\theta$ and follow a score-weighted average, justified by the log-derivative trick). These are simply general-purpose optimizers pointed at the policy-return objective, and they scale to neural-network policies (e.g., Atari).</p>",
+      example: "To train a small neural-network controller for a game, the cross-entropy method samples many parameter vectors, keeps the top-scoring 'elite' rollouts, refits a Gaussian over $\\theta$ to them, and repeats — no gradient of the game's reward ever required.",
+      takeaway: "When the return is a black box or non-differentiable, reach for gradient-free policy search first — it only needs rollouts, and CMA-ES is a strong default for modest parameter counts."
+    },
     {
       title: "Policy gradients: estimate it, then step safely",
       tag: "core",
@@ -57,6 +64,13 @@
       caption: "The actor acts; the critic watches the reward and next state, then hands back an advantage that steers the actor's gradient.",
       example: "AlphaZero's actor proposes move probabilities and its critic predicts who wins; MCTS uses both to search, and the sharpened search statistics become the next training targets — an actor-critic loop wrapped around a tree search.",
       takeaway: "Add a critic when high-variance returns stall learning; tune GAE's $\\lambda$ to dial the bias-variance tradeoff for your reward sparsity and horizon."
+    },
+    {
+      title: "Policy validation: trust it before you deploy it",
+      tag: "practice",
+      body: "<p>Before a learned policy controls anything real, validate it in simulation. <b>Performance metrics</b> $f(\\pi)=\\mathbb{E}_\\tau[f_{\\text{traj}}(\\tau)]$ are estimated by sampling rollouts, reported with a standard error and 95% confidence interval — and for small failure probabilities the <i>relative</i> standard error is what matters.</p><ul><li><b>Rare-event simulation:</b> naive Monte-Carlo wastes samples when failures are rare, so use <b>importance sampling</b> biased toward failure-prone trajectories.</li><li><b>Robustness analysis:</b> stress-test on a higher-fidelity <i>evaluation model</i>; <b>robust dynamic programming</b> plans against the worst case, $U_{k+1}(s)=\\max_a\\min_i(R_i+\\gamma\\sum_{s'}T_i U_k)$.</li><li><b>Adversarial analysis:</b> an adversary picks next states to minimize return while maximizing trajectory likelihood (reward $-R+\\lambda\\log T$, a search problem), surfacing the <b>most-likely failure</b>. Then change the action space, reward, transition model, or solver — or decide not to deploy.</li></ul>",
+      example: "For a collision-avoidance policy, importance sampling concentrates rollouts on near-miss geometries to pin down a tiny crash probability with a tight confidence interval, while adversarial search hunts the single most-likely failure trajectory so engineers can see exactly how the policy breaks.",
+      takeaway: "Treat validation as a gate, not an afterthought — quantify rare-failure risk with importance sampling and find the worst case adversarially before a policy ever touches the real world."
     },
     {
       title: "Exploration vs exploitation: bandits & UCB",
@@ -141,71 +155,6 @@
       body: "<p>When the reward is unknown but an <b>expert's demonstrations</b> are available, learn from them.</p><p><b>Behavioral cloning</b> is plain supervised learning of the expert's action given the state — simple, but it suffers <b>cascading errors</b>: a small mistake moves the agent to states the expert never visited, where its behavior is undefined, compounding the drift. <b>DAgger</b> fixes this by rolling out the <i>current</i> policy, querying the expert on the states actually visited, aggregating those labels, and retraining — so training data covers the agent's own state distribution. <b>SMILe</b> mixes newly trained component policies, decaying the expert's weight as $(1-\\beta)^k$.</p><p><b>Inverse RL</b> instead recovers a reward $R_\\phi=\\phi^\\top\\beta$:</p><ul><li><b>Maximum margin:</b> find a reward under which the expert beats alternatives by matching feature expectations via a QP (underspecified — many rewards fit).</li><li><b>Maximum entropy:</b> prefer the max-entropy trajectory distribution $P_\\phi(\\tau)\\propto\\exp R_\\phi(\\tau)$; do ML on $\\phi$ by gradient ascent with forward DP for visitation frequencies.</li><li><b>GAIL:</b> an adversarial discriminator $C_\\phi$ tries to tell agent from expert while the policy (trained by TRPO) fools it, using surrogate reward $-\\log C_\\phi$.</li></ul>",
       example: "A self-driving policy cloned from human demos drives fine until it drifts slightly toward the shoulder — a state no human demo covers — and has no idea how to recover, so the error snowballs. DAgger asks the expert 'what would you do <i>here</i>?' on exactly those drifted states and folds the answers back into training.",
       takeaway: "Plain behavioral cloning silently fails at deployment via compounding drift; if you can query the expert online, DAgger fixes the distribution mismatch that breaks it."
-    },
-    {
-      title: "POMDPs: maintain a belief, then plan over it",
-      tag: "pomdp",
-      body: "<p>A <b>POMDP</b> $(\\mathcal{S},\\mathcal{A},\\mathcal{O},T,R,O,\\gamma)$ adds <i>state</i> uncertainty: you never see the true state, only observations, so you maintain a <b>belief</b> $b$ (a distribution over states), updated by Bayes — start diffuse to avoid overconfidence. The <b>discrete Bayes filter (exact)</b> is $b'(s')\\propto O(o\\mid a,s')\\sum_s T(s'\\mid s,a)\\,b(s)$: a predict step (push the belief through the dynamics) then an update step (reweight by the observation). The <b>Kalman filter</b> does this in closed form for linear-Gaussian models via the <b>Kalman gain</b> $K=\\Sigma_p O_s^\\top(O_s\\Sigma_p O_s^\\top+\\Sigma_o)^{-1}$; <b>EKF</b> (Jacobian linearization), <b>UKF</b> ($2n+1$ sigma points), and the <b>particle filter</b> (sample/weight/resample, multimodal) extend it.</p><p>Planning treats the POMDP as a continuous-state <b>belief-MDP</b> (reward $R(b,a)=\\sum_s R(s,a)b(s)$, deterministic belief transition per $(a,o)$). A <b>conditional plan</b> is a policy <i>tree</i> — action per node, observation per edge. Each plan $\\pi$ has an <b>alpha vector</b> $\\boldsymbol\\alpha_\\pi$ (expected utility per state), so $U^\\pi(b)=\\boldsymbol\\alpha_\\pi^\\top\\mathbf{b}$ is a hyperplane over belief space, and the optimal value $U^*(\\mathbf{b})=\\max_\\pi\\boldsymbol\\alpha_\\pi^\\top\\mathbf{b}$ is <b>piecewise-linear and convex (PWLC)</b>. <b>Pruning</b> drops alpha vectors best for no belief (a utility-gap LP); value iteration expands $(k{+}1)$-step plans then prunes.</p><p>Exact solving is PSPACE-complete, so we bound it. <b>Upper bounds:</b> <b>QMDP</b> (one alpha vector per action, assuming full observability after step 1 — poor at valuing information gathering) and the <b>fast informed bound</b> (never looser than QMDP). <b>Lower bound:</b> <b>point-based value iteration (PBVI)</b> backs up at selected belief points. Online, search the belief tree with <b>POMCP/DESPOT</b>, using the upper-lower <i>gap</i> to guide search (HSVI/SARSOP).</p>",
-      visual: `<svg viewBox="0 0 520 250" xmlns="http://www.w3.org/2000/svg" role="img">
-        <text x="10" y="20" style="fill:var(--text)" font-size="13" font-weight="700">Alpha-vector value over a 2-state belief</text>
-        <line x1="60" y1="35" x2="60" y2="195" class="vx-axis" stroke-width="1.5"/>
-        <line x1="60" y1="195" x2="490" y2="195" class="vx-axis" stroke-width="1.5"/>
-        <text x="60" y="213" text-anchor="middle" font-size="10.5">b(s₀)=1</text>
-        <text x="490" y="213" text-anchor="middle" font-size="10.5">b(s₁)=1</text>
-        <text x="275" y="230" text-anchor="middle" font-size="11">belief  b  (simplex)</text>
-        <text x="26" y="115" font-size="11" transform="rotate(-90 26 115)" text-anchor="middle">U(b)</text>
-        <!-- three alpha-vector lines (thin); each dominant in one belief region -->
-        <line x1="60" y1="98" x2="490" y2="167" class="vx-grid" stroke-width="1.3"/>
-        <line x1="60" y1="120" x2="490" y2="120" class="vx-grid" stroke-width="1.3"/>
-        <line x1="60" y1="172" x2="490" y2="103" class="vx-grid" stroke-width="1.3"/>
-        <!-- upper envelope = max over lines = topmost (min-y) trace, PWLC convex -->
-        <path d="M60,98 L196,120 L385,120 L490,103" fill="none" class="vx-accent" stroke-width="3"/>
-        <circle cx="196" cy="120" r="3.5" style="fill:var(--accent)"/>
-        <circle cx="385" cy="120" r="3.5" style="fill:var(--accent)"/>
-        <text x="110" y="92" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">action A best</text>
-        <text x="272" y="112" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">action B</text>
-        <text x="438" y="95" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">action C</text>
-        <text x="290" y="180" text-anchor="middle" font-size="10.5" style="fill:var(--accent)">upper envelope = U*(b), PWLC convex</text>
-        <text x="64" y="190" font-size="9.5" style="fill:var(--text-faint)">thin grey = α-vector per plan; bold = their max</text>
-      </svg>`,
-      caption: "Each conditional plan is a line over the belief simplex; the optimal value is their upper envelope (bold), and which line dominates names the action to take.",
-      example: "In the crying-baby POMDP, one alpha vector encodes 'feed', another 'ignore'. When the belief that the baby is hungry is high enough, the feed plan's hyperplane dominates; below that crossover, ignore dominates — the dominating alpha vector tells you both the value and the action.",
-      takeaway: "POMDPs are the right model whenever your agent can't directly observe true state (sensors, hidden intent), and they correctly value actions taken purely to gather information."
-    },
-    {
-      title: "Multiagent: games, Nash & equilibria",
-      tag: "multiagent",
-      body: "<p>Add <i>other</i> agents. A <b>simple (normal-form) game</b> has agents $\\mathcal{I}$, action sets $\\mathcal{A}^i$, and a joint reward $\\mathbf{R}(\\mathbf{a})$, with utility $U^i(\\boldsymbol\\pi)=\\sum_\\mathbf{a}R^i\\prod_j\\pi^j(a^j)$ over pure or mixed strategies.</p><p>Solution concepts: a <b>dominant strategy</b> is a best response against <i>all</i> opponents (rare). A <b>Nash equilibrium</b> has every agent best-responding (no unilateral incentive to deviate) — it <b>always exists</b> for finite action spaces, may require <b>mixed</b> strategies, and computing it is <b>PPAD-complete</b>. A <b>correlated equilibrium</b> uses a single coordinating signal; every Nash is correlated but not conversely, and it is computable by a <b>linear program</b> (the objective — utilitarian / egalitarian / etc. — selects among equilibria).</p><p>Sequential extensions reduce to repeated game-solving. <b>Markov games</b> = MDPs with multiple agents (best response to fixed opponents is itself an MDP; Nash exists; Nash Q-learning bootstraps per-transition equilibria). <b>POMGs</b> add partial observability — <i>no</i> belief updates are possible (recursive reasoning about others), so agents use conditional plans / controllers. A <b>Dec-POMDP</b> is a POMG with one <i>shared</i> reward (fully cooperative); it is <b>NEXP-complete</b>, though factored independence (transition / observation / reward) can drop it to NP- or even P-complete.</p>",
-      example: "In the prisoner's dilemma, mutual defection is the unique Nash (each player's best response to the other), even though mutual cooperation pays both more — illustrating why 'no incentive to deviate' is not the same as 'collectively best'. A correlated equilibrium with a trusted signal can do better when one exists.",
-      takeaway: "Once other strategic agents share your environment, single-agent optimality is the wrong target — solve for equilibria, since a Nash-stable plan is what no rival will unilaterally undercut."
-    },
-    {
-      title: "Finite-state controllers: a policy with its own memory",
-      tag: "pomdp",
-      body: "<p>A <b>finite-state controller (FSC)</b> is a POMDP policy that carries its own internal memory instead of maintaining a belief. It is defined by a node set $X$, an <b>action distribution</b> $\\psi(a\\mid x)$ (what to do in each node), and a <b>successor distribution</b> $\\eta(x'\\mid x,a,o)$ (which node to move to after acting and observing).</p><p>It <b>generalizes the conditional plan</b> (a finite policy tree): because transitions can <b>loop</b> and be <b>stochastic</b>, a finite set of nodes can represent an <i>infinite-horizon</i> policy compactly, with <b>bounded memory</b> and <b>no belief maintenance</b> at runtime — you just track which node you're in. Each node $x$ still defines an <b>alpha vector</b> $\\alpha_x(s)=U(x,s)$ (expected utility per state), so you choose the <b>start node</b> by $\\arg\\max_x\\mathbf{b}^\\top\\boldsymbol\\alpha_x$, and the controller is evaluated on the product MDP over $X\\times\\mathcal{S}$.</p><p><b>Construction methods:</b> <b>policy iteration</b> (Hansen — grow/merge nodes); <b>nonlinear programming</b> when the node count is fixed (a quadratically-constrained program, QCLP, jointly optimizing $\\psi$ and $\\eta$); or <b>gradient ascent</b> on the controller parameters.</p>",
-      visual: `<svg viewBox="0 0 520 210" xmlns="http://www.w3.org/2000/svg" role="img">
-        <text x="10" y="20" style="fill:var(--text)" font-size="13" font-weight="700">A 2-node controller (listen → act)</text>
-        <circle cx="150" cy="110" r="40" class="vx-accent" fill="none" stroke-width="2"/>
-        <text x="150" y="106" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--accent)">x₀</text>
-        <text x="150" y="123" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">listen</text>
-        <circle cx="380" cy="110" r="40" class="vx-good" fill="none" stroke-width="2"/>
-        <text x="380" y="106" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--good)">x₁</text>
-        <text x="380" y="123" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">open door</text>
-        <path d="M190,100 C250,80 310,80 345,98" fill="none" class="vx-axis" stroke-width="1.8" marker-end="url(#fsc1)"/>
-        <text x="268" y="74" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">obs: confident</text>
-        <path d="M112,124 C72,154 100,193 130,145" fill="none" class="vx-axis" stroke-width="1.8" marker-end="url(#fsc2)"/>
-        <text x="100" y="185" text-anchor="middle" font-size="10" style="fill:var(--text-dim)">obs: unsure → loop</text>
-        <path d="M345,130 C300,165 230,165 175,138" fill="none" class="vx-grid" stroke-width="1.6" marker-end="url(#fsc3)"/>
-        <text x="262" y="170" text-anchor="middle" font-size="10" style="fill:var(--text-faint)">after acting → reset</text>
-        <defs>
-          <marker id="fsc1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" style="fill:var(--text-dim)"/></marker>
-          <marker id="fsc2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" style="fill:var(--text-dim)"/></marker>
-          <marker id="fsc3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" style="fill:var(--text-faint)"/></marker>
-        </defs>
-      </svg>`,
-      caption: "Two nodes and looping transitions encode an unbounded-horizon policy: stay in 'listen' while observations are ambiguous, jump to 'act' once confident, then reset — no belief vector required at runtime.",
-      example: "For the tiger problem, a compact FSC stays in a 'listen' node while the growls remain ambiguous (a self-loop), and only transitions to an 'open-door' node after enough consistent observations build confidence — capturing an infinite-horizon strategy in two nodes, with runtime memory being just 'which node am I in?' rather than a full belief over {tiger-left, tiger-right}.",
-      takeaway: "Use an FSC to deploy a POMDP policy on memory-constrained hardware — you track one node instead of a full belief vector, with no Bayesian update at runtime."
     }
   ]
 };

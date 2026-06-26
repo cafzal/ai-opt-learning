@@ -69,17 +69,25 @@
       title: "Constraints, Duality, LP, QP & Convex",
       blurb: "Constraint handling, Lagrangian duality & KKT, simplex/LP, quadratic programming, and disciplined convex programming. (Opt Ch 10–14)"
     },
-    "opt-advanced": {
-      title: "Multiobjective, Surrogates & Uncertainty",
-      blurb: "Pareto & scalarization, sampling plans, GP surrogates & Bayesian optimization, robust optimization (VaR/CVaR), discrete & MDO. (Opt Ch 15–24)"
+    "opt-surrogate": {
+      title: "Multiobjective & Surrogate Optimization",
+      blurb: "Pareto frontiers & scalarization, space-filling sampling plans, surrogate models, Gaussian processes, and Bayesian optimization via acquisition functions."
+    },
+    "opt-uncertainty": {
+      title: "Optimization under Uncertainty, Discrete & MDO",
+      blurb: "Robust optimization & risk measures (VaR/CVaR, Markowitz), uncertainty propagation, discrete/integer programming, expression optimization, and multidisciplinary optimization."
     },
     "dm-mdp": {
       title: "Probabilistic Reasoning & MDPs",
       blurb: "Bayesian networks & inference, utility theory & value of information, MDPs, value/policy iteration, LQR, and online planning. (DM Ch 1–9)"
     },
-    "dm-rl-pomdp": {
-      title: "RL, POMDPs & Multiagent Decisions",
-      blurb: "Policy gradients & actor-critic, bandits & exploration, model-based/free RL, POMDP beliefs & alpha vectors, and multiagent equilibria. (DM Ch 10–27)"
+    "dm-rl": {
+      title: "Reinforcement Learning & Policy Optimization",
+      blurb: "Policy search & policy gradients, actor–critic, exploration & bandits, model-based and model-free RL, and imitation learning — acting under an unknown model."
+    },
+    "dm-pomdp": {
+      title: "POMDPs & Multiagent Systems",
+      blurb: "Beliefs & filters (Kalman/particle), belief-state planning with alpha vectors (QMDP, PBVI, POMCP), finite-state controllers, and multiagent games (Nash, Markov games, Dec-POMDPs)."
     },
 
     /* ---- Generative AI & LLMs track ---- */
@@ -117,7 +125,7 @@
       sub: "Engineering optimization & decision-making under uncertainty — concepts after Kochenderfer et al. (MIT Press).",
       batches: [
         "opt-foundations", "opt-stochastic", "constrained-opt",
-        "opt-advanced", "dm-mdp", "dm-rl-pomdp"
+        "opt-surrogate", "opt-uncertainty", "dm-mdp", "dm-rl", "dm-pomdp"
       ]
     }
   ];
