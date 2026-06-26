@@ -1,5 +1,7 @@
 # AI & Optimization — Self-Quiz
 
+**▶ Live: https://cafzal.github.io/ai-opt-learning/**
+
 A self-contained web app that helps you learn and self-test across three sources —
 `ML-Fundamentals.md`, `optimization fundamentals.md`, and a Generative-AI / LLM track
 (drawn from the diffusion-llms study guide). Each of **20 batches** opens to a
