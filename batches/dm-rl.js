@@ -74,7 +74,7 @@
     prompt: "A two-armed bandit pays mean $\\mu^\\star=0.6$ (best) and $0.5$ (other). A greedy policy locks onto the worse arm and pulls it on <b>every</b> one of $T=10{,}000$ steps. What is its cumulative regret $\\text{Regret}(T)=T\\mu^\\star-\\sum_t\\mathbb{E}[\\mu_{a_t}]$?",
     answer: 1000, tolerance: 0, unit: "",
     hint: "Each pull of the worse arm adds the gap $\\mu^\\star-\\mu_a=0.1$; multiply by $T$.",
-    explanation: "Every step pays the suboptimality gap $\\mu^\\star-0.5=0.1$, so regret $=0.1\\times10{,}000=1000$ and grows <i>linearly</i> in $T$ — the policy never stops losing. A sublinear-regret algorithm like UCB or Thompson sampling would pull the worse arm only $O(\\log T)$ times, so its total regret here is on the order of tens, and $\\text{Regret}(T)/T\\to0$ means its average reward approaches the optimal $0.6$.",
+    explanation: "Every step pays the suboptimality gap $\\mu^\\star-0.5=0.1$, so regret $=0.1\\times10{,}000=1000$ and grows <i>linearly</i> in $T$ — the policy never stops losing. A sublinear-regret algorithm like UCB or Thompson sampling would pull the worse arm only $O(\\log T)$ times, so its total regret grows only as $O(\\log T)$ — vastly smaller than $1000$ — and $\\text{Regret}(T)/T\\to0$ means its average reward approaches the optimal $0.6$.",
     ref: "Regret"
   },
   {

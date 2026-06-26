@@ -20,14 +20,14 @@
       tag: "typologies",
       body: "<p>Before reaching for a method, locate your problem on a few axes — each one narrows the toolkit:</p>" +
         "<ul>" +
-        "<li><b>Learning signal</b> — supervised (labels) · unsupervised (structure) · self-supervised (labels manufactured from the data itself) · reinforcement (reward from acting). <i>Stages 2, 5.</i></li>" +
+        "<li><b>Learning signal</b> — supervised (labels) · unsupervised (structure) · self-supervised (labels manufactured from the data itself) · reinforcement (reward from acting). <i>Stages 1, 2, 5.</i></li>" +
         "<li><b>Output space</b> — regression (a number) vs classification (a category); this choice fixes your loss. <i>Stage 2.</i></li>" +
         "<li><b>Generative vs discriminative</b> — model the joint $p(x,y)$ vs just the boundary $p(y\\mid x)$. <i>Stage 2.</i></li>" +
         "<li><b>Parametric vs nonparametric</b> — fixed capacity vs capacity that grows with the data. <i>Stages 1–2.</i></li>" +
         "<li><b>Discrete vs continuous</b> — combinatorial search vs smooth, gradient-friendly optimization. <i>Stage 4.</i></li>" +
         "<li><b>Deterministic vs stochastic</b> — a fixed objective/dynamics vs noise and randomness. <i>Stages 4–5.</i></li>" +
         "<li><b>Exact vs approximate</b> — a solution with guarantees vs a heuristic that scales. <i>Stages 3–4.</i></li>" +
-        "<li><b>Online vs offline (batch)</b> — learn or decide as data streams in vs from a fixed dataset. <i>Stages 2, 5.</i></li>" +
+        "<li><b>Online vs offline (batch)</b> — learn or decide as data streams in vs from a fixed dataset. <i>Stages 3, 5.</i></li>" +
         "</ul>",
       example: "“Predict 30-day churn” → supervised, classification (so log-loss), discriminative, continuous-parameter, offline. Five labels placed before you pick a single model.",
       takeaway: "Naming the regime narrows the method space before you touch the math — and tells you which later stage to focus on."
@@ -38,7 +38,7 @@
       body: "<p>A handful of objects reappear under many names. Spotting them turns scattered topics into one toolkit:</p>" +
         "<ul>" +
         "<li><b>Gradient &amp; curvature</b> — the slope (and the Hessian's bend) behind almost every optimizer. <i>Stages 1, 4.</i></li>" +
-        "<li><b>Convexity</b> — the divide between “every local optimum is global” and “no such guarantee.” <i>Stage 4.</i></li>" +
+        "<li><b>Convexity</b> — the divide between “every local optimum is global” and “no such guarantee.” <i>Stages 1, 4.</i></li>" +
         "<li><b>The Lagrangian</b> — one object behind <i>duality</i> and KKT, and the equivalence <b>constraint = penalty = prior = capacity control</b>. <i>Stages 1, 4.</i></li>" +
         "<li><b>Temperature</b> — the same $e^{\\text{score}/\\tau}$ knob in simulated annealing, Boltzmann exploration, and LLM sampling: high = explore, low = commit. <i>Stages 4–6.</i></li>" +
         "<li><b>Softmax</b> = a smooth, differentiable relaxation of $\\arg\\max$ = the Boltzmann distribution. <i>Stages 2, 6.</i></li>" +
@@ -46,7 +46,7 @@
         "<li><b>Backprop</b> = reverse-mode autodiff = the chain rule = credit assignment. <i>Stage 2.</i></li>" +
         "<li><b>Spectral decomposition</b> — eigen/SVD = PCA = low-rank compression. <i>Stages 1–2.</i></li>" +
         "<li><b>Value of information</b> = the value of exploration = expected reduction in loss. <i>Stages 0, 3, 5.</i></li>" +
-        "<li><b>Saddle points</b> = minimax / Nash equilibria = the real obstacle in high dimensions. <i>Stages 4–5.</i></li>" +
+        "<li><b>Saddle points</b> = minimax / Nash equilibria = the real obstacle in high dimensions. <i>Stages 2, 4–5.</i></li>" +
         "</ul>",
       example: "The “temperature” you meet in Stage 4 (annealing), Stage 5 (Boltzmann exploration), and Stage 6 (LLM decoding) is one idea — a single knob trading exploration for sharpness.",
       takeaway: "When a “new” idea looks familiar, it usually is. These aliases are the shortcuts that make the whole path cohere — watch for them."

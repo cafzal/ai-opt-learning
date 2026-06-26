@@ -116,7 +116,7 @@
       "Adjusting instead for a <i>descendant</i> of $X$ on the $X\\to Y$ path is a valid way to block the backdoor"
     ],
     answer: [0, 1, 2],
-    explanation: "Setting $X$ via $\\mathrm{do}(x)$ cuts the edge $Z\\to X$, so the backdoor path $X\\!\\leftarrow\\!Z\\!\\to\\!Y$ is severed; passive conditioning leaves it open, hence $p(y\\mid x)\\neq p(y\\mid \\mathrm{do}(x))$ in general. The backdoor criterion is met by $\\mathbf{Z}=\\{Z\\}$ (it blocks the backdoor and is not a descendant of $X$), so the adjustment formula recovers the effect. Randomization severs $X$'s incoming edges by design, estimating the $\\mathrm{do}$-distribution directly. Option 4 is false (conditioning $\\neq$ intervening under confounding), and option 5 is false — adjusting for a descendant of $X$ can block the causal path or open a collider, biasing the estimate.",
+    explanation: "Setting $X$ via $\\mathrm{do}(x)$ cuts the edge $Z\\to X$, so the backdoor path $X\\!\\leftarrow\\!Z\\!\\to\\!Y$ is severed; passive conditioning leaves it open, hence $p(y\\mid x)\\neq p(y\\mid \\mathrm{do}(x))$ in general. The backdoor criterion is met by $\\mathbf{Z}=\\{Z\\}$ (it blocks the backdoor and is not a descendant of $X$), so the adjustment formula recovers the effect. Randomization severs $X$'s incoming edges by design, estimating the $\\mathrm{do}$-distribution directly. Option 4 is false (conditioning $\\neq$ intervening under confounding), and option 5 is false — a descendant of $X$ on the $X\\to Y$ path is a mediator, and conditioning on it blocks part of the very causal effect you're trying to measure.",
     ref: "Causality: intervention & counterfactuals (backdoor adjustment)"
   },
   {
