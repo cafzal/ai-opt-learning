@@ -112,14 +112,19 @@
   }
 
   // For a goal + level, tag every stage: core / skim (on-path) or review / off.
+  // A level only softens — below its start stage, core→skim and skim→review;
+  // it never removes what the goal marked essential.
   function stageStatus(goalKey, levelKey) {
     const goal = (DATA.goals || []).find(g => g.key === goalKey) || (DATA.goals || [])[0];
     const level = (DATA.levels || []).find(l => l.key === levelKey) || (DATA.levels || [])[0];
     const start = level ? level.start : 1;
-    return DATA.stages.map(s => ({
-      stage: s,
-      status: (s.n < start) ? "review" : ((goal && goal.role[s.id]) || "off")
-    }));
+    return DATA.stages.map(s => {
+      const role = (goal && goal.role[s.id]) || "off";
+      const status = (s.n < start)
+        ? (role === "core" ? "skim" : role === "skim" ? "review" : "off")
+        : role;
+      return { stage: s, status };
+    });
   }
 
   function footerEl() {
@@ -265,7 +270,7 @@
       const pr = el("button", "primer-card",
         `<span class="pr-badge">Stage 0</span>` +
         `<span class="pr-body"><span class="pr-title">${DATA.primer.title}</span>` +
-        `<span class="pr-sub">A 5-min primer — the decision-intelligence mindset. No quiz.</span></span>` +
+        `<span class="pr-sub">The decision-intelligence mindset — a 5-min primer, then a quick check.</span></span>` +
         `<span class="pr-arrow">→</span>`);
       pr.addEventListener("click", () => renderBatch("stage0"));
       app.appendChild(pr);
@@ -388,7 +393,7 @@
     top.appendChild(back);
     const tb = el("div", "quiz-titlebox");
     tb.appendChild(el("div", "qt-name", b.title));
-    tb.appendChild(el("div", "qt-prog", b.primer ? "A quick primer — no quiz" : "Review, then test yourself"));
+    tb.appendChild(el("div", "qt-prog", b.primer ? "The lens first — review, then a quick check" : "Review, then test yourself"));
     top.appendChild(tb);
     app.appendChild(top);
 
@@ -449,9 +454,9 @@
       });
     }
 
-    // quiz CTA — or, for the review-only primer, a path footer
+    // quiz CTA — or, for a review-only batch, a path footer
     const total = b.questions ? b.questions.length : 0;
-    if (b.primer || !total) {
+    if (!total) {
       const cta = el("div", "quiz-cta");
       const ctaText = el("div", "qc-text");
       ctaText.innerHTML =

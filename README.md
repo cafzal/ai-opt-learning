@@ -5,14 +5,14 @@
 An interactive web app for the **AI/ML + optimization fundamentals behind better decisions** —
 from probability and prediction through optimization, sequential decision-making, and the
 LLM / generative-AI frontier. Tell it what you want to learn and where you're starting, and it
-builds you a **tailored path**; or browse the full catalog by source. **229 questions** across
+builds you a **tailored path**; or browse the full catalog by source. **240 questions** across
 **22 topic batches**, each preceded by a visual concept **review**.
 
 ## Two ways to use it
 
 - **Path** (default) — a guided, goal-tailored route through a **6-stage decision-intelligence arc**:
   Foundations → Prediction → Reasoning & decision theory → Optimization → Sequential decisions →
-  Building decision products. A two-tap **onboarding** (your goal + your level) tailors which stages
+  Building AI products. A two-tap **onboarding** (your goal + your level) tailors which stages
   are core / skim / optional, and a persistent **tailor bar** re-tunes the path live — tailoring only
   highlights, so nothing is ever hidden. A short **Stage 0 primer** ("think like a decision scientist")
   frontloads the mental models — the problem typologies and recurring objects — you'll meet everywhere.
@@ -25,8 +25,8 @@ Toggle between the two anytime. A **light (default) / dark** theme switch lives 
 
 - **Review first** — collapsible key-concept toggles, each with a worked **example**, a practical
   **"why it matters"** takeaway, and — where it helps — an **SVG diagram** (100+ in all): bias–variance
-  curves, SVM margins, Pareto frontiers, Bellman backups, attention flow, and so on. **208 concepts** total.
-- **Then test** — **10 questions** ordered **easy → advanced**, in four GRE-style formats (multiple
+  curves, SVM margins, Pareto frontiers, Bellman backups, attention flow, and so on. **209 concepts** total.
+- **Then test** — **10–12 questions** ordered **easy → advanced**, in four GRE-style formats (multiple
   choice, select-all, numeric entry, quantitative comparison), tagged **conceptual** or **applied**.
   Every answer gets a worked **explanation** and the **topic** it tests.
 - **Progress** — best score per batch plus **gold / silver / bronze** mastery badges persist in your
@@ -57,7 +57,7 @@ questions.js       — registry: per-batch titles/blurbs, the by-source TRACKS, 
                      decision-intelligence STAGES / GOALS / LEVELS overlay; stitches in batches + reviews
 batches/<id>.js    — the quiz questions for each batch         (window.QUIZ_BATCHES)
 reviews/<id>.js    — the review concepts + diagrams per batch   (window.QUIZ_REVIEWS)
-                     reviews/stage0.js is the review-only Stage 0 primer
+                     reviews/stage0.js + batches/stage0.js are the Stage 0 primer + its check
 ```
 
 `localStorage` keys: `mlq_scores_v1` (best scores), `mlq_prefs_v1` (onboarding goal/level/view),

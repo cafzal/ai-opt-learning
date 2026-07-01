@@ -112,8 +112,8 @@
   {
     id: "gl-9", type: "qc", framing: "conceptual", difficulty: 4,
     prompt: "Compare classic RLHF (reward-model + PPO) with DPO for aligning a policy on the <i>same</i> preference dataset.",
-    quantityA: "Number of distinct models that must be instantiated to run classic RLHF's PPO stage (policy, reference, reward, value/critic)",
-    quantityB: "Number of distinct models DPO needs (policy + frozen reference)",
+    quantityA: "Number of distinct models that must be instantiated to run classic RLHF's PPO stage",
+    quantityB: "Number of distinct models DPO needs during training",
     answer: 0,
     explanation: "Classic RLHF's PPO stage juggles several models &mdash; the trainable policy, a frozen reference for the KL penalty, the separately-trained reward model, and typically a value/critic head &mdash; so quantity A is about 4. DPO collapses this to just the trainable policy plus a frozen reference (quantity B = 2), with no reward model and no RL loop. A is greater.",
     ref: "DPO vs RLHF"

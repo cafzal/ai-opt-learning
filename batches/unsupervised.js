@@ -58,8 +58,8 @@
   {
     id: "uns-6", type: "qc", framing: "applied", difficulty: 3,
     prompt: "Compare the <b>per-iteration computational cost</b> of the two clustering algorithms on $N$ points, $K$ clusters, and dimension $D>1$, as given in the K-means vs GMM table.",
-    quantityA: "Per-iteration cost of $K$-means, $O(NKD)$",
-    quantityB: "Per-iteration cost of a full-covariance GMM, $O(NKD^2)$",
+    quantityA: "Per-iteration cost of $K$-means",
+    quantityB: "Per-iteration cost of a full-covariance GMM",
     answer: 1,
     explanation: "$K$-means costs $O(NKD)$ per iteration while a full-covariance GMM costs $O(NKD^2)$. The extra factor of $D$ comes from forming and using the $D\\times D$ covariances $\\boldsymbol\\Sigma_k$. For $D>1$ the GMM cost is strictly greater, so B is larger.",
     ref: "Clustering (K-means vs GMM)"

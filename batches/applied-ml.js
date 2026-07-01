@@ -110,6 +110,15 @@
     ref: "Data leakage (the cardinal sin)"
   },
   {
+    id: "app-11", type: "qc", framing: "applied", difficulty: 4,
+    prompt: "A churn model is trained on two years of <b>temporally ordered</b> customer data whose behavior drifts over time, and it will be deployed to score <i>future</i> customers. Compare the offline AUC each evaluation protocol should be expected to report.",
+    quantityA: "Offline AUC measured with a uniformly <b>random</b> train/test split",
+    quantityB: "Offline AUC measured with a <b>time-based</b> split (train on the first 20 months, test on the last 4)",
+    answer: 0,
+    explanation: "A random split scatters future rows into the training set, so the model trains on patterns contemporaneous with — and even later than — the rows it is tested on. Under drift that temporal leakage inflates the estimate, so the random-split AUC (A) comes out optimistically higher, while the time-based split rehearses the real deployment task: predict the future from the past. The gap between the two estimates is itself a useful leakage/drift diagnostic.",
+    ref: "Data leakage (split time-series by time)"
+  },
+  {
     id: "app-10", type: "mc", framing: "conceptual", difficulty: 5,
     prompt: "Compare the two families of <b>graph representation</b> methods in the notes. Which statement is correct?",
     options: [

@@ -143,9 +143,9 @@
       batches: ["inference-graphical", "dm-mdp"] },
     { id: "s4", n: 4, name: "Optimization", tagline: "Choose the best feasible action",
       batches: ["opt-foundations", "opt-stochastic", "constrained-opt", "opt-surrogate", "opt-uncertainty"] },
-    { id: "s5", n: 5, name: "Sequential decisions", tagline: "Act, learn, and adapt over time",
+    { id: "s5", n: 5, name: "Sequential decisions", tagline: "Act, learn, and adapt when you don't know the model",
       batches: ["rl", "dm-rl", "dm-pomdp"] },
-    { id: "s6", n: 6, name: "Building decision products", tagline: "Ship it — applied ML, LLMs & agents",
+    { id: "s6", n: 6, name: "Building AI products", tagline: "Ship it — applied ML, LLMs & agents",
       batches: ["applied-ml", "genai-arch", "genai-align", "genai-applied"] }
   ];
 
@@ -153,13 +153,13 @@
   const GOALS = [
     { key: "decisions", label: "Make better decisions under uncertainty",
       sub: "The decision-intelligence toolkit — decision theory, optimization, and RL for choosing well when outcomes are unknown.",
-      role: { s1: "skim", s2: "skim", s3: "core", s4: "core", s5: "core", s6: "off" } },
+      role: { s1: "skim", s2: "skim", s3: "core", s4: "core", s5: "core", s6: "skim" } },
     { key: "ml", label: "Build predictive ML models",
       sub: "Classic machine learning end to end — from the math to models that generalize.",
       role: { s1: "core", s2: "core", s3: "skim", s4: "off", s5: "off", s6: "core" } },
     { key: "llm", label: "Build with LLMs & agents",
       sub: "How modern language models and agents work — architecture, training, alignment, RAG, and tool use.",
-      role: { s1: "skim", s2: "off", s3: "skim", s4: "off", s5: "core", s6: "core" } },
+      role: { s1: "skim", s2: "skim", s3: "skim", s4: "off", s5: "core", s6: "core" } },
     { key: "opt", label: "Tackle optimization & OR problems",
       sub: "Engineering optimization and operations research — descent, constraints, surrogates, and decisions under uncertainty.",
       role: { s1: "skim", s2: "off", s3: "skim", s4: "core", s5: "skim", s6: "off" } },
@@ -171,13 +171,13 @@
   // Level sets where the path starts; earlier stages collapse to "review if rusty".
   const LEVELS = [
     { key: "new", label: "New to the math", short: "from scratch", start: 1 },
-    { key: "basics", label: "Comfortable with probability & linear algebra", short: "some background", start: 3 },
+    { key: "basics", label: "Comfortable with probability & linear algebra", short: "some background", start: 2 },
     { key: "adv", label: "Experienced — take me to the advanced parts", short: "experienced", start: 4 }
   ];
 
   const PRIMER = {
     title: "Think like a decision scientist",
-    blurb: "A 5-minute primer on the decision-intelligence mindset — framing choices, utility, expected value, and the value of information. No quiz; just the lens the rest of the path builds on."
+    blurb: "A 5-minute primer on the decision-intelligence mindset — framing choices, utility, expected value, and the value of information — followed by a short check that the lens stuck."
   };
 
   // Build final structure, attaching question arrays. Batches with no
@@ -188,9 +188,9 @@
     if (qs.length) batches[id] = Object.assign({}, META[id], { questions: qs, review: R[id] || null });
   });
 
-  // Stage 0 primer: review-only (no questions), reachable from the path view.
+  // Stage 0 primer: reachable from the path view (review + a short framing check).
   if (R["stage0"]) {
-    batches["stage0"] = Object.assign({}, PRIMER, { questions: [], review: R["stage0"], primer: true });
+    batches["stage0"] = Object.assign({}, PRIMER, { questions: B["stage0"] || [], review: R["stage0"], primer: true });
   }
 
   const tracks = TRACKS.map(t => Object.assign({}, t, {

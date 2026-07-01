@@ -111,7 +111,7 @@
   },
   {
     id: "gp-10", type: "qc", framing: "conceptual", difficulty: 5,
-    prompt: "DDPM, score-based models, and Flow Matching are three views of the <b>same</b> forward Gaussian noising process $x_t=\\alpha_t x_0+\\sigma_t\\varepsilon$. Compare the two quantities for a fixed schedule $(\\alpha_t,\\sigma_t)$.",
+    prompt: "DDPM, score-based models, and Flow Matching each train a network against a forward Gaussian noising process of the form $x_t=\\alpha_t x_0+\\sigma_t\\varepsilon$. Compare the two quantities for a fixed schedule $(\\alpha_t,\\sigma_t)$.",
     quantityA: "The forward noising process implied by the DDPM (noise-prediction) view",
     quantityB: "The forward noising process implied by the Flow-Matching (velocity-prediction) view",
     answer: 2,

@@ -98,12 +98,12 @@
     prompt: "With $X\\sim U(-1,1)$ and $Y=X^2$, the source notes $\\text{corr}[X,Y]=0$ even though $X$ and $Y$ are clearly dependent. Which statement does this illustrate?",
     options: [
       "Correlation captures only linear dependence, so uncorrelated does not imply independent",
-      "Independence implies zero correlation, but never the reverse",
+      "For any two random variables with finite variances, independence and zero correlation are equivalent",
       "Covariance and correlation always have opposite signs",
       "Zero correlation guarantees the variables are independent"
     ],
     answer: 0,
-    explanation: "Correlation measures only <i>linear</i> dependence, so variables can be uncorrelated yet dependent ($Y=X^2$): uncorrelated $\\ne$ independent. Mutual information (§4) captures any dependence. Option 4 states the exact fallacy being refuted.",
+    explanation: "Correlation measures only <i>linear</i> dependence, so variables can be uncorrelated yet dependent ($Y=X^2$): uncorrelated $\\ne$ independent. Mutual information (§4) captures any dependence. Option 2 is false because the equivalence holds only in special families — e.g. <i>jointly Gaussian</i> variables, where zero correlation does imply independence; in general only independence $\\Rightarrow$ uncorrelated. Option 4 states the exact fallacy being refuted.",
     ref: "Moments (uncorrelated vs independent)"
   },
   {

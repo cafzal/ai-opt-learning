@@ -39,7 +39,7 @@
     prompt: "In <b>Metropolis–Hastings</b>, why can we sample from a posterior even when we only know it up to an unknown normalizing constant $Z$?",
     options: [
       "Because the proposal $q$ is always chosen to be symmetric, which removes $Z$",
-      "Because the acceptance test uses only the <i>ratio</i> $p^*(\\boldsymbol{x}')/p^*(\\boldsymbol{x})$, in which $Z$ cancels",
+      "Because $p^*$ enters the acceptance test only through the <i>ratio</i> $p^*(\\boldsymbol{x}')/p^*(\\boldsymbol{x})$, in which $Z$ cancels",
       "Because Gibbs steps are substituted whenever $Z$ is unknown",
       "Because burn-in samples are discarded, which normalizes the chain"
     ],
@@ -99,7 +99,7 @@
   {
     id: "inf-9", type: "qc", framing: "conceptual", difficulty: 4,
     prompt: "In a Kalman-filter <b>update</b> step, the new state estimate is $\\boldsymbol\\mu_t=\\boldsymbol\\mu_{t\\mid t-1}+\\mathbf{K}_t\\boldsymbol{r}_t$, with gain $\\mathbf{K}_t$ acting as the prior-to-total uncertainty ratio. Compare the influence of the two terms on the updated mean.",
-    quantityA: "The weight effectively placed on the prediction $\\boldsymbol\\mu_{t\\mid t-1}$ when the measurement noise $\\mathbf{R}$ is very large (sensor nearly useless)",
+    quantityA: "The weight effectively placed on the prediction $\\boldsymbol\\mu_{t\\mid t-1}$ when the measurement noise $\\mathbf{R}$ is very large",
     quantityB: "The weight effectively placed on the innovation/measurement term $\\mathbf{K}_t\\boldsymbol{r}_t$ in that same regime",
     answer: 0,
     explanation: "The new mean is prediction + gain × innovation, and the gain $\\mathbf{K}_t=\\boldsymbol\\Sigma_{t\\mid t-1}\\mathbf{C}^\\top\\mathbf{S}_t^{-1}$ is the prior-to-total uncertainty ratio. When measurement noise $\\mathbf{R}$ is huge, the total innovation covariance $\\mathbf{S}_t$ is dominated by $\\mathbf{R}$, so $\\mathbf{K}_t\\to 0$: the filter trusts its prediction and nearly ignores the measurement. Hence the prediction term dominates — quantity A is greater.",
@@ -118,6 +118,19 @@
     answer: [0, 1, 2],
     explanation: "Setting $X$ via $\\mathrm{do}(x)$ cuts the edge $Z\\to X$, so the backdoor path $X\\!\\leftarrow\\!Z\\!\\to\\!Y$ is severed; passive conditioning leaves it open, hence $p(y\\mid x)\\neq p(y\\mid \\mathrm{do}(x))$ in general. The backdoor criterion is met by $\\mathbf{Z}=\\{Z\\}$ (it blocks the backdoor and is not a descendant of $X$), so the adjustment formula recovers the effect. Randomization severs $X$'s incoming edges by design, estimating the $\\mathrm{do}$-distribution directly. Option 4 is false (conditioning $\\neq$ intervening under confounding), and option 5 is false — a descendant of $X$ on the $X\\to Y$ path is a mediator, and conditioning on it blocks part of the very causal effect you're trying to measure.",
     ref: "Causality: intervention & counterfactuals (backdoor adjustment)"
+  },
+  {
+    id: "inf-12", type: "mc", framing: "applied", difficulty: 4,
+    prompt: "A SaaS company observes that users who enabled feature $X$ retain at far higher rates, and proposes <b>force-enabling</b> $X$ for everyone, projecting the retention gain from the observed gap. Why can the observed association fail to survive this deployment decision?",
+    options: [
+      "Users self-selected into $X$: drivers like engagement plausibly cause both enabling $X$ and retaining, so the gap estimates $p(\\text{retain}\\mid x)$, not $p(\\text{retain}\\mid \\mathrm{do}(x))$ — forcing $X$ severs the self-selection path, and the projected gain can shrink or vanish. Randomize the rollout (or adjust for confounders) before betting on it",
+      "The concern is only sampling noise: once the retention gap is statistically significant at large enough $N$, projecting it onto the forced rollout is sound",
+      "There is no concern: $\\mathrm{do}(x)$ cuts only edges <i>out of</i> $X$, so the observed conditional remains valid under the rollout",
+      "Observational data cannot estimate $p(\\text{retain}\\mid x)$ in the first place, so the reported gap is meaningless"
+    ],
+    answer: 0,
+    explanation: "The rollout is an intervention: $\\mathrm{do}(x)$ cuts the edges <i>into</i> $X$ — including the self-selection path from engagement — so the deployed population follows the $\\mathrm{do}$-distribution, which differs from the observed conditional whenever a confounder feeds both $X$ and retention. Statistical significance is beside the point: it quantifies sampling error in estimating the association, and the association is the wrong quantity for an intervention. Before acting, estimate the causal effect — an A/B test that randomizes enablement, or backdoor adjustment for the confounders.",
+    ref: "Causality: intervention & counterfactuals (acting on observational data)"
   },
   {
     id: "inf-10", type: "mc", framing: "conceptual", difficulty: 5,

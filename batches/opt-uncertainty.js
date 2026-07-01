@@ -28,9 +28,9 @@
   },
   {
     id: "ouc-3", type: "numeric", framing: "applied", difficulty: 2,
-    prompt: "At confidence level $\\alpha=0.95$ a loss distribution has Value at Risk $\\text{VaR}=10$. The worst-5% tail beyond that quantile contains losses averaging $14$. What is the Conditional Value at Risk (CVaR), the expected loss in that worst $1-\\alpha$ tail?",
+    prompt: "At confidence level $\\alpha=0.95$ a loss distribution has Value at Risk $\\text{VaR}=10$. The worst-5% tail beyond that quantile contains losses averaging $14$. What is the Conditional Value at Risk (CVaR)?",
     answer: 14, tolerance: 0, unit: "",
-    hint: "CVaR is the mean of the losses in the worst $1-\\alpha$ tail, i.e. the values at or beyond VaR.",
+    hint: "VaR marks the edge of the worst $1-\\alpha$ tail; CVaR summarizes what lies beyond that edge.",
     explanation: "CVaR is the <i>expected</i> loss over the worst $1-\\alpha$ tail, so it equals the tail average $14$ here — necessarily $\\ge\\text{VaR}=10$ and strictly larger whenever the tail carries mass beyond the quantile. This ordering $\\text{CVaR}\\ge\\text{VaR}$ always holds, which is why CVaR captures extremes VaR ignores.",
     ref: "Optimization under uncertainty"
   },

@@ -82,6 +82,19 @@
     ref: "Classification metrics (cost-sensitive)"
   },
   {
+    id: "stat-12", type: "mc", framing: "applied", difficulty: 3,
+    prompt: "A growth team wants to claim \"the new onboarding flow <b>causes</b> higher retention.\" Which comparison licenses that causal claim, and why?",
+    options: [
+      "A randomized A/B test: assigning the flow by coin flip makes treatment independent of every user attribute — observed or not — so no confounder can produce the gap, and the arm difference estimates the effect of intervening, $p(y\\mid \\mathrm{do}(x))$",
+      "Comparing users who chose the new flow with those who didn't, provided the retention difference is statistically significant",
+      "The A/B test, because randomization guarantees the two arms are exactly identical on every attribute, so any observed difference must be causal",
+      "Either comparison works, provided the sample size is fixed in advance and nobody peeks at the results early"
+    ],
+    answer: 0,
+    explanation: "Randomization severs the link between who a user is and which flow they receive, cutting off self-selection and every other confounder — observed or unobserved — by design: the experiment estimates the $\\mathrm{do}$-distribution directly, which is what a causal claim needs. It balances the arms in <i>expectation</i>, not exactly, so sampling noise remains — that is what the significance machinery handles, and peeking / optional stopping breaks that machinery without touching confounding at all. An observational comparison of self-selected adopters can be arbitrarily significant and still reflect who chose the flow rather than what the flow did.",
+    ref: "Randomized experiments (A/B tests)"
+  },
+  {
     id: "stat-7", type: "mc", framing: "applied", difficulty: 4,
     prompt: "Under a Gaussian likelihood (known $\\sigma^2$) with a Gaussian prior, the posterior mean is a <b>precision-weighted average</b> of the prior mean and the data mean, with posterior precision $V_N^{-1}=V_0^{-1}+N\\sigma^{-2}$. As the number of observations $N$ grows, the posterior mean:",
     options: [

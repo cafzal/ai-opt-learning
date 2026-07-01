@@ -100,13 +100,13 @@
     id: "os-9", type: "numeric", framing: "applied", difficulty: 4,
     prompt: "Adam is typically run with its default hyperparameters $(\\alpha,\\gamma_v,\\gamma_s)$. What is the default <b>step factor</b> $\\alpha$?",
     answer: 0.001, tolerance: 0, unit: "",
-    hint: "The defaults are written $(0.001,\\,0.9,\\,0.999)$.",
+    hint: "An order of magnitude below the classic SGD default of $0.01$.",
     explanation: "Adam's defaults are $\\alpha=0.001$, $\\gamma_v=0.9$ (first-moment / momentum decay), and $\\gamma_s=0.999$ (second-moment / squared-gradient decay). The slower decay on $\\mathbf{s}$ gives a longer-memory estimate of the gradient's magnitude.",
     ref: "First-Order Methods"
   },
   {
     id: "os-10", type: "qc", framing: "conceptual", difficulty: 5,
-    prompt: "Compare two simulated-annealing <b>cooling schedules</b> for reaching the global optimum. The <i>logarithmic</i> schedule carries a theoretical global-optimum guarantee; the <i>exponential</i> schedule is $t\\leftarrow\\gamma t$.",
+    prompt: "Two simulated-annealing <b>cooling schedules</b> are compared: slow <i>logarithmic</i> decay, and the faster <i>exponential</i> decay $t\\leftarrow\\gamma t$ with $\\gamma<1$.",
     quantityA: "Theoretical guarantee of converging to the global optimum, logarithmic schedule",
     quantityB: "Theoretical guarantee of converging to the global optimum, exponential schedule",
     answer: 0,

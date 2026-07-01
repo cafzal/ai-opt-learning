@@ -111,9 +111,9 @@
   },
   {
     id: "sur-10", type: "qc", framing: "conceptual", difficulty: 4,
-    prompt: "A GP surrogate is being optimized. Compare how much each acquisition function <b>explores</b> (favors points of high posterior uncertainty $\\hat\\sigma$ over points of low predicted mean $\\hat\\mu$) when choosing the next evaluation.",
-    quantityA: "The point chosen by prediction-based exploitation, $\\min\\hat\\mu$",
-    quantityB: "The point chosen by error-based exploration, $\\max\\hat\\sigma$",
+    prompt: "A GP surrogate is being optimized. Compare how much each acquisition rule <b>explores</b>, rather than exploits, when choosing the next evaluation point.",
+    quantityA: "Exploration by <b>prediction-based</b> selection, $\\min\\hat\\mu$",
+    quantityB: "Exploration by <b>error-based</b> selection, $\\max\\hat\\sigma$",
     answer: 1,
     explanation: "Prediction-based $\\min\\hat\\mu$ ignores uncertainty entirely and exploits the surrogate's current best guess — it can get stuck in a local basin. Error-based $\\max\\hat\\sigma$ does the opposite: it queries wherever the GP is least certain, pure exploration. So B explores strictly more. Intermediate strategies — LCB $\\min(\\hat\\mu-\\alpha\\hat\\sigma)$, probability of improvement, expected improvement — sit between these two extremes.",
     ref: "Acquisition functions"

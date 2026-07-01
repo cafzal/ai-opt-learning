@@ -137,10 +137,10 @@
       "It is the minimum-entropy distribution consistent with its moment constraints",
       "The log-partition $A(\\boldsymbol\\theta)$ is convex, with $\\nabla A=\\mathbb{E}[\\boldsymbol\\phi]$",
       "Maximum likelihood reduces to moment matching",
-      "Conjugate priors exist if and only if the likelihood is in the exponential family"
+      "Conjugate priors exist whenever the likelihood is in the exponential family"
     ],
     answer: 0,
-    explanation: "The exponential family is the <i>maximum</i>-entropy distribution under its moment constraints, not the minimum. The other three are core facts: $A$ is convex with gradient $\\mathbb{E}[\\boldsymbol\\phi]$, MLE equals moment matching, and conjugacy holds iff the likelihood is exponential-family.",
+    explanation: "The exponential family is the <i>maximum</i>-entropy distribution under its moment constraints, not the minimum. The other three are core facts: $A$ is convex with gradient $\\mathbb{E}[\\boldsymbol\\phi]$, MLE equals moment matching, and every exponential-family likelihood admits a conjugate prior.",
     ref: "Exponential family (canonical form)"
   }
 ];

@@ -101,7 +101,7 @@
     id: "pom-9", type: "numeric", framing: "conceptual", difficulty: 5,
     prompt: "A <b>Dec-POMDP</b> with full transition, observation, AND reward independence is <b>P-complete</b>; dropping to transition+observation independence only makes it <b>NP-complete</b>; the general case is <b>NEXP-complete</b>. Ordering these three complexity classes from easiest (1) to hardest (3), what rank does the <b>NP-complete</b> (transition+observation-independent) subclass receive?",
     answer: 2, tolerance: 0, unit: "",
-    hint: "P $\\subseteq$ NP $\\subseteq$ NEXP; rank the middle one.",
+    hint: "Recall how P, NP, and NEXP are ordered by containment.",
     explanation: "The containment is P $\\subseteq$ NP $\\subseteq$ NEXP, so the ordering easiest→hardest is P-complete (1), NP-complete (2), NEXP-complete (3). The transition+observation-independent subclass is NP-complete, so it ranks 2 — exploiting factored independence collapses the general NEXP-complete Dec-POMDP to a far easier class.",
     ref: "Collaborative agents"
   },

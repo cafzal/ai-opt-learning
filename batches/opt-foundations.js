@@ -65,7 +65,7 @@
     id: "of-6", type: "numeric", framing: "applied", difficulty: 3,
     prompt: "A central finite-difference approximation of a derivative has error of order $O(h^p)$. What is the integer $p$?",
     answer: 2, tolerance: 0, unit: "",
-    hint: "Forward differences are $O(h)$; central differences are one order more accurate.",
+    hint: "Expand $f(x+h)$ and $f(x-h)$ in Taylor series and watch which error terms cancel in their difference.",
     explanation: "Forward differences are $O(h)$ and central differences are $O(h^2)$, so $p=2$. Shrinking $h$ reduces truncation error but eventually triggers subtractive cancellation, so usable steps sit near the square (forward) or cube (central) root of machine precision.",
     ref: "Derivatives and Gradients"
   },
