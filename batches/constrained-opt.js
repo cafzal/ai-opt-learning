@@ -105,6 +105,20 @@
     ref: "Constraints (penalty methods)"
   },
   {
+    id: "co-12", type: "ms", framing: "applied", difficulty: 4,
+    prompt: "Your LP solver lands at a <b>degenerate</b> optimal vertex and prints a sensitivity report. Select <b>every</b> correct statement about interpreting it.",
+    options: [
+      "The optimal duals need not be unique — a different solver (or pivot rule) can report a different shadow price for the same constraint, and both can be right",
+      "The optimal-value function $p^\\star(b)$ can have a kink at the current right-hand side, so a shadow price may be valid in one direction only (relaxing vs tightening differ)",
+      "A reduced cost of exactly zero on a nonbasic variable signals alternative optima — the returned plan is one of several with the same objective value",
+      "Degeneracy opens a positive duality gap, so the reported duals no longer bound the optimum",
+      "The reported shadow price exactly predicts the optimal-value change for a right-hand-side change of any size"
+    ],
+    answer: [0, 1, 2],
+    explanation: "Primal degeneracy makes the optimal dual a <i>set</i>, not a point: $p^\\star(b)$ kinks, its one-sided slopes differ, and each reported dual is one element of the set — so cross-solver disagreement is expected, and the honest fix is to re-solve with the RHS nudged each way. A zero reduced cost on a nonbasic variable is dual degeneracy: alternative optima. Strong duality is unaffected (the gap stays zero — degeneracy is about <i>uniqueness</i>, not optimality), and even a non-degenerate shadow price is only a local rate, valid within its basis range — never for arbitrary changes.",
+    ref: "Sensitivity under degeneracy"
+  },
+  {
     id: "co-9", type: "ms", framing: "conceptual", difficulty: 5,
     prompt: "Select <b>every</b> true statement about <b>duality-based algorithms</b> and the dual function.",
     options: [
@@ -130,5 +144,18 @@
     answer: 0,
     explanation: "DCP's composition rule certifies $f(g(\\mathbf{x}))$ convex if [$f$ convex nondecreasing and $g$ convex] or [$f$ convex nonincreasing and $g$ concave] (and can be inconclusive otherwise). The curvature is propagated by sign and composition rules over an atom library so software can verify convexity before transcribing to a solver.",
     ref: "Disciplined Convex Programming"
+  },
+  {
+    id: "co-13", type: "mc", framing: "applied", difficulty: 5,
+    prompt: "A scheduling LP with constraints $\\mathbf{A}\\mathbf{x}\\le\\mathbf{b}$ comes back <b>infeasible</b>, and the solver returns a <b>Farkas certificate</b>: weights $\\mathbf{y}\\ge\\mathbf{0}$ with $\\mathbf{y}^\\top\\mathbf{A}=\\mathbf{0}^\\top$ and $\\mathbf{y}^\\top\\mathbf{b}<0$. For conflict analysis, what does this certificate give you?",
+    options: [
+      "A weighted combination of constraints that is self-contradictory — the positively-weighted rows identify the conflict, which solvers refine to a minimal conflicting set (an IIS)",
+      "The feasible plan that violates the fewest constraints",
+      "A proof that the dual problem is infeasible as well",
+      "The gradient of the log-barrier at the analytic center of the feasible region"
+    ],
+    answer: 0,
+    explanation: "Summing the $y$-weighted rows of $\\mathbf{A}\\mathbf{x}\\le\\mathbf{b}$ gives $0=(\\mathbf{y}^\\top\\mathbf{A})\\,\\mathbf{x}\\le\\mathbf{y}^\\top\\mathbf{b}<0$ — impossible, so no $\\mathbf{x}$ satisfies them all (Farkas' lemma). The support of $\\mathbf{y}$ names the constraints in conflict; refining it to an <b>irreducible infeasible subsystem</b> (IIS) yields a minimal set where every member is necessary — the actionable “what must be relaxed,” with the weights as exchange rates. A minimum-violation plan is a different (elastic) computation; the certificate is a dual <i>ray</i> (the dual is unbounded, not proven infeasible); and an infeasible model has no analytic center at all. Note a model can contain several distinct IISes — repair one and re-check.",
+    ref: "Conflict analysis (Farkas / IIS)"
   }
 ];

@@ -5,7 +5,7 @@
 An interactive web app for the **AI/ML + optimization fundamentals behind better decisions** —
 from probability and prediction through optimization, sequential decision-making, and the
 LLM / generative-AI frontier. Tell it what you want to learn and where you're starting, and it
-builds you a **tailored path**; or browse the full catalog by source. **240 questions** across
+builds you a **tailored path**; or browse the full catalog by source. **242 questions** across
 **22 topic batches**, each preceded by a visual concept **review**.
 
 ## Two ways to use it
@@ -25,8 +25,8 @@ Toggle between the two anytime. A **light (default) / dark** theme switch lives 
 
 - **Review first** — collapsible key-concept toggles, each with a worked **example**, a practical
   **"why it matters"** takeaway, and — where it helps — an **SVG diagram** (100+ in all): bias–variance
-  curves, SVM margins, Pareto frontiers, Bellman backups, attention flow, and so on. **209 concepts** total.
-- **Then test** — **10–12 questions** ordered **easy → advanced**, in four GRE-style formats (multiple
+  curves, SVM margins, Pareto frontiers, Bellman backups, attention flow, and so on. **210 concepts** total.
+- **Then test** — **10–13 questions** ordered **easy → advanced**, in four GRE-style formats (multiple
   choice, select-all, numeric entry, quantitative comparison), tagged **conceptual** or **applied**.
   Every answer gets a worked **explanation** and the **topic** it tests.
 - **Progress** — best score per batch plus **gold / silver / bronze** mastery badges persist in your
