@@ -10,6 +10,49 @@
       takeaway: "Decide first whether you even have a distribution: no distribution pushes you to minimax/info-gap, a distribution unlocks mean-variance and statistical-feasibility — and either way the robust answer is a wide basin, never a deep narrow spike."
     },
     {
+      title: "Scenario analysis: re-solve under each future",
+      tag: "practice",
+      body: "<p>A <b>scenario</b> is a coherent future — demand, prices, and budgets shifted <i>together</i> — not one knob turned. The honest way to read one is a <b>full re-optimization under that future</b>, not a perturbation of the base answer: evaluating your current plan under new inputs only shows how the <i>old</i> plan degrades, while re-solving shows what the <i>right</i> plan becomes. And because optima live at corners, the best plan can <b>jump discontinuously</b> — a different basis, a different portfolio — even when the inputs move smoothly. The gap between the two readings is the <b>value of adapting</b>.</p><p>The cross-scenario read is the payoff: picks chosen in <i>every</i> future's optimum are the <b>robust core</b> — commit them now. Picks that appear only under some futures are the <b>swing decisions</b>, and they — not the core — deserve the attention and the hedging. (This enumerated-futures view complements the worst-case machinery above: minimax optimizes against the worst future; scenario re-solving shows how the plan itself <i>changes</i> across futures.)</p><p>It also completes a division of labor with duality: <b>duals are the directional lens</b> — they rank which constraint is the highest-leverage lever, and under degeneracy (common in real problems, where overlapping constraints bind at once) they are <i>directions rather than exact prices</i>; a <b>cheap re-solve prices the move</b> the duals pointed at; and <b>scenario re-optimization stress-tests the winner</b> across whole futures. Cheap and local first, exact and global to confirm.</p>",
+      visual: `<svg viewBox="0 0 520 250" xmlns="http://www.w3.org/2000/svg" role="img">
+        <text x="10" y="18" style="fill:var(--text)" font-size="13" font-weight="700">Duals point, scenarios confirm</text>
+        <line x1="252" y1="34" x2="252" y2="215" class="vx-grid" stroke-width="1" stroke-dasharray="4 4"/>
+        <text x="10" y="42" font-size="11" style="fill:var(--text-dim)">1 · duals rank the levers</text>
+        <text x="78" y="72" font-size="11" style="fill:var(--text)" text-anchor="end">capacity</text>
+        <rect x="86" y="61" width="140" height="14" rx="3" style="fill:var(--accent)"/>
+        <text x="120" y="94" font-size="10.5" style="fill:var(--accent)">λ = 5.0 — look here first</text>
+        <text x="78" y="122" font-size="11" style="fill:var(--text)" text-anchor="end">contract</text>
+        <rect x="86" y="111" width="34" height="14" rx="3" style="fill:var(--accent)" opacity="0.55"/>
+        <text x="128" y="122" font-size="10.5" style="fill:var(--text-dim)">λ = 1.2</text>
+        <text x="78" y="152" font-size="11" style="fill:var(--text)" text-anchor="end">materials</text>
+        <rect x="86" y="141" width="4" height="14" rx="2" style="fill:var(--text-faint)"/>
+        <text x="98" y="152" font-size="10.5" style="fill:var(--text-faint)">λ = 0 (slack)</text>
+        <text x="10" y="185" font-size="10" style="fill:var(--text-faint)">degenerate? read as direction —</text>
+        <text x="10" y="198" font-size="10" style="fill:var(--text-faint)">price the move with a re-solve</text>
+        <text x="266" y="42" font-size="11" style="fill:var(--text-dim)">2 · which picks survive every future?</text>
+        <text x="310" y="62" font-size="10.5" style="fill:var(--text-dim)" text-anchor="middle">base</text>
+        <text x="390" y="62" font-size="10.5" style="fill:var(--text-dim)" text-anchor="middle">downturn</text>
+        <text x="465" y="62" font-size="10.5" style="fill:var(--text-dim)" text-anchor="middle">shock</text>
+        <rect x="288" y="70" width="200" height="20" rx="4" style="fill:var(--good-soft)"/>
+        <rect x="288" y="98" width="200" height="20" rx="4" style="fill:var(--good-soft)"/>
+        <text x="278" y="84" font-size="11" style="fill:var(--text)" text-anchor="end">A</text>
+        <text x="278" y="112" font-size="11" style="fill:var(--text)" text-anchor="end">B</text>
+        <text x="278" y="140" font-size="11" style="fill:var(--text)" text-anchor="end">C</text>
+        <text x="278" y="168" font-size="11" style="fill:var(--text)" text-anchor="end">D</text>
+        <circle cx="310" cy="80" r="5.5" style="fill:var(--good)"/><circle cx="390" cy="80" r="5.5" style="fill:var(--good)"/><circle cx="465" cy="80" r="5.5" style="fill:var(--good)"/>
+        <circle cx="310" cy="108" r="5.5" style="fill:var(--good)"/><circle cx="390" cy="108" r="5.5" style="fill:var(--good)"/><circle cx="465" cy="108" r="5.5" style="fill:var(--good)"/>
+        <circle cx="310" cy="136" r="5.5" style="fill:var(--warn)"/><circle cx="390" cy="136" r="5.5" style="fill:var(--warn)"/><circle cx="465" cy="136" r="5.5" fill="none" class="vx-grid" stroke-width="1.5"/>
+        <circle cx="310" cy="164" r="5.5" style="fill:var(--bad)"/><circle cx="390" cy="164" r="5.5" fill="none" class="vx-grid" stroke-width="1.5"/><circle cx="465" cy="164" r="5.5" fill="none" class="vx-grid" stroke-width="1.5"/>
+        <text x="518" y="84" font-size="9.5" style="fill:var(--good)" text-anchor="end">core</text>
+        <text x="518" y="112" font-size="9.5" style="fill:var(--good)" text-anchor="end">core</text>
+        <text x="518" y="140" font-size="9.5" style="fill:var(--warn)" text-anchor="end">swing</text>
+        <text x="518" y="168" font-size="9.5" style="fill:var(--bad)" text-anchor="end">fragile</text>
+        <text x="266" y="198" font-size="10" style="fill:var(--text-faint)">● in that future's optimal plan · ○ not chosen</text>
+      </svg>`,
+      caption: "Left: duals rank where to look (a degenerate model makes them directions, not gospel). Right: each future is a true re-solve — commit the picks that hold everywhere, spend attention on the swings.",
+      example: "Allocating capital across ten projects under three futures — base, downturn, supply shock: seven projects appear in all three optimal portfolios (fund them today), two appear only in the base case (fragile — don't anchor on them), one enters only under the shock (a hedge worth pre-negotiating). The decision meeting should be about the three swings, not the seven.",
+      takeaway: "Perturbation answers “how bad does my plan get”; re-optimization answers “what would I do instead.” Read duals for direction, re-solve to price the move, and trust only the picks that hold in every future."
+    },
+    {
       title: "Risk measures: VaR, CVaR & the Markowitz portfolio",
       tag: "uncertainty",
       body: "<p>For <b>tail risk</b>, two quantities are compared at a confidence level $\\alpha$. <b>Value at Risk (VaR)</b> is the $\\alpha$-quantile of the loss — a single cutoff. <b>Conditional Value at Risk (CVaR)</b> is the <i>expected</i> loss in the worst $1-\\alpha$ tail, averaging everything at or beyond the VaR quantile. Hence <b>CVaR $\\ge$ VaR always</b>, strictly larger whenever the tail carries mass beyond the quantile. CVaR is <b>coherent</b>, less sensitive to estimation error, and accounts for the extreme losses VaR ignores; <b>distributionally robust optimization</b> hedges against the distribution itself being uncertain.</p><p>The <b>Markowitz portfolio</b> is the canonical mean-variance problem — trade expected return against return variance subject to a budget: $\\min\\,-w\\,\\mathbf{x}^\\top\\mu+(1-w)\\,\\mathbf{x}^\\top\\Sigma\\mathbf{x}$ s.t. $\\mathbf{x}^\\top\\mathbf{1}=b,\\ \\mathbf{x}\\ge\\mathbf{0}$.</p>",

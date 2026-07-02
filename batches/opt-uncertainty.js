@@ -105,6 +105,19 @@
     ref: "Optimization under uncertainty"
   },
   {
+    id: "ouc-11", type: "mc", framing: "applied", difficulty: 4,
+    prompt: "You hold an optimal base-case plan. To assess a plausible <b>downturn scenario</b>, analyst A evaluates the <i>existing</i> plan under the downturn inputs; analyst B <b>re-optimizes from scratch</b> under the same inputs. Why can B's answer differ <i>qualitatively</i> from A's?",
+    options: [
+      "Optimal plans can change discontinuously with the inputs — under the new scenario a different corner/portfolio may be optimal — and the gap between A's and B's values is the value of adapting",
+      "A's evaluation is numerically unstable, while B's re-solve avoids round-off error",
+      "They cannot differ: by continuity, the re-optimized plan coincides with the base plan for any moderate scenario change",
+      "Re-optimization drops the scenario's constraints, giving B extra freedom"
+    ],
+    answer: 0,
+    explanation: "Evaluating the frozen plan measures how the <i>old</i> decision degrades; re-optimizing reveals what the <i>right</i> decision becomes — and because LP/MIP optima sit at vertices, the optimal plan can jump to a different corner under a smooth input change (continuity may hold for the optimal <i>value</i>, not the <i>plan</i>). Across several scenarios, picks that survive every re-solve form the robust core; the swing picks are where hedging and attention belong. Duals still help — they point at the binding constraint to examine first; the re-solve then prices it.",
+    ref: "Scenario analysis"
+  },
+  {
     id: "ouc-10", type: "ms", framing: "applied", difficulty: 5,
     prompt: "Select every statement that is <b>true</b> across uncertainty propagation, multidisciplinary analysis (MDA), and MDO architectures.",
     options: [
